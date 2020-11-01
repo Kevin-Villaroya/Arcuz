@@ -1,0 +1,1 @@
+- Taille de map dans le constructeur de Model

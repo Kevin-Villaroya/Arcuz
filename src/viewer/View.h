@@ -2,16 +2,17 @@
 #define __VIEW_H__
 
 #include <SFML/Graphics.hpp>
+#include <vector>
+#include "../model/entities/EntityDrawable.h"
 
 class View{
 private:
   int height;
   int width;
-  bool fullscreen;
   sf::RenderWindow& window;
 public:
-  View(sf::RenderWindow &window, int height, int width, bool fullscreen);
-  bool isShown();
+  View(sf::RenderWindow &window, int height, int width);
+  void render(const std::vector<EntityDrawable> &entities);
 };
 
 #endif

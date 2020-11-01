@@ -11,11 +11,13 @@ private:
   sf::RenderWindow window; //WINDOWS IN SFML ARE DISPLAYERS AND LISTENERS
   bool running;
 
-  void makeWindow(int width, int height, bool fullscreen);
-
 public:
-  Controller(int width, int height, bool fullscreen);
-  void start();
-};
+  Controller(int width, int height);
+  void checkEvents();
 
+  void start();
+  void closeGame();
+
+  ~Controller();
+};
 #endif
