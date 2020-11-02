@@ -21,6 +21,8 @@ enum TypeAnimationCharacter{
 class Character : public EntityDrawable{
 
 private:
+  const static float SCALE;
+
   std::string name;
 
   Animation animationIdle;
@@ -32,6 +34,8 @@ private:
   Animation* currentAnimation;
 
   unsigned int speed;
+
+  void applySprite();
 public:
   Character();
   Character(std::string name);

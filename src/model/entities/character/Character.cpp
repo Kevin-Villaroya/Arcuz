@@ -2,6 +2,8 @@
 #include "../../../viewer/texture/CharacterTexture.h"
 #include <iostream>
 
+const float Character::SCALE = 0.5;
+
 Character::Character() : Character("default"){}
 
 Character::Character(std::string name) : Character(name, TypeCharacter::man){}
@@ -18,7 +20,7 @@ animationDead(setCharacterAnimation(type, TypeAnimationCharacter::dead))
 void Character::update(){
   this->watchDirection();
   this->moveCharacter();
-  this->setTexture(this->currentAnimation->getTextureDisplay());
+  this->applySprite();
 }
 
 void Character::moveCharacter(){
@@ -70,6 +72,11 @@ void Character::die(){
     this->currentAnimation = &this->animationDead;
   }
   this->speed = 0;
+}
+
+void Character::applySprite(){
+  this->setTexture(this->currentAnimation->getTextureDisplay());
+  this->setScale(Character::SCALE, Character::SCALE);
 }
 
 Animation setCharacterAnimation(TypeCharacter type, TypeAnimationCharacter typeAnimation){
