@@ -3,13 +3,13 @@
 
 #include <vector>
 #include <string>
-#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include "../../tool/TextureTool.h"
 
 class Animation{
 
 private:
-  std::vector<sf::Sprite> animation;
+  std::vector<sf::Texture> animation;
   const unsigned int delay;
 
   unsigned int currentFrame;
@@ -18,12 +18,10 @@ private:
   void increaseFrame();
 public:
   Animation();
-  Animation(std::vector<sf::Sprite> &animation);
-  Animation(std::vector<TextureTool> &textures);
-  Animation(std::vector<sf::Sprite> &animation, unsigned int delay);
-  Animation(std::vector<TextureTool> &textures, unsigned int delay);
-  void addSprite(sf::Sprite sprite);
-  sf::Sprite play();
+  Animation(std::vector<TextureTool*> &textures);
+  Animation(std::vector<TextureTool*> &textures, unsigned int delay);
+  void addTexture(sf::Texture &texture);
+  sf::Texture& getTextureDisplay();
   void reset();
 };
 

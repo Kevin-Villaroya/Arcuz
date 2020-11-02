@@ -2,41 +2,23 @@
 #include <iostream>
 #include <filesystem>
 
-Animation::Animation() : animation(std::vector<sf::Sprite>()), delay(0){}
+Animation::Animation() : animation(std::vector<sf::Texture>()), delay(0){}
 
-Animation::Animation(std::vector<sf::Sprite> &animation) : animation(animation), delay(0){
-  this->currentDelay = 0;
-  this->currentFrame = 0;
-}
+Animation::Animation(std::vector<TextureTool*> &textures) : Animation(textures, 0){}
 
-  Animation::Animation(std::vector<TextureTool> &textures) : animation(std::vector<sf::Sprite>()), delay(0){
-    for(unsigned int i = 0; i < textures.size(); i++){
-      this->addSprite(sf::Sprite(textures[i]));
-    }
-
-    this->currentDelay = 0;
-    this->currentFrame = 0;
-  }
-
-Animation::Animation(std::vector<sf::Sprite> &animation, unsigned int delay) : animation(animation), delay(delay){
-  this->currentDelay = 0;
-  this->currentFrame = 0;
-}
-
-Animation::Animation(std::vector<TextureTool> &textures, unsigned int delay) : animation(std::vector<sf::Sprite>()), delay(delay){
+Animation::Animation(std::vector<TextureTool*> &textures, unsigned int delay) : animation(std::vector<sf::Texture>()), delay(delay){
   for(unsigned int i = 0; i < textures.size(); i++){
-    this->addSprite(sf::Sprite(textures[i]));
+    this->addTexture(*textures[i]);
   }
-
   this->currentDelay = 0;
   this->currentFrame = 0;
 }
 
-void Animation::addSprite(sf::Sprite sprite){
-  this->animation.push_back(sprite);
+void Animation::addTexture(sf::Texture &texture){
+  this->animation.push_back(texture);
 }
 
-sf::Sprite Animation::play(){
+sf::Texture& Animation::getTextureDisplay(){
   if(this->currentDelay < this->delay){
     this->currentDelay++;
     return this->animation[this->currentFrame];
@@ -55,7 +37,7 @@ void Animation::reset(){
 
 void Animation::increaseFrame(){
   this->currentFrame++;
-  if(this->currentFrame <= animation.size()){
+  if(this->currentFrame >= animation.size()){
     this->currentFrame = 0;
   }
 }

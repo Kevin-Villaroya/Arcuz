@@ -9,6 +9,8 @@ Tile::Tile(TypeTile type, bool block){
   this->setSpriteByType(type);
 }
 
+void Tile::update(){}
+
 TypeTile Tile::getType() const{
   return this->type;
 }
@@ -29,12 +31,4 @@ void Tile::setSpriteByType(TypeTile type){
       this->setTexture(*Tile::GROUND_GRASS_TEXTURE);
       break;
   }
-}
-
-unsigned int Tile::getLenght() const{
-  return this->getTexture()->getSize().x;
-}
-
-unsigned int Tile::getWidth() const{
-  return this->getTexture()->getSize().y;
 }

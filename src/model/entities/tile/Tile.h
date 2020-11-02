@@ -26,8 +26,8 @@ public:
   Tile(TypeTile type, bool block);
   TypeTile getType() const;
   void setType(TypeTile type);
-  unsigned int getLenght() const;
-  unsigned int getWidth() const;
+
+  void update() override;
 };
 
 #endif

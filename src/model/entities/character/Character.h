@@ -2,7 +2,7 @@
 #define __CHARACTER_H__
 
 #include "../EntityDrawable.h"
-#include "string"
+#include <string>
 #include "../../../viewer/animation/Animation.h"
 
 enum TypeCharacter{
@@ -29,14 +29,23 @@ private:
   Animation animationJump;
   Animation animationDead;
 
+  Animation* currentAnimation;
 
+  unsigned int speed;
 public:
   Character();
   Character(std::string name);
   Character(std::string name, TypeCharacter type);
 
-  void playAnimation();
+  void update() override;
+  void moveCharacter();
 
+  void playAnimation();
+  void walk(Direction direction);
+  void run(Direction direction);
+  void stop();
+  void jump();
+  void die();
 };
 
 Animation setCharacterAnimation(TypeCharacter type, TypeAnimationCharacter typeAnimation);

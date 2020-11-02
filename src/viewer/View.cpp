@@ -17,4 +17,5 @@ void View::render(const std::vector<EntityDrawable> &entities){
 
 void View::centerViewOn(Character &character){
   this->viewCharacter.setCenter(character.getPosX(), character.getPosY());
+  this->window.setView(this->viewCharacter);
 }
