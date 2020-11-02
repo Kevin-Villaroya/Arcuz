@@ -1,6 +1,6 @@
 LIB=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
 BIN=../bin
-FLAGS=-Wall -ansi -std=c++17 -lstdc++fs
+FLAGS=-Wall -ansi -std=c++17 -lstdc++fs -Wno-psabi
 EXEC=cluedo
 
 OBJETS=$(shell find ./ -type f -name "*.cpp")

@@ -11,10 +11,10 @@
 class Model{
 private:
   View view;
-
-  Character mainCharacter;
-  std::vector<EntityDrawable> entities; //all entities in the game (without character)
   Map map;
+  Character mainCharacter;
+
+  std::vector<EntityDrawable> entities; //all entities in the game (without character)
 
 public:
   Model(View &view);

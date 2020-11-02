@@ -1,3 +1,5 @@
 - Taille de map dans le constructeur de Model
 - Penser a ce que les fichiers sont par reference
-- Faireune barre de chargement lors du chargement des sprites
+- Faire une barre de chargement lors du chargement des sprites
+- mettre const touts les vectors de texture
+- avoir une classe textureTle
