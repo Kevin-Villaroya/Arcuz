@@ -1,6 +1,8 @@
 #include "Model.h"
 
-Model::Model(View &view):view(view), map(Map(50,50)){}
+Model::Model(View &view):view(view), map(Map(50,50)), mainCharacter(Character()){
+  this->view.centerViewOn(mainCharacter);
+}
 
 void Model::update(){//loop update
 
@@ -14,6 +16,8 @@ void Model::render(){
       allDraws.push_back(this->map.getTile(i,j));
     }
   }
+
+  allDraws.push_back(mainCharacter);
 
   for(int i = 0; i < this->entities.size(); i++){
     allDraws.push_back(this->entities[i]);

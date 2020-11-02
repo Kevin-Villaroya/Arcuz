@@ -6,12 +6,14 @@
 #include "../viewer/View.h"
 #include "entities/EntityDrawable.h"
 #include "map/Map.h"
+#include "entities/character/Character.h"
 
 class Model{
 private:
   View view;
 
-  std::vector<EntityDrawable> entities;
+  Character mainCharacter;
+  std::vector<EntityDrawable> entities; //all entities in the game (without character)
   Map map;
 
 public:

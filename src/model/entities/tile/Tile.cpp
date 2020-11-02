@@ -1,8 +1,8 @@
 #include "Tile.h"
 
-const TextureTool* Tile::GRASS_TEXTURE = new TextureTool("assets/tall_grass.png");
-const TextureTool* Tile::GROUND_TEXTURE = new TextureTool("assets/ground.png");
-const TextureTool* Tile::GROUND_GRASS_TEXTURE = new TextureTool("assets/grass.png");
+const TextureTool* Tile::GRASS_TEXTURE = new TextureTool("assets/tiles/tall_grass.png");
+const TextureTool* Tile::GROUND_TEXTURE = new TextureTool("assets/tiles/ground.png");
+const TextureTool* Tile::GROUND_GRASS_TEXTURE = new TextureTool("assets/tiles/grass.png");
 
 Tile::Tile(TypeTile type, bool block){
   this->block = block;
