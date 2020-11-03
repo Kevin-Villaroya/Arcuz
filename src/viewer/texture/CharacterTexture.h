@@ -24,11 +24,11 @@ public:
 
   ~CharacterTexture();
 
-  std::vector<TextureTool*>& getDeadTextures();
-  std::vector<TextureTool*>& getIdleTextures();
-  std::vector<TextureTool*>& getJumpTextures();
-  std::vector<TextureTool*>& getRunTextures();
-  std::vector<TextureTool*>& getWalkTextures();
+  const std::vector<TextureTool*>& getDeadTextures();
+  const std::vector<TextureTool*>& getIdleTextures();
+  const std::vector<TextureTool*>& getJumpTextures();
+  const std::vector<TextureTool*>& getRunTextures();
+  const std::vector<TextureTool*>& getWalkTextures();
 };
 
 #endif

@@ -11,11 +11,6 @@ enum TypeTile{
 };
 
 class Tile : public EntityDrawable{
-public:
-  static const TextureTool* GRASS_TEXTURE;
-  static const TextureTool* GROUND_TEXTURE;
-  static const TextureTool* GROUND_GRASS_TEXTURE;
-
 private:
   bool block;
   TypeTile type;

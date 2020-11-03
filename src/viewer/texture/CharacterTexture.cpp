@@ -75,23 +75,23 @@ void CharacterTexture::setWalkTextures(std::string type){
   }
 }
 
-std::vector<TextureTool*>& CharacterTexture::getDeadTextures(){
+const std::vector<TextureTool*>& CharacterTexture::getDeadTextures(){
   return this->dead;
 }
 
-std::vector<TextureTool*>& CharacterTexture::getIdleTextures(){
+const std::vector<TextureTool*>& CharacterTexture::getIdleTextures(){
   return this->idle;
 }
 
-std::vector<TextureTool*>& CharacterTexture::getJumpTextures(){
+const std::vector<TextureTool*>& CharacterTexture::getJumpTextures(){
   return this->jump;
 }
 
-std::vector<TextureTool*>& CharacterTexture::getRunTextures(){
+const std::vector<TextureTool*>& CharacterTexture::getRunTextures(){
   return this->run;
 }
 
-std::vector<TextureTool*>& CharacterTexture::getWalkTextures(){
+const std::vector<TextureTool*>& CharacterTexture::getWalkTextures(){
   return this->walk;
 }
 

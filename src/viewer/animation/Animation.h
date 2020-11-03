@@ -18,9 +18,9 @@ private:
   void increaseFrame();
 public:
   Animation();
-  Animation(std::vector<TextureTool*> &textures);
-  Animation(std::vector<TextureTool*> &textures, unsigned int delay);
-  void addTexture(sf::Texture &texture);
+  Animation(const std::vector<TextureTool*> &textures);
+  Animation(const std::vector<TextureTool*> &textures, unsigned int delay);
+  void addTexture(const sf::Texture &texture);
   sf::Texture& getTextureDisplay();
   void reset();
 };
