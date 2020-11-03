@@ -1,8 +1,9 @@
 #include "model/Model.h"
 #include "controller/Controller.h"
+#include "controller/network/Network.h"
 
 int main(){
-    Controller controller(920,620);
+    Network controller(920,620);
     controller.start();
     return 0;
 }
