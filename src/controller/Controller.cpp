@@ -8,7 +8,7 @@ Controller::Controller(int width, int height)  : window(sf::VideoMode(width, hei
   this->running = true;
 }
 
-void Controller::checkEvents(){ //if event do something to model TODO
+void Controller::checkEvents(){
     sf::Event event;
     while (this->window.pollEvent(event)) {
 
@@ -28,11 +28,11 @@ void Controller::checkEvents(){ //if event do something to model TODO
            this->model->getMainCharacter().stop();
          }
        }
-     }else{
+     }else{ // IF NO KEY PRESSED
        this->model->getMainCharacter().stop();
      }
 
-     if(event.type == sf::Event::Closed){
+     if(event.type == sf::Event::Closed){ // IF WINDOWS CLOSE
        this->closeGame();
      }
    }

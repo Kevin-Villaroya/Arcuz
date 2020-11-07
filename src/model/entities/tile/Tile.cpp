@@ -1,7 +1,7 @@
 #include "Tile.h"
 #include "../../../viewer/texture/TextureTile.h"
 
-Tile::Tile(TypeTile type, bool block){
+Tile::Tile(TypeTile type, bool block) : EntityDrawable(true){
   this->block = block;
   this->setSpriteByType(type);
 }
@@ -23,9 +23,6 @@ void Tile::setSpriteByType(TypeTile type){
       break;
     case GROUND:
       this->setTexture(*TextureTile::GROUND_TEXTURE);
-      break;
-    case GROUND_GRASS:
-      this->setTexture(*TextureTile::GROUND_GRASS_TEXTURE);
       break;
   }
 }

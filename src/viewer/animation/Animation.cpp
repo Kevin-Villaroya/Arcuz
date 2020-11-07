@@ -2,11 +2,11 @@
 #include <iostream>
 #include <filesystem>
 
-Animation::Animation() : animation(std::vector<sf::Texture>()), delay(0){}
+Animation::Animation() : animation(std::vector<TextureTool>()), delay(0){}
 
 Animation::Animation(const std::vector<TextureTool*> &textures) : Animation(textures, 0){}
 
-Animation::Animation(const std::vector<TextureTool*> &textures, unsigned int delay) : animation(std::vector<sf::Texture>()), delay(delay){
+Animation::Animation(const std::vector<TextureTool*> &textures, unsigned int delay) : animation(std::vector<TextureTool>()), delay(delay){
   for(unsigned int i = 0; i < textures.size(); i++){
     this->addTexture(*textures[i]);
   }
@@ -14,7 +14,7 @@ Animation::Animation(const std::vector<TextureTool*> &textures, unsigned int del
   this->currentFrame = 0;
 }
 
-void Animation::addTexture(const sf::Texture &texture){
+void Animation::addTexture(const TextureTool &texture){
   this->animation.push_back(texture);
 }
 

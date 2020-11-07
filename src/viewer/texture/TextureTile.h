@@ -7,7 +7,6 @@ class TextureTile{
 public:
   static const TextureTool* GRASS_TEXTURE;
   static const TextureTool* GROUND_TEXTURE;
-  static const TextureTool* GROUND_GRASS_TEXTURE;
 
 public:
 };

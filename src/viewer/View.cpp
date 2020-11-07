@@ -14,7 +14,6 @@ void View::render(const Character &character, const std::vector<EntityDrawable> 
     this->window.draw(entities[i]);
   }
   this->window.draw(character);
-
   this->window.display();
 }
 

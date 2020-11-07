@@ -3,13 +3,12 @@
 
 #include <vector>
 #include <string>
-#include <SFML/Graphics/Texture.hpp>
 #include "../../tool/TextureTool.h"
 
 class Animation{
 
 private:
-  std::vector<sf::Texture> animation;
+  std::vector<TextureTool> animation;
   const unsigned int delay;
 
   unsigned int currentFrame;
@@ -20,7 +19,7 @@ public:
   Animation();
   Animation(const std::vector<TextureTool*> &textures);
   Animation(const std::vector<TextureTool*> &textures, unsigned int delay);
-  void addTexture(const sf::Texture &texture);
+  void addTexture(const TextureTool &texture);
   sf::Texture& getTextureDisplay();
   void reset();
   bool isLastFrame();

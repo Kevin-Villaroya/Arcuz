@@ -6,8 +6,7 @@
 
 enum TypeTile{
   GRASS,
-  GROUND,
-  GROUND_GRASS
+  GROUND
 };
 
 class Tile : public EntityDrawable{

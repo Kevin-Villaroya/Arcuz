@@ -3,17 +3,17 @@
 
 Map::Map(){}
 
-Map::Map(int lenght, int width) : tiles(std::vector<std::vector<Tile>> (lenght, std::vector<Tile>(width, Tile(TypeTile::GROUND_GRASS, true)))) {
+Map::Map(int lenght, int width) : tiles(std::vector<std::vector<Tile>> (lenght, std::vector<Tile>(width, Tile(TypeTile::GROUND, true)))) {
   this->lenght = lenght;
   this->width = width;
 
   for(int i = 0; i < lenght; i++){
     for(int j = 0; j < width; j++){
-      unsigned int lenght = this->tiles[i][j].getLenght();
+      unsigned int height = this->tiles[i][j].getHeight();
       unsigned int width = this->tiles[i][j].getWidth();
-      this->tiles[i][j].setPosition(i * lenght, j * width);
+      this->tiles[i][j].setPosition(i * width, j * height);
       if(i == 0 || j == 0){
-        this->tiles[i][j].setSpriteByType(TypeTile::GROUND_GRASS);
+        this->tiles[i][j].setSpriteByType(TypeTile::GRASS);
       }
     }
   }
