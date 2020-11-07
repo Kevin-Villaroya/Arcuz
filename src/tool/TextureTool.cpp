@@ -11,13 +11,29 @@ TextureTool::TextureTool(std::string locationFolder) : sf::Texture(){
 void TextureTool::resizeTextureLessAlpha(){
   sf::Image oldImage = this->copyToImage();
   sf::Image newImage;
+
+  int width = oldImage.getSize().x; int height = oldImage.getSize().y;
+  int xMin = width; int xMax = 0; int yMin = height; int yMax = 0;
+
+  this->findNotAlphaPixelsIn(oldImage, xMin, xMax, yMin, yMax);
+
+  newImage.create(xMax - xMin, yMax - yMin);
+
+  for(int i = 0; i < width; i++){
+    for(int j = 0; j < height; j++){
+      if(!(i < xMin || i >= xMax || j < yMin || j >= yMax)){
+        newImage.setPixel(i - xMin, j - yMin, oldImage.getPixel(i,j));
+      }
+    }
+  }
+
+  this->loadFromImage(newImage);
+}
+
+
+void TextureTool::findNotAlphaPixelsIn(const sf::Image &oldImage, int &xMin, int &xMax, int &yMin, int &yMax){
   int width = oldImage.getSize().x;
   int height = oldImage.getSize().y;
-
-  int xMin = width;
-  int xMax = 0;
-  int yMin = height;
-  int yMax = 0;
 
   for(int i = 0; i < width; i++){
     for(int j = 0; j < height; j++){
@@ -29,16 +45,4 @@ void TextureTool::resizeTextureLessAlpha(){
       }
     }
   }
-
-  newImage.create(xMax - xMin, yMax - yMin);
-
-  for(int i = 0; i < width; i++){
-    for(int j = 0; j < height; j++){
-      if(!(i < xMin || i >= xMax || j < yMin || j >= yMax)){
-        newImage.setPixel(i - xMin, j - yMin, oldImage.getPixel(i,j));
-      }
-    }
-  }
-  this->loadFromImage(newImage);
-
 }

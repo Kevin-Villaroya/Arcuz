@@ -12,8 +12,9 @@ void Controller::checkEvents(){
     sf::Event event;
     while (this->window.pollEvent(event)) {
 
-     if (event.type == sf::Event::KeyPressed){ //KEY PRESSED
-       if (event.key.code == sf::Keyboard::Escape){
+     if (event.type == sf::Event::KeyPressed){ //ANY KEY PRESSED
+
+       if (event.key.code == sf::Keyboard::Escape){ //CASE ELSE
          this->running = false;
        }else if(event.key.code == sf::Keyboard::Right){
          this->model->getMainCharacter().walk(Direction::right);
