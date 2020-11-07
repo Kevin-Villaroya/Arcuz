@@ -12,6 +12,9 @@ Map::Map(int lenght, int width) : tiles(std::vector<std::vector<Tile>> (lenght, 
       unsigned int lenght = this->tiles[i][j].getLenght();
       unsigned int width = this->tiles[i][j].getWidth();
       this->tiles[i][j].setPosition(i * lenght, j * width);
+      if(i == 0 || j == 0){
+        this->tiles[i][j].setSpriteByType(TypeTile::GROUND_GRASS);
+      }
     }
   }
 }

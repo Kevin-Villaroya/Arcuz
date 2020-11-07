@@ -21,12 +21,14 @@ void Model::render(){
       allDraws.push_back(this->map.getTile(i,j));
     }
   }
-  //mainhcharacter pas de sprite
-  allDraws.push_back(this->mainCharacter);
 
   for(unsigned int i = 0; i < this->entities.size(); i++){
     allDraws.push_back(this->entities[i]);
   }
 
-  this->view.render(allDraws);
+  this->view.render(this->mainCharacter, allDraws);
+}
+
+Character& Model::getMainCharacter(){
+  return this->mainCharacter;
 }

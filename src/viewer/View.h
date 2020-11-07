@@ -15,8 +15,8 @@ private:
 
 public:
   View(sf::RenderWindow &window, int height, int width);
-  void render(const std::vector<EntityDrawable> &entities);
-  void centerViewOn(Character &character);
+  void render(const Character &character, const std::vector<EntityDrawable> &entities);
+  void centerViewOn(const Character &character);
 };
 
 #endif

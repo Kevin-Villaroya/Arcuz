@@ -33,9 +33,10 @@ private:
 
   Animation* currentAnimation;
 
-  unsigned int speed;
+  int speed;
 
   void applySprite();
+  void playAnimation();
 public:
   Character();
   Character(std::string name);
@@ -44,12 +45,17 @@ public:
   void update() override;
   void moveCharacter();
 
-  void playAnimation();
   void walk(Direction direction);
   void run(Direction direction);
   void stop();
   void jump();
   void die();
+
+  void setSpeedWhenRun();
+  void setSpeedWhenWalk();
+  void setSpeedWhenStopped();
+
+  int getSpeed();
 };
 
 Animation setCharacterAnimation(TypeCharacter type, TypeAnimationCharacter typeAnimation);

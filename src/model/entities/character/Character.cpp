@@ -24,7 +24,15 @@ void Character::update(){
 }
 
 void Character::moveCharacter(){
-  this->move(this->speed, this->speed);
+  if(this->direction == Direction::right){
+    this->move(this->speed, 0);
+  }else if(this->direction == Direction::left){
+    this->move(-this->speed, 0);
+  }else if(this->direction == Direction::up){
+    this->move(0, -this->speed);
+  }else if(this->direction == Direction::down){
+    this->move(0, this->speed);
+  }
 }
 
 void Character::walk(Direction newDirection){
@@ -34,7 +42,7 @@ void Character::walk(Direction newDirection){
     this->direction = newDirection;
     this->currentAnimation = &this->animationWalk;
   }
-  this->speed = 1;
+  this->setSpeedWhenWalk();
 }
 
 void Character::run(Direction newDirection){
@@ -44,16 +52,15 @@ void Character::run(Direction newDirection){
     this->direction = newDirection;
     this->currentAnimation = &this->animationRun;
   }
-  this->speed = 2;
+  this->setSpeedWhenRun();
 }
 
 void Character::stop(){
   if(this->currentAnimation == &this->animationIdle){
   }else{
-    this->currentAnimation->reset();
     this->currentAnimation = &this->animationIdle;
   }
-  this->speed = 0;
+  this->setSpeedWhenStopped();
 }
 
 void Character::jump(){
@@ -62,7 +69,7 @@ void Character::jump(){
     this->currentAnimation->reset();
     this->currentAnimation = &this->animationJump;
   }
-  this->speed = 1;
+  this->setSpeedWhenWalk();
 }
 
 void Character::die(){
@@ -71,7 +78,23 @@ void Character::die(){
     this->currentAnimation->reset();
     this->currentAnimation = &this->animationDead;
   }
+  this->setSpeedWhenStopped();
+}
+
+void Character::setSpeedWhenWalk(){
+  this->speed = 4;
+}
+
+void Character::setSpeedWhenRun(){
+  this->speed = 8;
+}
+
+void Character::setSpeedWhenStopped(){
   this->speed = 0;
+}
+
+int Character::getSpeed(){
+  return this->speed;
 }
 
 void Character::applySprite(){

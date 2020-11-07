@@ -20,6 +20,7 @@ public:
   Model(View &view);
   void update();
   void render();
+  Character& getMainCharacter();
 };
 
 #endif

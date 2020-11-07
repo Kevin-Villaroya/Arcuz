@@ -6,11 +6,11 @@ EntityDrawable::EntityDrawable(){
   this->setOriginCenter();
 }
 
-unsigned int EntityDrawable::getPosX(){
+unsigned int EntityDrawable::getPosX() const{
   return this->getPosition().x;
 }
 
-unsigned int EntityDrawable::getPosY(){
+unsigned int EntityDrawable::getPosY() const{
   return this->getPosition().y;
 }
 
@@ -30,7 +30,9 @@ unsigned int EntityDrawable::getWidth() const{
 
 void EntityDrawable::update(){}
 
-void EntityDrawable::watchDirection(){}
+void EntityDrawable::watchDirection(){
+
+}
 
 void EntityDrawable::setOriginCenter(){
   this->setPosition(this->getWidth() / 2, this->getLenght() / 2);

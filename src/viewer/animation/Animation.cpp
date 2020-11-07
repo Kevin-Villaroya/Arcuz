@@ -41,3 +41,7 @@ void Animation::increaseFrame(){
     this->currentFrame = 0;
   }
 }
+
+bool Animation::isLastFrame(){
+  return this->currentFrame == animation.size();
+}

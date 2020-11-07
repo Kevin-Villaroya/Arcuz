@@ -15,9 +15,9 @@ public:
   Controller(int width, int height);
   void checkEvents();
 
-  void start();
+  virtual void start();
   void closeGame();
 
-  ~Controller();
+  virtual ~Controller();
 };
 #endif

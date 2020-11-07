@@ -16,8 +16,8 @@ protected:
 public:
   EntityDrawable();
 
-  unsigned int getPosX();
-  unsigned int getPosY();
+  unsigned int getPosX() const;
+  unsigned int getPosY() const;
 
   unsigned int getLenght() const;
   unsigned int getWidth() const;

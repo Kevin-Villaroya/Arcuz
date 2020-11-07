@@ -9,11 +9,31 @@ Controller::Controller(int width, int height)  : window(sf::VideoMode(width, hei
 }
 
 void Controller::checkEvents(){ //if event do something to model TODO
-   sf::Event event;
-   this->window.pollEvent(event);
-   if (event.type == sf::Event::KeyPressed){
-     if (event.key.code == sf::Keyboard::Escape){
-       this->running = false;
+    sf::Event event;
+    while (this->window.pollEvent(event)) {
+
+     if (event.type == sf::Event::KeyPressed){ //KEY PRESSED
+       if (event.key.code == sf::Keyboard::Escape){
+         this->running = false;
+       }else if(event.key.code == sf::Keyboard::Right){
+         this->model->getMainCharacter().walk(Direction::right);
+       }else if(event.key.code == sf::Keyboard::Left){
+         this->model->getMainCharacter().walk(Direction::left);
+       }else if(event.key.code == sf::Keyboard::Up){
+         this->model->getMainCharacter().walk(Direction::up);
+       }else if(event.key.code == sf::Keyboard::Down){
+         this->model->getMainCharacter().walk(Direction::down);
+       }else{
+         if(this->model->getMainCharacter().getSpeed() != 0){
+           this->model->getMainCharacter().stop();
+         }
+       }
+     }else{
+       this->model->getMainCharacter().stop();
+     }
+
+     if(event.type == sf::Event::Closed){
+       this->closeGame();
      }
    }
 }

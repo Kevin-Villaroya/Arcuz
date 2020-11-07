@@ -15,12 +15,12 @@ private:
   bool block;
   TypeTile type;
 
-  void setSpriteByType(TypeTile type);
-
 public:
   Tile(TypeTile type, bool block);
   TypeTile getType() const;
   void setType(TypeTile type);
+
+  void setSpriteByType(TypeTile type);
 
   void update() override;
 };

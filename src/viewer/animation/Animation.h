@@ -23,6 +23,7 @@ public:
   void addTexture(const sf::Texture &texture);
   sf::Texture& getTextureDisplay();
   void reset();
+  bool isLastFrame();
 };
 
 #endif
