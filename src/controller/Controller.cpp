@@ -14,7 +14,19 @@ void Controller::checkEvents(){
 
      if (event.type == sf::Event::KeyPressed){ //ANY KEY PRESSED
 
-       if (event.key.code == sf::Keyboard::Escape){ //CASE ELSE
+       if(event.key.shift){ //SHIFT PRESSED
+         if(event.key.code == sf::Keyboard::Right){
+           this->model->getMainCharacter().run(Direction::right);
+         }else if(event.key.code == sf::Keyboard::Left){
+           this->model->getMainCharacter().run(Direction::left);
+         }else if(event.key.code == sf::Keyboard::Up){
+           this->model->getMainCharacter().run(Direction::up);
+         }else if(event.key.code == sf::Keyboard::Down){
+           this->model->getMainCharacter().run(Direction::down);
+         }
+       }
+
+       else if (event.key.code == sf::Keyboard::Escape){ //CASE ELSE
          this->running = false;
        }else if(event.key.code == sf::Keyboard::Right){
          this->model->getMainCharacter().walk(Direction::right);

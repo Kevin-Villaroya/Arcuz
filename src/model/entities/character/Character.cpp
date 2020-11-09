@@ -1,6 +1,7 @@
 #include "Character.h"
 #include "../../../viewer/texture/CharacterTexture.h"
 #include <iostream>
+#include <string>
 
 const float Character::SCALE = 0.5;
 
@@ -15,7 +16,7 @@ animationWalk(setCharacterAnimation(type, TypeAnimationCharacter::walk)),
 animationRun(setCharacterAnimation(type, TypeAnimationCharacter::run)),
 animationJump(setCharacterAnimation(type, TypeAnimationCharacter::jump)),
 animationDead(setCharacterAnimation(type, TypeAnimationCharacter::dead))
-{ this->currentAnimation = &this->animationIdle; this->speed = 0;}
+{ this->currentAnimation = &this->animationIdle; this->speed = 0; this->idCharacter = 0;}
 
 void Character::update(){
   this->watchDirection();
@@ -95,6 +96,10 @@ void Character::setSpeedWhenStopped(){
 
 int Character::getSpeed(){
   return this->speed;
+}
+
+std::string& Character::getName(){
+  return this->name;
 }
 
 void Character::applySprite(){

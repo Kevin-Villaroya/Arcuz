@@ -1,5 +1,6 @@
 #include "NetworkServer.h"
 #include <iostream>
+#include "data/NetworkData.h"
 
 NetworkServer::NetworkServer(int width, int height, unsigned int port) : Controller(width, height){
     this->port = port;
@@ -25,11 +26,18 @@ void NetworkServer::startServer(){
           if (this->selector.isReady(client)){
             sf::Packet packet;
             if (client.receive(packet) == sf::Socket::Done){
-              std::cout << "packet recu" << std::endl;
+              this->processingRequest(client, packet);
             }
           }
         }
       }
     }
+  }
+}
+
+void NetworkServer::processingRequest(sf::TcpSocket &socket, sf::Packet &packet){
+  const NetworkData* data = (NetworkData*)packet.getData();
+  if(data->action == Action::connect){
+    std::cout << socket.getRemoteAddress().toString() <<" se connecte au serveur" << std::endl;
   }
 }

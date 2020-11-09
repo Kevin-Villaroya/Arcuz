@@ -3,6 +3,7 @@
 
 #include <string>
 #include <SFML/Network.hpp>
+#include <SFML/Network/Packet.hpp>
 #include <vector>
 #include "../Controller.h"
 
@@ -13,7 +14,7 @@ private:
   sf::SocketSelector selector;
   std::vector<sf::TcpSocket*> clients;
 
-  const void* processingRequest(void* data, std::size_t size);
+  void processingRequest(sf::TcpSocket &socket, sf::Packet &packet);
 public:
   NetworkServer(int width, int height, unsigned int port);
   void startServer();

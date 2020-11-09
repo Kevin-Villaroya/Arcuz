@@ -24,6 +24,7 @@ private:
   const static float SCALE;
 
   std::string name;
+  unsigned int idCharacter;
 
   Animation animationIdle;
   Animation animationWalk;
@@ -56,6 +57,7 @@ public:
   void setSpeedWhenStopped();
 
   int getSpeed();
+  std::string& getName();
 };
 
 Animation setCharacterAnimation(TypeCharacter type, TypeAnimationCharacter typeAnimation);

@@ -1,24 +1,22 @@
-#include "model/Model.h"
-#include "controller/Controller.h"
-#include "controller/network/NetworkClient.h"
-#include "controller/network/NetworkServer.h"
-#include "functionInitGame.h"
-
-bool isHost();
+#include "tool/mainFunctions/functionsInitGame.h"
+#include "tool/mainFunctions/functionsLaunchGame.h"
 
 int main(){
-    Controller* controller;
     int width = 920;
     int height = 680;
 
-    if(initIsHost()){
-      controller = new NetworkServer(width, height, initPort());
-    }else{
-      controller = new NetworkClient(width, height, initIp(), initPort());
-    }
-    std::cout << "config.ini loaded" << std::endl;
+    bool isMulti = initIsMulti();
+    bool isHost = initIsHost();
+    std::string ip = initIp();
+    int port = initPort();
 
-    controller->start();
-    delete controller;
+    if(!isMulti){
+      launchSolo(width, height);
+    }else if(isHost){
+      launchServer(width, height, port);
+    }else{
+      launchClient(width, height, ip, port);
+    }
+
     return 0;
 }

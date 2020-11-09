@@ -5,10 +5,10 @@ TextureTool::TextureTool() : sf::Texture() {}
 
 TextureTool::TextureTool(std::string locationFolder) : sf::Texture(){
   this->loadFromFile(locationFolder);
-  this->resizeTextureLessAlpha();
+  this->resizeTextureLessAlpha(locationFolder);
 }
 
-void TextureTool::resizeTextureLessAlpha(){
+void TextureTool::resizeTextureLessAlpha(std::string locationAsset){
   sf::Image oldImage = this->copyToImage();
   sf::Image newImage;
 
@@ -19,11 +19,9 @@ void TextureTool::resizeTextureLessAlpha(){
 
   newImage.create(xMax - xMin, yMax - yMin);
 
-  for(int i = 0; i < width; i++){
-    for(int j = 0; j < height; j++){
-      if(!(i < xMin || i >= xMax || j < yMin || j >= yMax)){
-        newImage.setPixel(i - xMin, j - yMin, oldImage.getPixel(i,j));
-      }
+  for(int i = xMin; i < xMax; i++){
+    for(int j = yMin; j < yMax; j++){
+      newImage.setPixel(i - xMin, j - yMin, oldImage.getPixel(i,j));
     }
   }
 
@@ -38,10 +36,10 @@ void TextureTool::findNotAlphaPixelsIn(const sf::Image &oldImage, int &xMin, int
   for(int i = 0; i < width; i++){
     for(int j = 0; j < height; j++){
       if(oldImage.getPixel(i, j).a != 0){ //if pixel is not transparent
-        xMin = std::min(xMin,i);
-        xMax = std::max(xMax,i);
-        yMin = std::min(yMin,j);
-        yMax = std::max(yMax,j);
+        xMin = std::min(xMin, i);
+        xMax = std::max(xMax, i);
+        yMin = std::min(yMin, j);
+        yMax = std::max(yMax, j);
       }
     }
   }

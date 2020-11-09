@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 
 class Controller{
-private:
+protected:
   Model* model;
   View* view;
   sf::RenderWindow window; //WINDOWS IN SFML ARE DISPLAYERS AND LISTENERS
@@ -13,7 +13,7 @@ private:
 
 public:
   Controller(int width, int height);
-  void checkEvents();
+  virtual void checkEvents();
 
   virtual void start();
   void closeGame();

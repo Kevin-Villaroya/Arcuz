@@ -7,7 +7,7 @@
 
 class TextureTool : public sf::Texture{
 private:
-  void resizeTextureLessAlpha();
+  void resizeTextureLessAlpha(std::string locationAsset);
   void findNotAlphaPixelsIn(const sf::Image &image, int &xMin, int &xMax, int &yMin, int &yMax);
 
 public:

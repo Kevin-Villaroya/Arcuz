@@ -14,11 +14,14 @@ private:
   sf::TcpSocket socket;
 
   unsigned int port;
+  void connectGame();
 public:
   NetworkClient(int width, int height, std::string ip, unsigned int port);
   void communicate(sf::Packet &packet);
   bool connect();
   void send(sf::Packet &packet);
+
+  void checkEvents() override;
 };
 
 #endif
