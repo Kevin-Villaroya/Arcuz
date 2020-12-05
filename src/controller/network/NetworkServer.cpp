@@ -1,6 +1,6 @@
 #include "NetworkServer.h"
 #include <iostream>
-#include "data/NetworkData.h"
+#include <vector>
 
 NetworkServer::NetworkServer(int width, int height, unsigned int port) : Controller(width, height){
     this->port = port;
@@ -35,9 +35,52 @@ void NetworkServer::startServer(){
   }
 }
 
+void NetworkServer::start(){
+  while(this->running){
+    this->checkEvents();
+    this->model->update();
+    this->model->render();
+    this->updateAllCLient();
+  }
+}
+
 void NetworkServer::processingRequest(sf::TcpSocket &socket, sf::Packet &packet){
   const NetworkData* data = (NetworkData*)packet.getData();
   if(data->action == Action::connect){
-    std::cout << socket.getRemoteAddress().toString() <<" se connecte au serveur" << std::endl;
+    this->connectClient(socket, *data);
+  }else if(data->action == Action::walk_right){
+    this->clientWalk(socket, Direction::right);
   }
+}
+
+void  NetworkServer::updateAllCLient(){
+  sf::Packet packet;
+  std::vector<EntityDrawable> entities = this->model->getEntities();
+  entities.push_back(this->model->getMainCharacter());
+
+
+  size_t size = sizeof(std::vector<EntityDrawable>) * entities.size();
+  packet.append(&entities, size);
+
+  for (unsigned int i = 0; i < this->clients.size(); i++){
+    sf::TcpSocket& client = *this->clients[i];
+    if (this->selector.isReady(client)){
+      std::cout << "send entities to clients" << std::endl;
+      std::cout << "number of entities " << entities.size() << std::endl;
+      client.send(packet);
+    }
+  }
+}
+
+void NetworkServer::connectClient(sf::TcpSocket &socket, const NetworkData &data){
+  this->addCharacterClient(data.data);
+}
+
+void NetworkServer::addCharacterClient(std::string name){
+  Character character = Character(name);
+  this->model->addCharacter(character);
+}
+
+void NetworkServer::clientWalk(sf::TcpSocket &socket, Direction direction){
+  //Choose the good character and move it
 }

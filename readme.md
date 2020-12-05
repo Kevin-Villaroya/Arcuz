@@ -13,3 +13,4 @@ Majeur:
   - envoyer demande a adresse ip et port
   - interpreter demande
   - envoyer le resultat à tout les ip connectés
+  - delete le character a la deconnexion d'un client

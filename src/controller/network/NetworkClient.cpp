@@ -10,11 +10,11 @@ NetworkClient::NetworkClient(int width, int height, std::string ip, unsigned int
 }
 
 void NetworkClient::communicate(sf::Packet &packet){
-  this->connect();
+  this->connectServer();
   this->send(packet);
 }
 
-bool NetworkClient::connect(){
+bool NetworkClient::connectServer(){
   if(this->socket.connect(this->ip, this->port) == sf::Socket::Done){
     std::cout << "connection succeed" << std::endl;
     return true;
@@ -35,6 +35,27 @@ void NetworkClient::connectGame(){
   NetworkData data(Action::connect, model->getMainCharacter().getName());
   packet.append(&data, size);
   this->communicate(packet);
+}
+
+void NetworkClient::updateCLient(){
+  sf::Packet packet;
+  if(this->socket.receive(packet) == sf::Socket::Done){
+    std::vector<EntityDrawable>* entities = (std::vector<EntityDrawable>*)packet.getData();
+    std::cout << "test1" << std::endl;
+    std::cout << entities[0].size() << std::endl;
+    std::cout << "test2" << std::endl;
+    this->model->setEntities(entities[0]);
+  }
+}
+
+void NetworkClient::start(){
+  while(this->running){
+    this->checkEvents();
+    this->model->update();
+    this->model->render();
+    sf::Thread thread(&NetworkClient::updateCLient, this);
+    thread.launch();
+  }
 }
 
 void NetworkClient::checkEvents(){

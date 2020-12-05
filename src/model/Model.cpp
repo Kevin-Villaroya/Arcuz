@@ -1,6 +1,5 @@
 #include "Model.h"
 #include <iostream>
-#include <string>
 
 Model::Model(View &view):view(view), map(Map(50,50)), mainCharacter(Character()){
   this->view.centerViewOn(mainCharacter);
@@ -31,4 +30,21 @@ void Model::render(){
 
 Character& Model::getMainCharacter(){
   return this->mainCharacter;
+}
+
+void Model::addCharacter(Character& character){
+  entities.push_back(character);
+}
+
+const std::vector<EntityDrawable>& Model::getEntities(){
+  return this->entities;
+}
+
+void Model::setEntities(std::vector<EntityDrawable>& entities){
+  std::cout << "test" << std::endl;
+  std::cout << std::to_string(entities[0].getPosX()) << std::endl;
+  for(unsigned int i = 0; i < entities.size(); i++){
+    this->entities[i] = entities[i];
+  }
+  std::cout << "test" << std::endl;
 }

@@ -18,9 +18,11 @@ private:
 public:
   NetworkClient(int width, int height, std::string ip, unsigned int port);
   void communicate(sf::Packet &packet);
-  bool connect();
+  bool connectServer();
   void send(sf::Packet &packet);
 
+  void updateCLient();
+  void start() override;
   void checkEvents() override;
 };
 

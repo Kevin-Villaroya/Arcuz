@@ -2,6 +2,7 @@
 #define __MODEL_H__
 
 #include <vector>
+#include <string>
 
 #include "../viewer/View.h"
 #include "entities/EntityDrawable.h"
@@ -21,6 +22,10 @@ public:
   void update();
   void render();
   Character& getMainCharacter();
+
+  void addCharacter(Character& character);
+  const std::vector<EntityDrawable>& getEntities();
+  void setEntities(std::vector<EntityDrawable>& entities);
 };
 
 #endif

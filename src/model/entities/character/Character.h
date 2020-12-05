@@ -24,7 +24,6 @@ private:
   const static float SCALE;
 
   std::string name;
-  unsigned int idCharacter;
 
   Animation animationIdle;
   Animation animationWalk;
@@ -35,6 +34,7 @@ private:
   Animation* currentAnimation;
 
   int speed;
+  int id;
 
   void applySprite();
   void playAnimation();
@@ -55,7 +55,9 @@ public:
   void setSpeedWhenRun();
   void setSpeedWhenWalk();
   void setSpeedWhenStopped();
+  void setId(int id);
 
+  int getId();
   int getSpeed();
   std::string& getName();
 };

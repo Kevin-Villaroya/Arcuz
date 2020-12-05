@@ -6,6 +6,7 @@
 #include <SFML/Network/Packet.hpp>
 #include <vector>
 #include "../Controller.h"
+#include "data/NetworkData.h"
 
 class NetworkServer : public Controller{
 private:
@@ -15,10 +16,16 @@ private:
   std::vector<sf::TcpSocket*> clients;
 
   void processingRequest(sf::TcpSocket &socket, sf::Packet &packet);
+
+  void connectClient(sf::TcpSocket &socket, const NetworkData &data);
+  void updateAllCLient();
 public:
   NetworkServer(int width, int height, unsigned int port);
   void startServer();
-  void updateAllCLient();
+  void start() override;
+
+  void addCharacterClient(std::string name);
+  void clientWalk(sf::TcpSocket &socket, Direction direction);
 };
 
 #endif

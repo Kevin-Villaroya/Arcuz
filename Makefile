@@ -1,16 +1,29 @@
+BIN_DIR=./bin
+
 LIB=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
 BIN=../bin
 FLAGS=-Wall -ansi -std=c++17 -lstdc++fs -Wno-psabi
-EXEC=cluedo
+
+HEADER_TYPE=.h
+SOURCE_TYPE=.cpp
+BINARY_TYPE=.o
 
 OBJETS=$(shell find ./ -type f -name "*.cpp")
-BINARIES=$(shell find ./ -type f -name "*.o")
+HEADER=$(shell find ./ -type f -name "*.h")
+BINS:=$(SRCS:$(SRC_DIR)%$(SOURCE_TYPE)=$(BIN_DIR)%$(BINARY_TYPE))
 
-all:
-	g++ $(OBJETS) -o $(EXEC) $(LIB) $(FLAGS)
-ifneq ($(BINARIES),)
-	mv $(BINARIES) bin
-endif
+EXEC=cluedo
 
-clean:
-	find ../ -type f -name '*.o' -exec rm {} +
+all: $(EXEC)
+
+$(EXEC): $(BINS)
+	g++ $^ -o $(EXEC) $(LIB) $(FLAGS)
+
+$(BIN_DIR)/%$(BINARY_TYPE) : $(OBJETS)
+	g++ $(CFLAGS) -c $< -o $(BIN_DIR)/$*$(BINARY_TYPE)
+
+clear:
+	@rm -f $(BIN_DIR)/*
+
+mrproper: clear
+	@rm -f $(EXEC)

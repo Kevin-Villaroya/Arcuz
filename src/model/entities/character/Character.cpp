@@ -16,7 +16,7 @@ animationWalk(setCharacterAnimation(type, TypeAnimationCharacter::walk)),
 animationRun(setCharacterAnimation(type, TypeAnimationCharacter::run)),
 animationJump(setCharacterAnimation(type, TypeAnimationCharacter::jump)),
 animationDead(setCharacterAnimation(type, TypeAnimationCharacter::dead))
-{ this->currentAnimation = &this->animationIdle; this->speed = 0; this->idCharacter = 0;}
+{ this->currentAnimation = &this->animationIdle; this->speed = 0; this->direction = Direction::right; this->applySprite();}
 
 void Character::update(){
   this->watchDirection();
@@ -92,6 +92,14 @@ void Character::setSpeedWhenRun(){
 
 void Character::setSpeedWhenStopped(){
   this->speed = 0;
+}
+
+void Character::setId(int id){
+  this->id = id;
+}
+
+int Character::getId(){
+  return this->id;
 }
 
 int Character::getSpeed(){
