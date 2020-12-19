@@ -3,6 +3,7 @@
 #include <functional>
 #include <SFML/Network/Packet.hpp>
 #include "data/NetworkData.h"
+#include <SFML/Graphics/Sprite.hpp>
 
 NetworkClient::NetworkClient(int width, int height, std::string ip, unsigned int port) : Controller(width, height), ip(ip){
   this->port = port;
@@ -40,11 +41,18 @@ void NetworkClient::connectGame(){
 void NetworkClient::updateCLient(){
   sf::Packet packet;
   if(this->socket.receive(packet) == sf::Socket::Done){
-    std::vector<EntityDrawable>* entities = (std::vector<EntityDrawable>*)packet.getData();
-    std::cout << "test1" << std::endl;
-    std::cout << entities[0].size() << std::endl;
-    std::cout << "test2" << std::endl;
-    this->model->setEntities(entities[0]);
+    size_t size;
+    std::vector<EntityDrawable> entities;
+    EntityDrawable entity;
+
+    packet >> size;
+
+    std::cout << entity.getPosX() << std::endl;
+    for(unsigned int i = 0; i < size; i++){
+      packet >> entity;
+      entities.push_back(entity);
+    }
+    this->model->setEntities(entities);
   }
 }
 

@@ -1,29 +1,35 @@
-BIN_DIR=./bin
+CFLAG = -Wall -ansi -std=c++17 -lstdc++fs -Wno-psabi
+CLIB=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
 
-LIB=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
-BIN=../bin
-FLAGS=-Wall -ansi -std=c++17 -lstdc++fs -Wno-psabi
+CC = g++
+TARGET_EXEC ?= Arcuz
 
-HEADER_TYPE=.h
-SOURCE_TYPE=.cpp
-BINARY_TYPE=.o
+BUILD_DIR ?= ./build
+SRC_DIRS ?= ./src
 
-OBJETS=$(shell find ./ -type f -name "*.cpp")
-HEADER=$(shell find ./ -type f -name "*.h")
-BINS:=$(SRCS:$(SRC_DIR)%$(SOURCE_TYPE)=$(BIN_DIR)%$(BINARY_TYPE))
+SRCS := $(shell find $(SRC_DIRS) -name *.cpp)
+OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
+DEPS := $(OBJS:.o=.d)
 
-EXEC=cluedo
+INC_DIRS := $(shell find $(SRC_DIRS) -type d)
+INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
-all: $(EXEC)
+CPPFLAGS ?= $(INC_FLAGS) -MMD -MP
 
-$(EXEC): $(BINS)
-	g++ $^ -o $(EXEC) $(LIB) $(FLAGS)
+$(TARGET_EXEC): $(OBJS)
+	$(CC) $(OBJS) $(CFLAG) -o $@ $(LDFLAGS) $(CLIB)
 
-$(BIN_DIR)/%$(BINARY_TYPE) : $(OBJETS)
-	g++ $(CFLAGS) -c $< -o $(BIN_DIR)/$*$(BINARY_TYPE)
+# c++ source
+$(BUILD_DIR)/%.cpp.o: %.cpp
+	$(MKDIR_P) $(dir $@)
+	$(CXX) $(CPPFLAGS) $(CFLAG) $(CXXFLAGS) -c $< -o $@ $(CLIB)
 
-clear:
-	@rm -f $(BIN_DIR)/*
 
-mrproper: clear
-	@rm -f $(EXEC)
+.PHONY: clean
+
+clean:
+	$(RM) -r $(BUILD_DIR)
+
+-include $(DEPS)
+
+MKDIR_P ?= mkdir -p

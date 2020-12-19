@@ -2,6 +2,7 @@
 #define __ENTITY_DRAWABLE_H__
 
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Network/Packet.hpp>
 
 enum Direction{
   left,
@@ -31,5 +32,10 @@ public:
   void setTexture(const sf::Texture &texture);
   virtual void update();
 };
+
+sf::Packet& operator <<(sf::Packet& packet, const EntityDrawable& entity);
+sf::Packet& operator >>(sf::Packet& packet, EntityDrawable& entity);
+sf::Packet& operator <<(sf::Packet& packet, const sf::Texture& texture);
+sf::Packet& operator >>(sf::Packet& packet, sf::Texture& texture);
 
 #endif

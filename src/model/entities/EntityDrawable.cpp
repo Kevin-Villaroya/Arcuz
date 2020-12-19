@@ -1,5 +1,6 @@
 #include "EntityDrawable.h"
 #include <SFML/Graphics/Texture.hpp>
+#include <iostream>
 
 EntityDrawable::EntityDrawable() : EntityDrawable(false){}
 
@@ -49,4 +50,31 @@ void EntityDrawable::watchDirection(){
 
 void EntityDrawable::setOriginCenter(){
   //this->setOrigin(this->getTexture()->getCenter().x, this->getTexture()->getCenter().y);
+}
+
+sf::Packet& operator <<(sf::Packet& packet, const EntityDrawable& entity){
+    return packet << entity.getPosX() << entity.getPosY();
+}
+
+sf::Packet& operator >>(sf::Packet& packet, EntityDrawable& entity){
+  unsigned int posX;
+  unsigned int posY;
+  std::cout << "ok0" << std::endl;
+  std::cout << "ok1" << std::endl;
+  packet >> posX >> posY;
+  std::cout << "ok2" << std::endl;
+  entity.setPosition(posX, posY);
+  std::cout << "ok3" << std::endl;
+  return packet;
+}
+
+sf::Packet& operator <<(sf::Packet& packet, const sf::Texture& texture){
+  return packet << texture;
+}
+
+sf::Packet& operator >>(sf::Packet& packet, sf::Texture& texture){
+  std::cout << "ok4" << std::endl;
+  sf::Texture textureTemp;
+  std::cout << "ok5" << std::endl;
+  return packet >> texture;
 }

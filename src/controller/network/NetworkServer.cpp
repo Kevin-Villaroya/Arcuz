@@ -1,6 +1,7 @@
 #include "NetworkServer.h"
 #include <iostream>
 #include <vector>
+#include <../../model/entities/EntityDrawable.h>
 
 NetworkServer::NetworkServer(int width, int height, unsigned int port) : Controller(width, height){
     this->port = port;
@@ -57,10 +58,12 @@ void  NetworkServer::updateAllCLient(){
   sf::Packet packet;
   std::vector<EntityDrawable> entities = this->model->getEntities();
   entities.push_back(this->model->getMainCharacter());
+  size_t size = entities.size();
+  packet << size;
 
-
-  size_t size = sizeof(std::vector<EntityDrawable>) * entities.size();
-  packet.append(&entities, size);
+  for(unsigned int i = 0; i < size; i++){
+    packet << entities[i];
+  }
 
   for (unsigned int i = 0; i < this->clients.size(); i++){
     sf::TcpSocket& client = *this->clients[i];

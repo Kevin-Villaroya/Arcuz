@@ -41,8 +41,6 @@ const std::vector<EntityDrawable>& Model::getEntities(){
 }
 
 void Model::setEntities(std::vector<EntityDrawable>& entities){
-  std::cout << "test" << std::endl;
-  std::cout << std::to_string(entities[0].getPosX()) << std::endl;
   for(unsigned int i = 0; i < entities.size(); i++){
     this->entities[i] = entities[i];
   }
