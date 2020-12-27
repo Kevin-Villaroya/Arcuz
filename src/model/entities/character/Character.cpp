@@ -10,13 +10,17 @@ Character::Character() : Character("default"){}
 Character::Character(std::string name) : Character(name, TypeCharacter::man){}
 
 Character::Character(std::string name, TypeCharacter type) :
-name(name),
+type(type),
 animationIdle(setCharacterAnimation(type, TypeAnimationCharacter::idle)),
 animationWalk(setCharacterAnimation(type, TypeAnimationCharacter::walk)),
 animationRun(setCharacterAnimation(type, TypeAnimationCharacter::run)),
 animationJump(setCharacterAnimation(type, TypeAnimationCharacter::jump)),
-animationDead(setCharacterAnimation(type, TypeAnimationCharacter::dead))
-{ this->currentAnimation = &this->animationIdle; this->speed = 0; this->direction = Direction::right; this->applySprite();}
+animationDead(setCharacterAnimation(type, TypeAnimationCharacter::dead)){
+  this->name = name;
+  this->currentAnimation = &this->animationIdle;
+  this->speed = 0; this->direction = Direction::right;
+  this->applySprite();
+}
 
 void Character::update(){
   this->watchDirection();
@@ -98,16 +102,16 @@ void Character::setId(int id){
   this->id = id;
 }
 
-int Character::getId(){
+int Character::getId() const{
   return this->id;
 }
 
-int Character::getSpeed(){
+int Character::getSpeed() const{
   return this->speed;
 }
 
-std::string& Character::getName(){
-  return this->name;
+const TypeCharacter& Character::getType() const{
+  return this->type;
 }
 
 void Character::applySprite(){

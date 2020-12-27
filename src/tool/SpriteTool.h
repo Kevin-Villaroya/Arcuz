@@ -12,5 +12,4 @@ public:
   SpriteTool(std::string locationFolder);
 };
 
-
 #endif

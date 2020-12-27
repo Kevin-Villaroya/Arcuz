@@ -23,7 +23,7 @@ class Character : public EntityDrawable{
 private:
   const static float SCALE;
 
-  std::string name;
+  TypeCharacter type;
 
   Animation animationIdle;
   Animation animationWalk;
@@ -57,9 +57,9 @@ public:
   void setSpeedWhenStopped();
   void setId(int id);
 
-  int getId();
-  int getSpeed();
-  std::string& getName();
+  int getId() const;
+  int getSpeed() const;
+  const TypeCharacter& getType() const;
 };
 
 Animation setCharacterAnimation(TypeCharacter type, TypeAnimationCharacter typeAnimation);

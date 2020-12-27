@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Network/Packet.hpp>
 #include <string>
 
 class TextureTool : public sf::Texture{
@@ -14,5 +15,8 @@ public:
   TextureTool();
   TextureTool(std::string locationAsset);
 };
+
+sf::Packet& operator <<(sf::Packet& packet, TextureTool& texture);
+sf::Packet& operator >>(sf::Packet& packet, TextureTool& texture);
 
 #endif

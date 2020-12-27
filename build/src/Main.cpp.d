@@ -5,6 +5,7 @@ build/./src/Main.cpp.o: src/Main.cpp \
  src/tool/mainFunctions/../../controller/../model/Model.h \
  src/tool/mainFunctions/../../controller/../model/../viewer/View.h \
  src/tool/mainFunctions/../../controller/../model/../viewer/../model/entities/EntityDrawable.h \
+ src/tool/mainFunctions/../../controller/../model/../viewer/../model/entities/../../tool/TextureTool.h \
  src/tool/mainFunctions/../../controller/../model/../viewer/../model/entities/character/Character.h \
  src/tool/mainFunctions/../../controller/../model/../viewer/../model/entities/character/../EntityDrawable.h \
  src/tool/mainFunctions/../../controller/../model/../viewer/../model/entities/character/../../../viewer/animation/Animation.h \
@@ -31,6 +32,8 @@ src/tool/mainFunctions/../../controller/../model/Model.h:
 src/tool/mainFunctions/../../controller/../model/../viewer/View.h:
 
 src/tool/mainFunctions/../../controller/../model/../viewer/../model/entities/EntityDrawable.h:
+
+src/tool/mainFunctions/../../controller/../model/../viewer/../model/entities/../../tool/TextureTool.h:
 
 src/tool/mainFunctions/../../controller/../model/../viewer/../model/entities/character/Character.h:
 

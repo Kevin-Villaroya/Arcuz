@@ -2,6 +2,7 @@ build/./src/controller/Controller.cpp.o: src/controller/Controller.cpp \
  src/controller/Controller.h src/controller/../model/Model.h \
  src/controller/../model/../viewer/View.h \
  src/controller/../model/../viewer/../model/entities/EntityDrawable.h \
+ src/controller/../model/../viewer/../model/entities/../../tool/TextureTool.h \
  src/controller/../model/../viewer/../model/entities/character/Character.h \
  src/controller/../model/../viewer/../model/entities/character/../EntityDrawable.h \
  src/controller/../model/../viewer/../model/entities/character/../../../viewer/animation/Animation.h \
@@ -20,6 +21,8 @@ src/controller/../model/Model.h:
 src/controller/../model/../viewer/View.h:
 
 src/controller/../model/../viewer/../model/entities/EntityDrawable.h:
+
+src/controller/../model/../viewer/../model/entities/../../tool/TextureTool.h:
 
 src/controller/../model/../viewer/../model/entities/character/Character.h:
 

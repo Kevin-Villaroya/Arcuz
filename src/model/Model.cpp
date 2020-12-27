@@ -32,8 +32,23 @@ Character& Model::getMainCharacter(){
   return this->mainCharacter;
 }
 
-void Model::addCharacter(Character& character){
-  entities.push_back(character);
+void Model::addCharacter(Character character){
+  bool alreadyExist = false;
+  for(unsigned int i = 0; i < this->entities.size(); i++){
+    if(this->entities[i].getName().compare(character.getName()) == 0){
+      alreadyExist = true;
+    }
+  }
+  if(!alreadyExist){
+    std::cout << "le joueur " << character.getName() << " est connecté" << std::endl;
+    this->entities.push_back(character);
+  }else{
+    std::cout << "le joueur " << character.getName() << " existe déja ERREUR" << std::endl;
+  }
+}
+
+void Model::addEntity(EntityDrawable entity){
+  this->entities.push_back(entity);
 }
 
 const std::vector<EntityDrawable>& Model::getEntities(){
@@ -41,8 +56,39 @@ const std::vector<EntityDrawable>& Model::getEntities(){
 }
 
 void Model::setEntities(std::vector<EntityDrawable>& entities){
+  this->entities.clear();
+  //TextureTool* textureTest = new TextureTool("assets/character/man/Dead (1).png");
   for(unsigned int i = 0; i < entities.size(); i++){
-    this->entities[i] = entities[i];
+    EntityDrawable* entitie = new EntityDrawable();
+    entitie->setPosition(entities[i].getPosX(), entities[i].getPosY());
+    //entitie->setTexture(*textureTest);
+    this->entities.push_back(*entitie);
   }
-  std::cout << "test" << std::endl;
+  std::cout<<"nombre entite enregistrer "<< this->entities.size() << std::endl;
+}
+
+void Model::removeEntitie(EntityDrawable& entitie){
+  unsigned int i = 0;
+  bool find = false;
+  while(i < this->entities.size() || !find){
+    if(&this->entities[i] == &entitie){
+      std::cout << "Supression de l'entité " << this->entities[i].getName() << std::endl;
+      this->entities.erase(this->entities.begin() + i);
+      find = true;
+    }
+    i++;
+  }
+}
+
+void Model::removeEntitie(const std::string& name){
+  unsigned int i = 0;
+  bool find = false;
+  while(i < this->entities.size() || !find){
+    if(this->entities[i].getName().compare(name) == 0){
+      std::cout << "Supression de l'entité " << this->entities[i].getName() << std::endl;
+      this->entities.erase(this->entities.begin() + i);
+      find = true;
+    }
+    i++;
+  }
 }

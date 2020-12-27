@@ -15,16 +15,17 @@ private:
   sf::SocketSelector selector;
   std::vector<sf::TcpSocket*> clients;
 
-  void processingRequest(sf::TcpSocket &socket, sf::Packet &packet);
+  void processingRequest(sf::TcpSocket &socket,sf::Packet &packet);
 
-  void connectClient(sf::TcpSocket &socket, const NetworkData &data);
+  void connectClient(sf::Packet& packet);
   void updateAllCLient();
 public:
   NetworkServer(int width, int height, unsigned int port);
   void startServer();
   void start() override;
 
-  void addCharacterClient(std::string name);
+  void addCharacterClient(std::string& name, TypeCharacter& type);
+  void removeCharacterClient(const std::string& name);
   void clientWalk(sf::TcpSocket &socket, Direction direction);
 };
 

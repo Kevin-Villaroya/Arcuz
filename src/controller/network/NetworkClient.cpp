@@ -3,6 +3,9 @@
 #include <functional>
 #include <SFML/Network/Packet.hpp>
 #include "data/NetworkData.h"
+#include <experimental/filesystem>
+#include "../../viewer/texture/CharacterTexture.h"
+#include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 
 NetworkClient::NetworkClient(int width, int height, std::string ip, unsigned int port) : Controller(width, height), ip(ip){
@@ -32,27 +35,39 @@ void NetworkClient::send(sf::Packet &packet){
 
 void NetworkClient::connectGame(){
   sf::Packet packet;
-  size_t size = 10;
-  NetworkData data(Action::connect, model->getMainCharacter().getName());
-  packet.append(&data, size);
+
+  packet << (uint32_t)Action::connect;
+  packet << this->model->getMainCharacter().getName();
+  packet << (uint32_t)model->getMainCharacter().getType();
+
   this->communicate(packet);
+}
+
+void NetworkClient::disconnectGame(){
+  sf::Packet packet;
+
+  packet << (uint32_t)Action::disconnect;
+  packet << this->model->getMainCharacter().getName();
+
+  this->communicate(packet);
+  std::cout << "deconnection du serveur" << std::endl;
 }
 
 void NetworkClient::updateCLient(){
   sf::Packet packet;
+
   if(this->socket.receive(packet) == sf::Socket::Done){
-    size_t size;
+    unsigned int size;
     std::vector<EntityDrawable> entities;
     EntityDrawable entity;
 
     packet >> size;
 
-    std::cout << entity.getPosX() << std::endl;
     for(unsigned int i = 0; i < size; i++){
       packet >> entity;
       entities.push_back(entity);
     }
-    this->model->setEntities(entities);
+    //this->model->setEntities(entities);
   }
 }
 
@@ -85,6 +100,7 @@ void NetworkClient::checkEvents(){
        }
 
        else if (event.key.code == sf::Keyboard::Escape){ //CASE ELSE
+         this->disconnectGame();
          this->running = false;
        }else if(event.key.code == sf::Keyboard::Right){
          this->model->getMainCharacter().walk(Direction::right);
@@ -104,6 +120,7 @@ void NetworkClient::checkEvents(){
      }
 
      if(event.type == sf::Event::Closed){ // IF WINDOWS CLOSE
+       this->disconnectGame();
        this->closeGame();
      }
    }

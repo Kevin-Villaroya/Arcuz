@@ -6,6 +6,8 @@ Controller::Controller(int width, int height)  : window(sf::VideoMode(width, hei
   this->view = new View(this->window, width, height);
   this->model = new Model(*this->view);
   this->running = true;
+  this->window.setVerticalSyncEnabled(true);
+  this->window.setFramerateLimit(60);
 }
 
 void Controller::checkEvents(){

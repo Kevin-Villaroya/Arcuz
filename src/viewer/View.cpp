@@ -1,4 +1,5 @@
 #include "View.h"
+#include <iostream>
 
 View::View(sf::RenderWindow &window, int height, int width): window(window) , viewCharacter(sf::FloatRect(200.f, 200.f, 300.f, 200.f)){
   this->height = height;

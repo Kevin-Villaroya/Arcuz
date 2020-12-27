@@ -15,6 +15,7 @@ private:
 
   unsigned int port;
   void connectGame();
+  void disconnectGame();
 public:
   NetworkClient(int width, int height, std::string ip, unsigned int port);
   void communicate(sf::Packet &packet);

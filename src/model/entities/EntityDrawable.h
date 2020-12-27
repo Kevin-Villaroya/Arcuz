@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Network/Packet.hpp>
+#include "../../tool/TextureTool.h"
 
 enum Direction{
   left,
@@ -14,6 +15,7 @@ enum Direction{
 class EntityDrawable : public sf::Sprite{
 protected:
   Direction direction;
+  std::string name;
 
   bool isSpriteFixe;
 public:
@@ -26,6 +28,12 @@ public:
   unsigned int getHeight() const;
   unsigned int getWidth() const;
 
+  bool getIsSpriteFixe() const;
+  Direction getDirection() const;
+  const std::string& getName() const;
+
+  TextureTool getTextureTool() const;
+
   virtual void watchDirection();
   void setOriginCenter();
 
@@ -35,7 +43,5 @@ public:
 
 sf::Packet& operator <<(sf::Packet& packet, const EntityDrawable& entity);
 sf::Packet& operator >>(sf::Packet& packet, EntityDrawable& entity);
-sf::Packet& operator <<(sf::Packet& packet, const sf::Texture& texture);
-sf::Packet& operator >>(sf::Packet& packet, sf::Texture& texture);
 
 #endif

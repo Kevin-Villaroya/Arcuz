@@ -23,9 +23,12 @@ public:
   void render();
   Character& getMainCharacter();
 
-  void addCharacter(Character& character);
+  void addCharacter(Character character);
+  void addEntity(EntityDrawable entity);
   const std::vector<EntityDrawable>& getEntities();
   void setEntities(std::vector<EntityDrawable>& entities);
+  void removeEntitie(EntityDrawable& entitie);//Call destructor of EntityDrawable
+  void removeEntitie(const std::string& name);//Call destructor of EntityDrawable
 };
 
 #endif

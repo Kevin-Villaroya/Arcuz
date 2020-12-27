@@ -1,6 +1,8 @@
 #include "NetworkServer.h"
 #include <iostream>
 #include <vector>
+#include <typeinfo>
+#include <string.h>
 #include <../../model/entities/EntityDrawable.h>
 
 NetworkServer::NetworkServer(int width, int height, unsigned int port) : Controller(width, height){
@@ -17,7 +19,6 @@ void NetworkServer::startServer(){
         if (listener.accept(*client) == sf::Socket::Done){
           clients.push_back(client);
           this->selector.add(*client);
-          std::cout << "client connecté" << std::endl;
         }else{
           delete client;
         }
@@ -46,10 +47,19 @@ void NetworkServer::start(){
 }
 
 void NetworkServer::processingRequest(sf::TcpSocket &socket, sf::Packet &packet){
-  const NetworkData* data = (NetworkData*)packet.getData();
-  if(data->action == Action::connect){
-    this->connectClient(socket, *data);
-  }else if(data->action == Action::walk_right){
+  uint32_t action_int;
+  Action action;
+  std::string name;
+
+  packet >> action_int;
+  action = (Action)action_int;
+
+  if(action == Action::connect){
+    this->connectClient(packet);
+  }else if (action == Action::disconnect){
+    packet >> name;
+    this->removeCharacterClient(name);
+  }else if(action == Action::walk_right){
     this->clientWalk(socket, Direction::right);
   }
 }
@@ -58,30 +68,42 @@ void  NetworkServer::updateAllCLient(){
   sf::Packet packet;
   std::vector<EntityDrawable> entities = this->model->getEntities();
   entities.push_back(this->model->getMainCharacter());
-  size_t size = entities.size();
+  unsigned int size = (unsigned int) entities.size();
   packet << size;
 
   for(unsigned int i = 0; i < size; i++){
-    packet << entities[i];
+    //packet << entities[i];
   }
 
   for (unsigned int i = 0; i < this->clients.size(); i++){
     sf::TcpSocket& client = *this->clients[i];
     if (this->selector.isReady(client)){
-      std::cout << "send entities to clients" << std::endl;
-      std::cout << "number of entities " << entities.size() << std::endl;
       client.send(packet);
     }
   }
 }
 
-void NetworkServer::connectClient(sf::TcpSocket &socket, const NetworkData &data){
-  this->addCharacterClient(data.data);
+void NetworkServer::connectClient(sf::Packet& packet){
+  std::string name;
+  uint32_t type_int;
+  TypeCharacter type;
+
+  packet >> name;
+  packet >> type_int;
+  type = (TypeCharacter)type_int;
+
+  std::cout << "le joueur " << name << " essaie de se connecter" << std::endl;
+
+  this->addCharacterClient(name, type);
 }
 
-void NetworkServer::addCharacterClient(std::string name){
-  Character character = Character(name);
-  this->model->addCharacter(character);
+void NetworkServer::addCharacterClient(std::string& name, TypeCharacter& type){
+  Character* character = new Character(name, type);
+  this->model->addCharacter(*character);
+}
+
+void NetworkServer::removeCharacterClient(const std::string& name){
+  this->model->removeEntitie(name);
 }
 
 void NetworkServer::clientWalk(sf::TcpSocket &socket, Direction direction){

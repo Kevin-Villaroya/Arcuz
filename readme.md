@@ -9,8 +9,8 @@ Mineur:
 
 Majeur:
 - Gerer les deplacements par réponse du serveur apres une demande:
-  - ecouter un port:
-  - envoyer demande a adresse ip et port
-  - interpreter demande
-  - envoyer le resultat à tout les ip connectés
+  - interpreter demande edit: Tout le long du developpement
   - delete le character a la deconnexion d'un client
+
+En cours:
+- Passage de la reference texture du serveur au client pour toute les entités

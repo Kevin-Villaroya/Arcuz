@@ -1,4 +1,5 @@
 #include "EntityDrawable.h"
+#include "../../tool/TextureTool.h"
 #include <SFML/Graphics/Texture.hpp>
 #include <iostream>
 
@@ -36,6 +37,16 @@ void EntityDrawable::setTexture(const sf::Texture &texture){
   this->setOriginCenter();
 }
 
+TextureTool EntityDrawable::getTextureTool() const{
+  TextureTool texture;
+  texture.loadFromImage(this->getTexture()->copyToImage());
+  return texture;
+}
+
+const std::string& EntityDrawable::getName() const{
+  return this->name;
+}
+
 void EntityDrawable::update(){}
 
 void EntityDrawable::watchDirection(){
@@ -52,29 +63,29 @@ void EntityDrawable::setOriginCenter(){
   //this->setOrigin(this->getTexture()->getCenter().x, this->getTexture()->getCenter().y);
 }
 
+Direction EntityDrawable::getDirection() const{
+  return this->direction;
+}
+
+bool EntityDrawable::getIsSpriteFixe() const{
+  return this->isSpriteFixe;
+}
+
 sf::Packet& operator <<(sf::Packet& packet, const EntityDrawable& entity){
-    return packet << entity.getPosX() << entity.getPosY();
+  std::cout << "test" << std::endl;
+  TextureTool texture = entity.getTextureTool();
+  std::cout << "not a bug" << std::endl;
+  return packet << entity.getPosX() << entity.getPosY() << texture;
 }
 
 sf::Packet& operator >>(sf::Packet& packet, EntityDrawable& entity){
   unsigned int posX;
   unsigned int posY;
-  std::cout << "ok0" << std::endl;
-  std::cout << "ok1" << std::endl;
-  packet >> posX >> posY;
-  std::cout << "ok2" << std::endl;
+
+  TextureTool texture;
+  packet >> posX >> posY >> texture;
+
+  //entity.setTexture(texture);
   entity.setPosition(posX, posY);
-  std::cout << "ok3" << std::endl;
   return packet;
-}
-
-sf::Packet& operator <<(sf::Packet& packet, const sf::Texture& texture){
-  return packet << texture;
-}
-
-sf::Packet& operator >>(sf::Packet& packet, sf::Texture& texture){
-  std::cout << "ok4" << std::endl;
-  sf::Texture textureTemp;
-  std::cout << "ok5" << std::endl;
-  return packet >> texture;
 }
