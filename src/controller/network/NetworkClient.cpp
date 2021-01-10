@@ -59,15 +59,15 @@ void NetworkClient::updateCLient(){
   if(this->socket.receive(packet) == sf::Socket::Done){
     unsigned int size;
     std::vector<EntityDrawable> entities;
-    EntityDrawable entity;
+    EntityDrawable* entity = new EntityDrawable();
 
     packet >> size;
-
     for(unsigned int i = 0; i < size; i++){
-      packet >> entity;
-      entities.push_back(entity);
+      entity->putOut(packet);
+      entities.push_back(*entity);
     }
-    //this->model->setEntities(entities);
+
+    this->model->setEntities(entities);
   }
 }
 

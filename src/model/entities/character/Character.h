@@ -2,6 +2,7 @@
 #define __CHARACTER_H__
 
 #include "../EntityDrawable.h"
+#include <SFML/Network/Packet.hpp>
 #include <string>
 #include "../../../viewer/animation/Animation.h"
 

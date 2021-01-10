@@ -72,7 +72,7 @@ void  NetworkServer::updateAllCLient(){
   packet << size;
 
   for(unsigned int i = 0; i < size; i++){
-    //packet << entities[i];
+    entities[i].putIn(packet);
   }
 
   for (unsigned int i = 0; i < this->clients.size(); i++){

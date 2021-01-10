@@ -71,21 +71,27 @@ bool EntityDrawable::getIsSpriteFixe() const{
   return this->isSpriteFixe;
 }
 
-sf::Packet& operator <<(sf::Packet& packet, const EntityDrawable& entity){
-  std::cout << "test" << std::endl;
-  TextureTool texture = entity.getTextureTool();
-  std::cout << "not a bug" << std::endl;
-  return packet << entity.getPosX() << entity.getPosY() << texture;
+void EntityDrawable::putIn(sf::Packet& packet) const{
+  packet << this->getName();
+  packet << this->getPosX();
+  packet << this->getPosY();
+
+  //Ajouter point commun a tout entity TODO
+  //une classe heritante de EntityDrawable
+  //un type d'animation, null si aucune
+  //un numero de frame, 0 par défaut
 }
 
-sf::Packet& operator >>(sf::Packet& packet, EntityDrawable& entity){
+void EntityDrawable::putOut(sf::Packet& packet){
   unsigned int posX;
   unsigned int posY;
+  std::string name;
 
   TextureTool texture;
-  packet >> posX >> posY >> texture;
+  packet >> name;
+  packet >> posX;
+  packet >> posY;
 
-  //entity.setTexture(texture);
-  entity.setPosition(posX, posY);
-  return packet;
+  this->name = name;
+  this->setPosition(posX, posY);
 }

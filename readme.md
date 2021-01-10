@@ -14,3 +14,4 @@ Majeur:
 
 En cours:
 - Passage de la reference texture du serveur au client pour toute les entités
+- Besoin du type, de l'animation (IDLE) et de la frame de animation.

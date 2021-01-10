@@ -57,12 +57,8 @@ const std::vector<EntityDrawable>& Model::getEntities(){
 
 void Model::setEntities(std::vector<EntityDrawable>& entities){
   this->entities.clear();
-  //TextureTool* textureTest = new TextureTool("assets/character/man/Dead (1).png");
   for(unsigned int i = 0; i < entities.size(); i++){
-    EntityDrawable* entitie = new EntityDrawable();
-    entitie->setPosition(entities[i].getPosX(), entities[i].getPosY());
-    //entitie->setTexture(*textureTest);
-    this->entities.push_back(*entitie);
+    this->entities.push_back(entities[i]);
   }
   std::cout<<"nombre entite enregistrer "<< this->entities.size() << std::endl;
 }

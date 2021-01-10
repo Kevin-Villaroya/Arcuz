@@ -39,9 +39,9 @@ public:
 
   void setTexture(const sf::Texture &texture);
   virtual void update();
-};
 
-sf::Packet& operator <<(sf::Packet& packet, const EntityDrawable& entity);
-sf::Packet& operator >>(sf::Packet& packet, EntityDrawable& entity);
+  virtual void putIn(sf::Packet& packet) const;
+  virtual void putOut(sf::Packet& packet);
+};
 
 #endif

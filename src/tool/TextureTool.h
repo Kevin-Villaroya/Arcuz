@@ -16,7 +16,4 @@ public:
   TextureTool(std::string locationAsset);
 };
 
-sf::Packet& operator <<(sf::Packet& packet, TextureTool& texture);
-sf::Packet& operator >>(sf::Packet& packet, TextureTool& texture);
-
 #endif
