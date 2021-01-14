@@ -18,33 +18,33 @@ void Controller::checkEvents(){
 
        if(event.key.shift){ //SHIFT PRESSED
          if(event.key.code == sf::Keyboard::Right){
-           this->model->getMainCharacter().run(Direction::right);
+           this->model->getMainCharacter()->run(Direction::right);
          }else if(event.key.code == sf::Keyboard::Left){
-           this->model->getMainCharacter().run(Direction::left);
+           this->model->getMainCharacter()->run(Direction::left);
          }else if(event.key.code == sf::Keyboard::Up){
-           this->model->getMainCharacter().run(Direction::up);
+           this->model->getMainCharacter()->run(Direction::up);
          }else if(event.key.code == sf::Keyboard::Down){
-           this->model->getMainCharacter().run(Direction::down);
+           this->model->getMainCharacter()->run(Direction::down);
          }
        }
 
        else if (event.key.code == sf::Keyboard::Escape){ //CASE ELSE
          this->running = false;
        }else if(event.key.code == sf::Keyboard::Right){
-         this->model->getMainCharacter().walk(Direction::right);
+         this->model->getMainCharacter()->walk(Direction::right);
        }else if(event.key.code == sf::Keyboard::Left){
-         this->model->getMainCharacter().walk(Direction::left);
+         this->model->getMainCharacter()->walk(Direction::left);
        }else if(event.key.code == sf::Keyboard::Up){
-         this->model->getMainCharacter().walk(Direction::up);
+         this->model->getMainCharacter()->walk(Direction::up);
        }else if(event.key.code == sf::Keyboard::Down){
-         this->model->getMainCharacter().walk(Direction::down);
+         this->model->getMainCharacter()->walk(Direction::down);
        }else{
-         if(this->model->getMainCharacter().getSpeed() != 0){
-           this->model->getMainCharacter().stop();
+         if(this->model->getMainCharacter()->getSpeed() != 0){
+           this->model->getMainCharacter()->stop();
          }
        }
      }else{ // IF NO KEY PRESSED
-       this->model->getMainCharacter().stop();
+       this->model->getMainCharacter()->stop();
      }
 
      if(event.type == sf::Event::Closed){ // IF WINDOWS CLOSE

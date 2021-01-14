@@ -17,7 +17,7 @@ build/./src/controller/network/NetworkServer.cpp.o: \
  src/controller/network/../../model/map/../entities/tile/../../../tool/TextureTool.h \
  src/controller/network/../../model/entities/character/Character.h \
  src/controller/network/data/NetworkData.h \
- src/viewer/animation/../../model/entities/EntityDrawable.h
+ src/model/map/../../model/entities/EntityDrawable.h
 
 src/controller/network/NetworkServer.h:
 
@@ -53,4 +53,4 @@ src/controller/network/../../model/entities/character/Character.h:
 
 src/controller/network/data/NetworkData.h:
 
-src/viewer/animation/../../model/entities/EntityDrawable.h:
+src/model/map/../../model/entities/EntityDrawable.h:

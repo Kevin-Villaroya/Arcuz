@@ -12,10 +12,17 @@ enum Direction{
   down
 };
 
+enum TypeEntity{
+  character,
+  tile
+};
+
 class EntityDrawable : public sf::Sprite{
 protected:
   Direction direction;
+  TypeEntity typeEntity;
   std::string name;
+  int uid;
 
   bool isSpriteFixe;
 public:
@@ -27,6 +34,9 @@ public:
 
   unsigned int getHeight() const;
   unsigned int getWidth() const;
+
+  int getUid();
+  void setUid(unsigned int uid);
 
   bool getIsSpriteFixe() const;
   Direction getDirection() const;

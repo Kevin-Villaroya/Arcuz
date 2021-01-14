@@ -17,7 +17,7 @@ private:
 
   void processingRequest(sf::TcpSocket &socket,sf::Packet &packet);
 
-  void connectClient(sf::Packet& packet);
+  void connectClient(sf::TcpSocket &socket, sf::Packet& packet);
   void updateAllCLient();
 public:
   NetworkServer(int width, int height, unsigned int port);
@@ -25,7 +25,7 @@ public:
   void start() override;
 
   void addCharacterClient(std::string& name, TypeCharacter& type);
-  void removeCharacterClient(const std::string& name);
+  void removeCharacterClient(sf::TcpSocket &socket, const std::string& name);
   void clientWalk(sf::TcpSocket &socket, Direction direction);
 };
 

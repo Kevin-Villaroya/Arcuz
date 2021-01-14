@@ -13,22 +13,28 @@ class Model{
 private:
   View view;
   Map map;
-  Character mainCharacter;
+  Character* mainCharacter;
 
-  std::vector<EntityDrawable> entities; //all entities in the game (without character)
+  std::vector<EntityDrawable*> entities; //all entities in the game (without character)
 
 public:
   Model(View &view);
   void update();
   void render();
-  Character& getMainCharacter();
+  Character* getMainCharacter();
 
-  void addCharacter(Character character);
-  void addEntity(EntityDrawable entity);
-  const std::vector<EntityDrawable>& getEntities();
-  void setEntities(std::vector<EntityDrawable>& entities);
+  void addCharacter(Character* character);
+  void addEntity(EntityDrawable* entity);
+  const std::vector<EntityDrawable*>& getEntities();
+  void setEntities(std::vector<EntityDrawable*>& entities);
+
+  size_t quantityOfEntities();
+
+  void removeAllEntities();
   void removeEntitie(EntityDrawable& entitie);//Call destructor of EntityDrawable
   void removeEntitie(const std::string& name);//Call destructor of EntityDrawable
+
+  ~Model();
 };
 
 #endif

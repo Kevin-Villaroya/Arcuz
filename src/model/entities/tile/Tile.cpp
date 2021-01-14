@@ -3,6 +3,7 @@
 
 Tile::Tile(TypeTile type, bool block) : EntityDrawable(true){
   this->block = block;
+  this->typeEntity = TypeEntity::tile; 
   this->setSpriteByType(type);
 }
 

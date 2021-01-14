@@ -35,19 +35,33 @@ void NetworkClient::send(sf::Packet &packet){
 
 void NetworkClient::connectGame(){
   sf::Packet packet;
+  sf::Packet receiveUid;
+
+  std::string confirmation;
 
   packet << (uint32_t)Action::connect;
-  packet << this->model->getMainCharacter().getName();
-  packet << (uint32_t)model->getMainCharacter().getType();
+  packet << this->model->getMainCharacter()->getName();
+  packet << (uint32_t)model->getMainCharacter()->getType();
 
   this->communicate(packet);
+
+  bool packetReceived = false;
+
+  while(!packetReceived){
+    if(this->socket.receive(packet) != sf::Socket::Done){
+      receiveUid >> confirmation;
+      packetReceived = true;
+    }
+  }
+
+  std::cout << confirmation << std::endl;
 }
 
 void NetworkClient::disconnectGame(){
   sf::Packet packet;
 
   packet << (uint32_t)Action::disconnect;
-  packet << this->model->getMainCharacter().getName();
+  packet << this->model->getMainCharacter()->getName();
 
   this->communicate(packet);
   std::cout << "deconnection du serveur" << std::endl;
@@ -58,13 +72,13 @@ void NetworkClient::updateCLient(){
 
   if(this->socket.receive(packet) == sf::Socket::Done){
     unsigned int size;
-    std::vector<EntityDrawable> entities;
-    EntityDrawable* entity = new EntityDrawable();
-
+    std::vector<EntityDrawable*> entities;
+    EntityDrawable* entity;
     packet >> size;
     for(unsigned int i = 0; i < size; i++){
+      entity = new EntityDrawable();
       entity->putOut(packet);
-      entities.push_back(*entity);
+      entities.push_back(entity);
     }
 
     this->model->setEntities(entities);
@@ -89,13 +103,13 @@ void NetworkClient::checkEvents(){
 
        if(event.key.shift){ //SHIFT PRESSED
          if(event.key.code == sf::Keyboard::Right){
-           this->model->getMainCharacter().run(Direction::right);
+           this->model->getMainCharacter()->run(Direction::right);
          }else if(event.key.code == sf::Keyboard::Left){
-           this->model->getMainCharacter().run(Direction::left);
+           this->model->getMainCharacter()->run(Direction::left);
          }else if(event.key.code == sf::Keyboard::Up){
-           this->model->getMainCharacter().run(Direction::up);
+           this->model->getMainCharacter()->run(Direction::up);
          }else if(event.key.code == sf::Keyboard::Down){
-           this->model->getMainCharacter().run(Direction::down);
+           this->model->getMainCharacter()->run(Direction::down);
          }
        }
 
@@ -103,20 +117,20 @@ void NetworkClient::checkEvents(){
          this->disconnectGame();
          this->running = false;
        }else if(event.key.code == sf::Keyboard::Right){
-         this->model->getMainCharacter().walk(Direction::right);
+         this->model->getMainCharacter()->walk(Direction::right);
        }else if(event.key.code == sf::Keyboard::Left){
-         this->model->getMainCharacter().walk(Direction::left);
+         this->model->getMainCharacter()->walk(Direction::left);
        }else if(event.key.code == sf::Keyboard::Up){
-         this->model->getMainCharacter().walk(Direction::up);
+         this->model->getMainCharacter()->walk(Direction::up);
        }else if(event.key.code == sf::Keyboard::Down){
-         this->model->getMainCharacter().walk(Direction::down);
+         this->model->getMainCharacter()->walk(Direction::down);
        }else{
-         if(this->model->getMainCharacter().getSpeed() != 0){
-           this->model->getMainCharacter().stop();
+         if(this->model->getMainCharacter()->getSpeed() != 0){
+           this->model->getMainCharacter()->stop();
          }
        }
      }else{ // IF NO KEY PRESSED
-       this->model->getMainCharacter().stop();
+       this->model->getMainCharacter()->stop();
      }
 
      if(event.type == sf::Event::Closed){ // IF WINDOWS CLOSE

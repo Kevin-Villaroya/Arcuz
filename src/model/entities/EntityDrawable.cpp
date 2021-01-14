@@ -8,6 +8,7 @@ EntityDrawable::EntityDrawable() : EntityDrawable(false){}
 EntityDrawable::EntityDrawable(bool isSpriteFixe){
   this->isSpriteFixe = isSpriteFixe;
   this->direction = Direction::right;
+  this->uid = 0;
 }
 
 unsigned int EntityDrawable::getPosX() const{
@@ -30,6 +31,14 @@ unsigned int EntityDrawable::getWidth() const{
     return 0;
   }
   return this->getTexture()->getSize().x;
+}
+
+int EntityDrawable::getUid(){
+  return this->uid;
+}
+
+void EntityDrawable::setUid(unsigned int uid){
+  this->uid = uid;
 }
 
 void EntityDrawable::setTexture(const sf::Texture &texture){

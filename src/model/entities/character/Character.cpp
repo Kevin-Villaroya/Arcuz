@@ -17,6 +17,7 @@ animationRun(setCharacterAnimation(type, TypeAnimationCharacter::run)),
 animationJump(setCharacterAnimation(type, TypeAnimationCharacter::jump)),
 animationDead(setCharacterAnimation(type, TypeAnimationCharacter::dead)){
   this->name = name;
+  this->typeEntity = TypeEntity::character; 
   this->currentAnimation = &this->animationIdle;
   this->speed = 0; this->direction = Direction::right;
   this->applySprite();
