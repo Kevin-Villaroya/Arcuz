@@ -8,9 +8,12 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 
-NetworkClient::NetworkClient(int width, int height, std::string ip, unsigned int port) : Controller(width, height), ip(ip){
+sf::Mutex mutex;
+
+NetworkClient::NetworkClient(int width, int height, std::string ip, unsigned int port) : Controller(width, height), ip(ip), thread(&NetworkClient::updateCLient, this){
   this->port = port;
   this->connectGame();
+  this->threadTerminated = true;
 }
 
 void NetworkClient::communicate(sf::Packet &packet){
@@ -35,26 +38,14 @@ void NetworkClient::send(sf::Packet &packet){
 
 void NetworkClient::connectGame(){
   sf::Packet packet;
-  sf::Packet receiveUid;
 
-  std::string confirmation;
-
+  /*Envoie du nom du personnage et de son apparence*/
   packet << (uint32_t)Action::connect;
   packet << this->model->getMainCharacter()->getName();
   packet << (uint32_t)model->getMainCharacter()->getType();
 
   this->communicate(packet);
-
-  bool packetReceived = false;
-
-  while(!packetReceived){
-    if(this->socket.receive(packet) != sf::Socket::Done){
-      receiveUid >> confirmation;
-      packetReceived = true;
-    }
-  }
-
-  std::cout << confirmation << std::endl;
+  confirmationOfConnection();
 }
 
 void NetworkClient::disconnectGame(){
@@ -67,31 +58,55 @@ void NetworkClient::disconnectGame(){
   std::cout << "deconnection du serveur" << std::endl;
 }
 
+void NetworkClient::confirmationOfConnection(){
+  sf::Packet receiveUid;
+  unsigned int uid;
+
+  if(this->socket.receive(receiveUid) == sf::Socket::Done){
+    receiveUid >> uid;
+  }
+
+  this->model->getMainCharacter()->setUid(uid);
+  std::cout << "Mon id est " << uid << std::endl;
+}
+
 void NetworkClient::updateCLient(){
   sf::Packet packet;
+  this->threadTerminated = false;
+
+  std::cout << "in update" << std::endl;
 
   if(this->socket.receive(packet) == sf::Socket::Done){
-    unsigned int size;
     std::vector<EntityDrawable*> entities;
     EntityDrawable* entity;
+    unsigned int size;
+
     packet >> size;
+
     for(unsigned int i = 0; i < size; i++){
-      entity = new EntityDrawable();
+      entity = createEntity(packet);
       entity->putOut(packet);
       entities.push_back(entity);
+      std::cout << "pos x "<< entity->getPosX() << "pos y " << entity->getPosY()<< std::endl;
     }
 
+    mutex.lock();
     this->model->setEntities(entities);
+    mutex.unlock();
   }
+  this->threadTerminated = true;
 }
 
 void NetworkClient::start(){
   while(this->running){
+    mutex.lock();
     this->checkEvents();
     this->model->update();
     this->model->render();
-    sf::Thread thread(&NetworkClient::updateCLient, this);
-    thread.launch();
+    mutex.unlock();
+    if(this->threadTerminated){
+      this->thread.launch();
+    } 
   }
 }
 
@@ -135,7 +150,19 @@ void NetworkClient::checkEvents(){
 
      if(event.type == sf::Event::Closed){ // IF WINDOWS CLOSE
        this->disconnectGame();
+       this->thread.terminate();
        this->closeGame();
      }
    }
+}
+
+EntityDrawable* NetworkClient::createEntity(sf::Packet& packet){
+  int typeEntity;
+  packet >> typeEntity;
+
+  if((TypeEntity)typeEntity == TypeEntity::character){
+    return new Character();
+  }else{
+    return new EntityDrawable();
+  }
 }

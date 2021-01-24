@@ -1,6 +1,7 @@
 Rappel:
 - Taille de map dans le constructeur de Model
 - Penser a ce que les fichiers sont par reference
+- A chaque ajout de fille de Entity, qu'on aimerais transferer par reseau ajouter sa recuperation dans createEntity
 - continuer le projet :)
 
 Mineur:

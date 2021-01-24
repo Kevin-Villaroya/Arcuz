@@ -56,6 +56,10 @@ const std::string& EntityDrawable::getName() const{
   return this->name;
 }
 
+const int EntityDrawable::getIndexTypeEntity() const{
+  return this->typeEntity;
+}
+
 void EntityDrawable::update(){}
 
 void EntityDrawable::watchDirection(){
@@ -84,11 +88,6 @@ void EntityDrawable::putIn(sf::Packet& packet) const{
   packet << this->getName();
   packet << this->getPosX();
   packet << this->getPosY();
-
-  //Ajouter point commun a tout entity TODO
-  //une classe heritante de EntityDrawable
-  //un type d'animation, null si aucune
-  //un numero de frame, 0 par défaut
 }
 
 void EntityDrawable::putOut(sf::Packet& packet){

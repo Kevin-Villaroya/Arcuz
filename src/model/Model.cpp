@@ -22,7 +22,7 @@ void Model::render(){
   }
 
   for(unsigned int i = 0; i < this->entities.size(); i++){
-    allDraws.push_back(this->entities[i]);
+    allDraws.push_back(*this->entities[i]);
   }
 
   this->view.render(*this->mainCharacter, allDraws);
@@ -39,6 +39,7 @@ void Model::addCharacter(Character* character){
       alreadyExist = true;
     }
   }
+  
   if(!alreadyExist){
     std::cout << "le joueur " << character->getName() << " est connecté" << std::endl;
     this->addEntity(character);
@@ -62,7 +63,6 @@ void Model::setEntities(std::vector<EntityDrawable*>& entities){
   for(unsigned int i = 0; i < entities.size(); i++){
     this->entities.push_back(entities[i]);
   }
-  std::cout<<"nombre entite enregistrer "<< this->entities.size() << std::endl;
 }
 
 size_t Model::quantityOfEntities(){

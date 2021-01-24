@@ -19,6 +19,7 @@ animationDead(setCharacterAnimation(type, TypeAnimationCharacter::dead)){
   this->name = name;
   this->typeEntity = TypeEntity::character; 
   this->currentAnimation = &this->animationIdle;
+  this->action = TypeAnimationCharacter::idle;
   this->speed = 0; this->direction = Direction::right;
   this->applySprite();
 }
@@ -47,6 +48,7 @@ void Character::walk(Direction newDirection){
     this->currentAnimation->reset();
     this->direction = newDirection;
     this->currentAnimation = &this->animationWalk;
+    this->action = TypeAnimationCharacter::walk;
   }
   this->setSpeedWhenWalk();
 }
@@ -57,6 +59,7 @@ void Character::run(Direction newDirection){
     this->currentAnimation->reset();
     this->direction = newDirection;
     this->currentAnimation = &this->animationRun;
+    this->action = TypeAnimationCharacter::run;
   }
   this->setSpeedWhenRun();
 }
@@ -65,6 +68,7 @@ void Character::stop(){
   if(this->currentAnimation == &this->animationIdle){
   }else{
     this->currentAnimation = &this->animationIdle;
+    this->action = TypeAnimationCharacter::idle;
   }
   this->setSpeedWhenStopped();
 }
@@ -74,6 +78,7 @@ void Character::jump(){
   }else{
     this->currentAnimation->reset();
     this->currentAnimation = &this->animationJump;
+    this->action = TypeAnimationCharacter::jump;
   }
   this->setSpeedWhenWalk();
 }
@@ -83,6 +88,7 @@ void Character::die(){
   }else{
     this->currentAnimation->reset();
     this->currentAnimation = &this->animationDead;
+    this->action = TypeAnimationCharacter::dead;
   }
   this->setSpeedWhenStopped();
 }
@@ -111,13 +117,81 @@ int Character::getSpeed() const{
   return this->speed;
 }
 
-const TypeCharacter& Character::getType() const{
+const TypeAnimationCharacter Character::getAnimation() const{
+  return this->action;
+}
+
+const unsigned int Character::getCurrentFrame() const{
+  return this->currentAnimation->getCurrentFrame();
+}
+
+const int Character::getType() const{
   return this->type;
 }
 
 void Character::applySprite(){
   this->setTexture(this->currentAnimation->getTextureDisplay());
   this->setScale(Character::SCALE, Character::SCALE);
+}
+
+void Character::putIn(sf::Packet& packet) const{
+  EntityDrawable::putIn(packet);
+
+  packet << this->getType();
+  packet << this->getAnimation();
+  packet << this->getCurrentFrame();
+}
+
+void Character::putOut(sf::Packet& packet){
+  EntityDrawable::putOut(packet);
+
+  int animationPrimitive; 
+  TypeAnimationCharacter animation;
+
+  unsigned int currentFrame;
+
+  int typePrimitive; 
+  TypeCharacter type;
+
+  packet >> typePrimitive;
+  packet >> animationPrimitive;
+  packet >> currentFrame;
+
+  type = (TypeCharacter)typePrimitive;
+  animation = (TypeAnimationCharacter)animationPrimitive;
+
+  this->setTexture(*getTexture(type, animation, currentFrame));
+}
+
+const TextureTool* Character::getTexture(TypeCharacter type, TypeAnimationCharacter animation, unsigned int currentFrame){
+  CharacterTexture* characterTextures;
+
+  switch(type){
+    case girl:
+      characterTextures = CharacterTexture::GIRL_TEXTURES;
+      break;
+    default:
+      characterTextures = CharacterTexture::MAN_TEXTURES;
+      break;
+  }
+
+  switch(animation){
+    case TypeAnimationCharacter::dead:
+      return characterTextures->getDeadTextures()[currentFrame];
+      break;
+    case TypeAnimationCharacter::walk:
+      return characterTextures->getWalkTextures()[currentFrame];
+      break;
+    case TypeAnimationCharacter::run:
+      return characterTextures->getRunTextures()[currentFrame];
+      break;
+    case TypeAnimationCharacter::jump:
+      return characterTextures->getJumpTextures()[currentFrame];
+      break;
+    default:
+      return characterTextures->getIdleTextures()[currentFrame];
+      break;
+  }
 }
 
 Animation setCharacterAnimation(TypeCharacter type, TypeAnimationCharacter typeAnimation){
@@ -133,16 +207,16 @@ Animation setCharacterAnimation(TypeCharacter type, TypeAnimationCharacter typeA
   }
 
   switch(typeAnimation){
-    case dead:
+    case TypeAnimationCharacter::dead:
       return Animation(characterTextures->getDeadTextures());
       break;
-    case walk:
+    case TypeAnimationCharacter::walk:
       return Animation(characterTextures->getWalkTextures());
       break;
-    case run:
+    case TypeAnimationCharacter::run:
       return Animation(characterTextures->getRunTextures());
       break;
-    case jump:
+    case TypeAnimationCharacter::jump:
       return Animation(characterTextures->getJumpTextures());
       break;
     default:

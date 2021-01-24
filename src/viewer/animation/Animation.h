@@ -20,7 +20,10 @@ public:
   Animation(const std::vector<TextureTool*> &textures);
   Animation(const std::vector<TextureTool*> &textures, unsigned int delay);
   void addTexture(const TextureTool &texture);
+
   sf::Texture& getTextureDisplay();
+  unsigned int getCurrentFrame();
+
   void reset();
   bool isLastFrame();
 };

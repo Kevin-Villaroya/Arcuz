@@ -67,11 +67,13 @@ void NetworkServer::processingRequest(sf::TcpSocket &socket, sf::Packet &packet)
 void  NetworkServer::updateAllCLient(){
   sf::Packet packet;
   std::vector<EntityDrawable*> entities = this->model->getEntities();
+  
   entities.push_back(this->model->getMainCharacter());
   unsigned int size = (unsigned int) entities.size();
   packet << size;
 
   for(unsigned int i = 0; i < size; i++){
+    packet << entities[i]->getIndexTypeEntity();
     entities[i]->putIn(packet);
   }
 
@@ -92,19 +94,29 @@ void NetworkServer::connectClient(sf::TcpSocket &socket, sf::Packet& packet){
   packet >> name;
   packet >> type_int;
   type = (TypeCharacter)type_int;
-  uid = this->model->quantityOfEntities() + 1;
 
-  std::cout << "le joueur " << name << " essaie de se connecter, son uid est " << uid << std::endl;
+  std::cout << "le joueur " << name << " essaie de se connecter" << std::endl;
 
-  this->addCharacterClient(name, type);
-
-  sf::Packet packetSend;
-  packetSend << "Votre numero uid est" << uid;
-  socket.send(packetSend);
+  uid = this->confirmationOfConnection(socket);
+  this->addCharacterClient(name, type, uid);
 }
 
-void NetworkServer::addCharacterClient(std::string& name, TypeCharacter& type){
+unsigned int NetworkServer::confirmationOfConnection(sf::TcpSocket &socket){
+  sf::Packet packetSend;
+  unsigned int uid = this->model->quantityOfEntities() + 1;
+
+  packetSend << uid;
+
+  if (this->selector.isReady(socket)){
+    socket.send(packetSend);
+  }
+
+  return uid;
+}
+
+void NetworkServer::addCharacterClient(std::string& name, TypeCharacter& type, unsigned int uid){
   Character* character = new Character(name, type);
+  character->setUid(uid);
   this->model->addCharacter(character);
 }
 

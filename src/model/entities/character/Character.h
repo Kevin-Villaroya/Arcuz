@@ -33,6 +33,7 @@ private:
   Animation animationDead;
 
   Animation* currentAnimation;
+  TypeAnimationCharacter action;
 
   int speed;
   int id;
@@ -60,7 +61,14 @@ public:
 
   int getId() const;
   int getSpeed() const;
-  const TypeCharacter& getType() const;
+
+  const TypeAnimationCharacter getAnimation() const;
+  const unsigned int getCurrentFrame() const;
+  const int getType() const;
+
+  void putIn(sf::Packet& packet) const override;
+  void putOut(sf::Packet& packet) override;
+  const TextureTool* getTexture(TypeCharacter type, TypeAnimationCharacter animation, unsigned int currentFrame);
 };
 
 Animation setCharacterAnimation(TypeCharacter type, TypeAnimationCharacter typeAnimation);

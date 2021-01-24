@@ -30,6 +30,10 @@ sf::Texture& Animation::getTextureDisplay(){
   }
 }
 
+unsigned int Animation::getCurrentFrame(){
+  return this->currentFrame;
+}
+
 void Animation::reset(){
   this->currentFrame = 0;
   this->currentDelay = 0;

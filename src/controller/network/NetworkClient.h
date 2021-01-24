@@ -13,9 +13,14 @@ private:
   sf::IpAddress ip;
   sf::TcpSocket socket;
 
+  sf::Thread thread;
+  bool threadTerminated;
+
   unsigned int port;
   void connectGame();
   void disconnectGame();
+
+  void confirmationOfConnection();
 public:
   NetworkClient(int width, int height, std::string ip, unsigned int port);
   void communicate(sf::Packet &packet);
@@ -25,6 +30,8 @@ public:
   void updateCLient();
   void start() override;
   void checkEvents() override;
+
+  EntityDrawable* createEntity(sf::Packet& packet);
 };
 
 #endif

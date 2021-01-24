@@ -41,6 +41,7 @@ public:
   bool getIsSpriteFixe() const;
   Direction getDirection() const;
   const std::string& getName() const;
+  const int getIndexTypeEntity() const;
 
   TextureTool getTextureTool() const;
 
