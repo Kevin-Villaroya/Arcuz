@@ -21,7 +21,7 @@ public:
 
   void setSpriteByType(TypeTile type);
 
-  void update() override;
+  bool update() override;
 };
 
 #endif

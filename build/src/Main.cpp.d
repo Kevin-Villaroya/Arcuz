@@ -18,8 +18,9 @@ build/./src/Main.cpp.o: src/Main.cpp \
  src/tool/mainFunctions/../../controller/../model/entities/character/Character.h \
  src/tool/mainFunctions/../../controller/network/NetworkClient.h \
  src/tool/mainFunctions/../../controller/network/../Controller.h \
+ src/tool/mainFunctions/../../controller/network/data/NetworkData.h \
  src/tool/mainFunctions/../../controller/network/NetworkServer.h \
- src/tool/mainFunctions/../../controller/network/data/NetworkData.h
+ src/tool/mainFunctions/../../controller/network/data/ClientInformation.h
 
 src/tool/mainFunctions/functionsInitGame.h:
 
@@ -59,6 +60,8 @@ src/tool/mainFunctions/../../controller/network/NetworkClient.h:
 
 src/tool/mainFunctions/../../controller/network/../Controller.h:
 
+src/tool/mainFunctions/../../controller/network/data/NetworkData.h:
+
 src/tool/mainFunctions/../../controller/network/NetworkServer.h:
 
-src/tool/mainFunctions/../../controller/network/data/NetworkData.h:
+src/tool/mainFunctions/../../controller/network/data/ClientInformation.h:

@@ -24,10 +24,21 @@ animationDead(setCharacterAnimation(type, TypeAnimationCharacter::dead)){
   this->applySprite();
 }
 
-void Character::update(){
+bool Character::update(){
   this->watchDirection();
   this->moveCharacter();
   this->applySprite();
+
+  bool updated = this->oldPosX != this->getPosX() || this->oldPosY != this->getPosY();
+
+  this->oldPosX = this->getPosX();
+  this->oldPosY = this->getPosY();
+
+  return updated;
+}
+
+void Character::noUpdate(){
+  this->stop();
 }
 
 void Character::moveCharacter(){
@@ -121,8 +132,24 @@ const TypeAnimationCharacter Character::getAnimation() const{
   return this->action;
 }
 
-const unsigned int Character::getCurrentFrame() const{
-  return this->currentAnimation->getCurrentFrame();
+Animation* Character::getAnimation(TypeAnimationCharacter typeAnimation){
+  switch(typeAnimation){
+    case TypeAnimationCharacter::dead:
+      return &this->animationDead;
+      break;
+    case TypeAnimationCharacter::walk:
+      return &this->animationWalk;
+      break;
+    case TypeAnimationCharacter::run:
+      return &this->animationRun;
+      break;
+    case TypeAnimationCharacter::jump:
+      return &this->animationJump;
+      break;
+    default:
+      return &this->animationIdle;
+      break;
+  }
 }
 
 const int Character::getType() const{
@@ -139,7 +166,7 @@ void Character::putIn(sf::Packet& packet) const{
 
   packet << this->getType();
   packet << this->getAnimation();
-  packet << this->getCurrentFrame();
+  packet << (uint32_t)this->direction;
 }
 
 void Character::putOut(sf::Packet& packet){
@@ -147,51 +174,25 @@ void Character::putOut(sf::Packet& packet){
 
   int animationPrimitive; 
   TypeAnimationCharacter animation;
-
-  unsigned int currentFrame;
+  uint32_t direction;
 
   int typePrimitive; 
   TypeCharacter type;
 
   packet >> typePrimitive;
   packet >> animationPrimitive;
-  packet >> currentFrame;
+  packet >> direction;
 
+  this->direction = (Direction)direction;
   type = (TypeCharacter)typePrimitive;
   animation = (TypeAnimationCharacter)animationPrimitive;
 
-  this->setTexture(*getTexture(type, animation, currentFrame));
-}
-
-const TextureTool* Character::getTexture(TypeCharacter type, TypeAnimationCharacter animation, unsigned int currentFrame){
-  CharacterTexture* characterTextures;
-
-  switch(type){
-    case girl:
-      characterTextures = CharacterTexture::GIRL_TEXTURES;
-      break;
-    default:
-      characterTextures = CharacterTexture::MAN_TEXTURES;
-      break;
+  if(this->type != type){
+    setCharacterAnimation(type, animation);
   }
 
-  switch(animation){
-    case TypeAnimationCharacter::dead:
-      return characterTextures->getDeadTextures()[currentFrame];
-      break;
-    case TypeAnimationCharacter::walk:
-      return characterTextures->getWalkTextures()[currentFrame];
-      break;
-    case TypeAnimationCharacter::run:
-      return characterTextures->getRunTextures()[currentFrame];
-      break;
-    case TypeAnimationCharacter::jump:
-      return characterTextures->getJumpTextures()[currentFrame];
-      break;
-    default:
-      return characterTextures->getIdleTextures()[currentFrame];
-      break;
-  }
+  this->currentAnimation = this->getAnimation(animation);
+  this->watchDirection();
 }
 
 Animation setCharacterAnimation(TypeCharacter type, TypeAnimationCharacter typeAnimation){

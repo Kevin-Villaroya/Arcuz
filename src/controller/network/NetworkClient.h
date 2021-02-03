@@ -7,29 +7,42 @@
 #include <vector>
 #include <iostream>
 #include "../Controller.h"
+#include "data/NetworkData.h"
 
 class NetworkClient : public Controller{
 private:
   sf::IpAddress ip;
-  sf::TcpSocket socket;
+  sf::UdpSocket socket;
 
   sf::Thread thread;
+  sf::Mutex mutex;
+  
   bool threadTerminated;
+  bool threadPriority;
 
-  unsigned int port;
+  unsigned short port;
+  unsigned short portHost;
+
   void connectGame();
   void disconnectGame();
 
   void confirmationOfConnection();
-public:
-  NetworkClient(int width, int height, std::string ip, unsigned int port);
-  void communicate(sf::Packet &packet);
-  bool connectServer();
-  void send(sf::Packet &packet);
+  void confirmUpdate();
 
-  void updateCLient();
+  void WhenNoUpdateReceived();
+public:
+  NetworkClient(int width, int height, std::string ip, unsigned short port);
+
   void start() override;
   void checkEvents() override;
+
+  void send(sf::Packet &packet);
+  sf::Socket::Status receive(sf::Packet &packet);
+
+  /*Recover data of server for update the client*/
+  void updateCLient();
+  /*Send data to server for update the server*/
+  void updateServer();
 
   EntityDrawable* createEntity(sf::Packet& packet);
 };

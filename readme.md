@@ -9,9 +9,7 @@ Mineur:
 - Faire une fenetre de démarrage
 
 Majeur:
-- Gerer les deplacements par réponse du serveur apres une demande:
-  - interpreter demande edit: Tout le long du developpement
-  - delete le character a la deconnexion d'un client
+- Modifier les entites de client de la meme facon que update ajouter des personages uid la premiere fois et les updates
 
 En cours:
 - Passage de la reference texture du serveur au client pour toute les entités

@@ -15,6 +15,9 @@ private:
   Map map;
   Character* mainCharacter;
 
+  bool modelChanged;
+  std::vector<EntityDrawable*> entitiesNeedUpdate; //optimisation
+
   std::vector<EntityDrawable*> entities; //all entities in the game (without character)
 
 public:
@@ -23,12 +26,19 @@ public:
   void render();
   Character* getMainCharacter();
 
-  void addCharacter(Character* character);
+  bool addCharacter(Character* character);
   void addEntity(EntityDrawable* entity);
   const std::vector<EntityDrawable*>& getEntities();
   void setEntities(std::vector<EntityDrawable*>& entities);
 
+  bool existEntity(const std::string& name);
+  bool existEntity(const int uid);
+  EntityDrawable* getEntity(const int uid);
+
   size_t quantityOfEntities();
+
+  bool updateNeededForEntities();
+  std::vector<EntityDrawable*>& getEntitiesNeedUpdate();
 
   void removeAllEntities();
   void removeEntitie(EntityDrawable& entitie);//Call destructor of EntityDrawable

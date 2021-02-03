@@ -7,7 +7,7 @@ Tile::Tile(TypeTile type, bool block) : EntityDrawable(true){
   this->setSpriteByType(type);
 }
 
-void Tile::update(){}
+bool Tile::update(){return false;}
 
 TypeTile Tile::getType() const{
   return this->type;

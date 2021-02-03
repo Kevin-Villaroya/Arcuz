@@ -9,6 +9,8 @@ EntityDrawable::EntityDrawable(bool isSpriteFixe){
   this->isSpriteFixe = isSpriteFixe;
   this->direction = Direction::right;
   this->uid = 0;
+  this->oldPosX = this->getPosX();
+  this->oldPosY = this->getPosY();
 }
 
 unsigned int EntityDrawable::getPosX() const{
@@ -60,7 +62,16 @@ const int EntityDrawable::getIndexTypeEntity() const{
   return this->typeEntity;
 }
 
-void EntityDrawable::update(){}
+bool EntityDrawable::update(){
+  bool updated = this->oldPosX != this->getPosX() || this->oldPosY != this->getPosY();
+
+  this->oldPosX = this->getPosX();
+  this->oldPosY = this->getPosY();
+
+  return updated;
+}
+
+void EntityDrawable::noUpdate(){}
 
 void EntityDrawable::watchDirection(){
   if(!this->isSpriteFixe){
@@ -85,6 +96,7 @@ bool EntityDrawable::getIsSpriteFixe() const{
 }
 
 void EntityDrawable::putIn(sf::Packet& packet) const{
+  packet << this->uid;
   packet << this->getName();
   packet << this->getPosX();
   packet << this->getPosY();
@@ -94,12 +106,15 @@ void EntityDrawable::putOut(sf::Packet& packet){
   unsigned int posX;
   unsigned int posY;
   std::string name;
-
+  int uid;
   TextureTool texture;
+
+  packet >> uid;
   packet >> name;
   packet >> posX;
   packet >> posY;
 
+  this->uid = uid;
   this->name = name;
   this->setPosition(posX, posY);
 }

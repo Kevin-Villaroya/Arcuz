@@ -45,7 +45,9 @@ public:
   Character(std::string name);
   Character(std::string name, TypeCharacter type);
 
-  void update() override;
+  bool update() override;
+  void noUpdate() override;
+
   void moveCharacter();
 
   void walk(Direction direction);
@@ -63,12 +65,12 @@ public:
   int getSpeed() const;
 
   const TypeAnimationCharacter getAnimation() const;
-  const unsigned int getCurrentFrame() const;
+  Animation* getAnimation(TypeAnimationCharacter typeAnimation);
+
   const int getType() const;
 
   void putIn(sf::Packet& packet) const override;
   void putOut(sf::Packet& packet) override;
-  const TextureTool* getTexture(TypeCharacter type, TypeAnimationCharacter animation, unsigned int currentFrame);
 };
 
 Animation setCharacterAnimation(TypeCharacter type, TypeAnimationCharacter typeAnimation);

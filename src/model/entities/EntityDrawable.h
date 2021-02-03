@@ -24,6 +24,9 @@ protected:
   std::string name;
   int uid;
 
+  unsigned int oldPosX;
+  unsigned int oldPosY;
+
   bool isSpriteFixe;
 public:
   EntityDrawable();
@@ -49,7 +52,8 @@ public:
   void setOriginCenter();
 
   void setTexture(const sf::Texture &texture);
-  virtual void update();
+  virtual bool update();
+  virtual void noUpdate(); /*Change the entity when is not updated*/
 
   virtual void putIn(sf::Packet& packet) const;
   virtual void putOut(sf::Packet& packet);

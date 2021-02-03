@@ -3,13 +3,25 @@
 
 Model::Model(View &view):view(view), map(Map(50,50)), mainCharacter(new Character()){
   this->view.centerViewOn(*mainCharacter);
+  this->modelChanged = false;
 }
 
 void Model::update(){//loop update
-  this->mainCharacter->update();
+  bool updated = this->mainCharacter->update();
+  this->entitiesNeedUpdate.clear();
+
   for(unsigned int i = 0; i < this->entities.size(); i++){
-    this->entities[i]->update();
+    if(this->entities[i]->update()){
+      updated = true;
+      this->entitiesNeedUpdate.push_back(this->entities[i]);
+    }
   }
+
+  if(this->mainCharacter->update()){
+    updated = true;
+    this->entitiesNeedUpdate.push_back(this->mainCharacter);
+  }
+  this->modelChanged = updated;
 }
 
 void Model::render(){
@@ -32,7 +44,7 @@ Character* Model::getMainCharacter(){
   return this->mainCharacter;
 }
 
-void Model::addCharacter(Character* character){
+bool Model::addCharacter(Character* character){
   bool alreadyExist = false;
   for(unsigned int i = 0; i < this->entities.size(); i++){
     if(this->entities[i]->getName().compare(character->getName()) == 0){
@@ -46,6 +58,8 @@ void Model::addCharacter(Character* character){
   }else{
     std::cout << "le joueur " << character->getName() << " existe déja ERREUR" << std::endl;
   }
+
+  return !alreadyExist;
 }
 
 void Model::addEntity(EntityDrawable* entity){
@@ -65,6 +79,35 @@ void Model::setEntities(std::vector<EntityDrawable*>& entities){
   }
 }
 
+bool Model::existEntity(const std::string& name){
+  bool find = false;
+  for(unsigned int i = 0; i < this->entities.size() && !find; i++){
+    if(this->entities[i]->getName().compare(name) == 0){
+      find = true;
+    }
+  }
+  return find;
+}
+
+bool Model::existEntity(const int uid){
+  bool find = false;
+  for(unsigned int i = 0; i < this->entities.size() && !find; i++){
+    if(this->entities[i]->getUid() == uid){
+      find = true;
+    }
+  }
+  return find;
+}
+
+EntityDrawable* Model::getEntity(const int uid){
+  for(unsigned int i = 0; i < this->entities.size(); i++){
+    if(this->entities[i]->getUid()== uid){
+      return this->entities[i];
+    }
+  }
+  return NULL;
+}
+
 size_t Model::quantityOfEntities(){
   return this->entities.size();
 }
@@ -77,13 +120,20 @@ void Model::removeAllEntities(){
   this->entities.clear();
 }
 
+bool Model::updateNeededForEntities(){
+  return this->modelChanged;
+}
+
+std::vector<EntityDrawable*>& Model::getEntitiesNeedUpdate(){
+  return this->entitiesNeedUpdate;
+}
+
 void Model::removeEntitie(EntityDrawable& entitie){
   unsigned int i = 0;
   bool find = false;
   while(i < this->entities.size() || !find){
     if(this->entities[i] == &entitie){
       EntityDrawable* entityRemoved = this->entities[i];
-      std::cout << "Supression de l'entité " << entityRemoved->getName() << std::endl;
       this->entities.erase(this->entities.begin() + i);
       delete entityRemoved;
       find = true;
@@ -97,7 +147,6 @@ void Model::removeEntitie(const std::string& name){
   bool find = false;
   while(i < this->entities.size() || !find){
     if(this->entities[i]->getName().compare(name) == 0){
-      std::cout << "Supression de l'entité " << this->entities[i]->getName() << std::endl;
       this->entities.erase(this->entities.begin() + i);
       find = true;
     }

@@ -7,7 +7,7 @@ Controller::Controller(int width, int height)  : window(sf::VideoMode(width, hei
   this->model = new Model(*this->view);
   this->running = true;
   this->window.setVerticalSyncEnabled(true);
-  this->window.setFramerateLimit(60);
+  this->window.setFramerateLimit(30);
 }
 
 void Controller::checkEvents(){

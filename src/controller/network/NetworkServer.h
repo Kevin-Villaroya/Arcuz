@@ -7,28 +7,38 @@
 #include <vector>
 #include "../Controller.h"
 #include "data/NetworkData.h"
+#include "data/ClientInformation.h"
 
 class NetworkServer : public Controller{
 private:
-  unsigned int port;
-  sf::TcpListener listener;
-  sf::SocketSelector selector;
-  std::vector<sf::TcpSocket*> clients;
+  unsigned short port;
+  sf::UdpSocket socket;
+  std::vector<ClientInformation> clients;
 
-  void processingRequest(sf::TcpSocket &socket,sf::Packet &packet);
+  bool allClientupdated;
 
-  void connectClient(sf::TcpSocket &socket, sf::Packet& packet);
-  void updateAllCLient();
+  void processingRequest(const sf::IpAddress &adressClient, unsigned short port, sf::Packet &packet);
 
-  unsigned int confirmationOfConnection(sf::TcpSocket &socket);
+  unsigned int connectClient(const sf::IpAddress &adressClient, unsigned short port, sf::Packet& packet);
+
+  void updateAllCLient(std::vector<EntityDrawable*> &entitiesUpdated);
+  void sendUpdateTo(ClientInformation &client, std::vector<EntityDrawable*> &entities);
+  void updateCLient(sf::Packet& packet);
+
+  unsigned int confirmationOfConnection(const sf::IpAddress &adressClient, unsigned short port);
+  void confirmationOfHavingReceivedUpdate(int uid);
 public:
-  NetworkServer(int width, int height, unsigned int port);
+  NetworkServer(int width, int height, unsigned short port);
   void startServer();
   void start() override;
 
-  void addCharacterClient(std::string& name, TypeCharacter& type, unsigned int uid);
-  void removeCharacterClient(sf::TcpSocket &socket, const std::string& name);
-  void clientWalk(sf::TcpSocket &socket, Direction direction);
+  void deleteClient(sf::IpAddress ip, unsigned short port);
+  void addCLient(sf::IpAddress ip, unsigned short port, unsigned int uid);
+
+  bool clientActive(ClientInformation &client);
+
+  bool addCharacterClient(std::string& name, TypeCharacter& type, unsigned int uid);
+  void removeCharacterClient(const sf::IpAddress &adressClient, unsigned short port, const std::string& name);
 };
 
 #endif
