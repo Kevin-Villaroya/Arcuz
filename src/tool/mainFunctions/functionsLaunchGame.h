@@ -1,10 +1,10 @@
 #include <functional>
-#include "../../controller/Controller.h"
-#include "../../controller/network/NetworkClient.h"
-#include "../../controller/network/NetworkServer.h"
+#include "../../controller/controllerState/gameController/GameController.h"
+#include "../../controller/controllerState/gameController/network/NetworkClient.h"
+#include "../../controller/controllerState/gameController/network/NetworkServer.h"
 
 void launchSolo(int width, int height){
-  Controller* controller = new Controller(width, height);
+  GameController* controller = new GameController(width, height);
   std::cout << "config.ini loaded" << std::endl;
   std::cout << "game solo launched" << std::endl;
   controller->start();

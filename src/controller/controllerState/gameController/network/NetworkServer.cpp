@@ -5,7 +5,7 @@
 #include <string.h>
 #include <../../model/entities/EntityDrawable.h>
 
-NetworkServer::NetworkServer(int width, int height, unsigned short port) : Controller(width, height){
+NetworkServer::NetworkServer(int width, int height, unsigned short port) : GameController(width, height){
     this->port = port;
     this->socket.bind(this->port);
     this->allClientupdated = false;
@@ -50,6 +50,8 @@ void NetworkServer::processingRequest(const sf::IpAddress &adressClient, unsigne
     uid = this->connectClient(adressClient, port, packet);
     if(uid != 0){
       this->addCLient(adressClient, port, uid);
+    }else{
+      this->notAcceptClient(adressClient, port);
     }
   }else if (action == Action::disconnect){
     packet >> name;
@@ -83,7 +85,7 @@ void  NetworkServer::updateAllCLient(std::vector<EntityDrawable*> &entitiesUpdat
   this->allClientupdated = false;
 }
 
-void NetworkServer::sendUpdateTo(ClientInformation &client, std::vector<EntityDrawable*> &entities){
+void NetworkServer::sendUpdateTo(ClientInformation &client, const std::vector<EntityDrawable*> &entities){
   sf::Packet packet;
   unsigned int size = (unsigned int)entities.size();
   packet << size;
@@ -113,7 +115,7 @@ unsigned int  NetworkServer::connectClient(const sf::IpAddress &adressClient, un
   std::string name;
   uint32_t type_int;
   TypeCharacter type;
-  unsigned int uid;
+  unsigned int uid = 0;
 
   packet >> name;
   packet >> type_int;
@@ -121,14 +123,28 @@ unsigned int  NetworkServer::connectClient(const sf::IpAddress &adressClient, un
 
   std::cout << "le joueur " << name << " essaie de se connecter" << std::endl;
 
-  if(this->model->existEntity(name)){
-    std::cout << "le joueur " << name << " existe déja ERREUR" << std::endl;
-    return 0;
-  }else{
-    uid = this->confirmationOfConnection(adressClient, port);
-    this->addCharacterClient(name, type, uid);
+  if(!this->model->existEntity(name)){
+      uid = this->confirmationOfConnection(adressClient, port);
+      ClientInformation client = this->addCLient(adressClient, port, uid);
+
+      std::vector<EntityDrawable*> entitiesToSend = this->model->getEntities();
+      entitiesToSend.push_back(this->model->getMainCharacter());
+
+      this->sendUpdateTo(client, entitiesToSend);
+      this->addCharacterClient(name, type, uid);
+    }else{
+      std::cout << "le joueur " << name << " existe déja ERREUR" << std::endl;
+      this->notAcceptClient(adressClient, port);
+    }
+
     return uid;
-  }
+}
+
+void NetworkServer::notAcceptClient(const sf::IpAddress &adressClient, unsigned short port){
+  sf::Packet packet;
+  packet << (uint32_t)Action::confirm_disconnect;
+
+  this->socket.send(packet, adressClient, port);
 }
 
 unsigned int NetworkServer::confirmationOfConnection(const sf::IpAddress &adressClient, unsigned short port){
@@ -144,7 +160,7 @@ void NetworkServer::confirmationOfHavingReceivedUpdate(int uid){
   bool find = false;
   for(unsigned int i = 0; i < this->clients.size() && !find; i++){
     if(this->clients[i].uid == uid){
-      this->clients[i].active = true;
+      this->clients[i].state = State::active;
       this->clients[i].nbUpdateNotConfirmed = 0;
       find = true;
     }
@@ -164,24 +180,26 @@ void NetworkServer::deleteClient(sf::IpAddress ip, unsigned short port){
   }
 }
 
-void NetworkServer::addCLient(sf::IpAddress ip, unsigned short port, unsigned int uid){
+ClientInformation& NetworkServer::addCLient(sf::IpAddress ip, unsigned short port, unsigned int uid){
   ClientInformation client;
 
   client.ip = ip;
   client.port = port;
   client.uid = uid;
-  client.active = true;
+  client.state = State::untested;
   client.nbUpdateMaxNotConfirmed = 8;
   client.nbUpdateNotConfirmed = 0;
 
   this->clients.push_back(client);
+  return this->clients[this->clients.size() - 1];
 }
 
 bool NetworkServer::clientActive(ClientInformation &client){
   if(client.nbUpdateNotConfirmed >= client.nbUpdateMaxNotConfirmed){
-    client.active = false;
+    client.state = State::inactive;
+    return false;
   }
-  return client.active;
+  return true;
 }
 
 bool NetworkServer::addCharacterClient(std::string& name, TypeCharacter& type, unsigned int uid){
@@ -193,8 +211,4 @@ bool NetworkServer::addCharacterClient(std::string& name, TypeCharacter& type, u
 void NetworkServer::removeCharacterClient(const sf::IpAddress &adressClient, unsigned short port, const std::string& name){
   std::cout << "deconnection de " << name << std::endl;
   this->model->removeEntitie(name);
-/*
-  sf::Packet packetSend;
-  packetSend << "Votre déconnection est confirmer";
-  socket.send(packetSend);*/
 }

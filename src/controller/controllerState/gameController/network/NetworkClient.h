@@ -6,10 +6,10 @@
 #include <SFML/Network/Packet.hpp>
 #include <vector>
 #include <iostream>
-#include "../Controller.h"
+#include "../GameController.h"
 #include "data/NetworkData.h"
 
-class NetworkClient : public Controller{
+class NetworkClient : public GameController{
 private:
   sf::IpAddress ip;
   sf::UdpSocket socket;
@@ -17,16 +17,18 @@ private:
   sf::Thread thread;
   sf::Mutex mutex;
   
+  bool connectionSucceed;
+
   bool threadTerminated;
   bool threadPriority;
 
   unsigned short port;
   unsigned short portHost;
 
-  void connectGame();
+  bool connectGame();
   void disconnectGame();
 
-  void confirmationOfConnection();
+  bool confirmationOfConnection();
   void confirmUpdate();
 
   void WhenNoUpdateReceived();

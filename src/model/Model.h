@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-#include "../viewer/View.h"
+#include "../viewer/view/View.h"
 #include "entities/EntityDrawable.h"
 #include "map/Map.h"
 #include "entities/character/Character.h"
@@ -22,6 +22,7 @@ private:
 
 public:
   Model(View &view);
+
   void update();
   void render();
   Character* getMainCharacter();

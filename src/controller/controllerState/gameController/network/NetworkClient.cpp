@@ -9,37 +9,39 @@
 
 sf::Mutex mutex;
 
-NetworkClient::NetworkClient(int width, int height, std::string ip, unsigned short portHost) : Controller(width, height), ip(ip), thread(&NetworkClient::updateCLient, this){
+NetworkClient::NetworkClient(int width, int height, std::string ip, unsigned short portHost) : GameController(width, height), ip(ip), thread(&NetworkClient::updateCLient, this){
   this->portHost = portHost;
   this->port = sf::Socket::AnyPort;
   if(this->socket.bind(this->port) != sf::Socket::Done){
     std::cout << "Erreur de liaison" << std::endl;
   }else{
-    this->connectGame();
+    this->connectionSucceed = this->connectGame();
     this->threadTerminated = true;
     this->threadPriority = false;
   }
 }
 
 void NetworkClient::start(){
-  while(this->running){
-    
-    this->checkEvents();
-    this->model->update();
-    this->model->render();
-    this->updateServer();
-    
-    if(this->threadTerminated){
-      this->thread.launch();
-    }else{
-      this->WhenNoUpdateReceived();
+  if(this->connectionSucceed){
+    while(this->running){
+      
+      this->checkEvents();
+      this->model->update();
+      this->model->render();
+      this->updateServer();
+      
+      if(this->threadTerminated){
+        this->thread.launch();
+      }else{
+        this->WhenNoUpdateReceived();
+      }
     }
+    this->disconnectGame();
   }
-  this->disconnectGame();
 }
 
 void NetworkClient::checkEvents(){
-  Controller::checkEvents();
+  GameController::checkEvents();
 }
 
 void NetworkClient::send(sf::Packet &packet){
@@ -54,7 +56,7 @@ sf::Socket::Status NetworkClient::receive(sf::Packet &packet){
   return this->socket.receive(packet, ip, port);
 }
 
-void NetworkClient::connectGame(){
+bool NetworkClient::connectGame(){
   sf::Packet packet;
 
   /*Envoie du nom du personnage et de son apparence*/
@@ -63,7 +65,7 @@ void NetworkClient::connectGame(){
   packet << (uint32_t)model->getMainCharacter()->getType();
 
   this->send(packet);
-  confirmationOfConnection();
+  return confirmationOfConnection();
 }
 
 void NetworkClient::disconnectGame(){
@@ -77,16 +79,24 @@ void NetworkClient::disconnectGame(){
   std::cout << "deconnection du serveur" << std::endl;
 }
 
-void NetworkClient::confirmationOfConnection(){
+bool NetworkClient::confirmationOfConnection(){
   sf::Packet receiveUid;
-  unsigned int uid;
+  uint32_t info;
+  int uid;
 
   if(this->receive(receiveUid) == sf::Socket::Done){
-    receiveUid >> uid;
+    receiveUid >> info;
   }
 
-  this->model->getMainCharacter()->setUid(uid);
-  std::cout << "Mon id est " << uid << std::endl;
+  if((Action)info == Action::confirm_disconnect){
+    std::cout << "Reception d'un rejet de connection " << std::endl;
+    return false;
+  }else{
+    uid = (int)info;
+    this->model->getMainCharacter()->setUid(uid);
+    std::cout << "Mon id est " << uid << std::endl;
+    return true;
+  }
 }
 
 void NetworkClient::confirmUpdate(){

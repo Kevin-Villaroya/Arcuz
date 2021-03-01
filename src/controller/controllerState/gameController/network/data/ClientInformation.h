@@ -3,13 +3,19 @@
 
 #include <SFML/Network.hpp>
 
+enum State{
+    active,
+    inactive,
+    untested
+};
+
 struct ClientInformation{
     sf::IpAddress ip;
     unsigned short port;
     int uid;
     int nbUpdateNotConfirmed;
     int nbUpdateMaxNotConfirmed;
-    bool active;
+    State state;
 };
 
 #endif

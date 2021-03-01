@@ -5,11 +5,11 @@
 #include <SFML/Network.hpp>
 #include <SFML/Network/Packet.hpp>
 #include <vector>
-#include "../Controller.h"
+#include "../GameController.h"
 #include "data/NetworkData.h"
 #include "data/ClientInformation.h"
 
-class NetworkServer : public Controller{
+class NetworkServer : public GameController{
 private:
   unsigned short port;
   sf::UdpSocket socket;
@@ -20,9 +20,10 @@ private:
   void processingRequest(const sf::IpAddress &adressClient, unsigned short port, sf::Packet &packet);
 
   unsigned int connectClient(const sf::IpAddress &adressClient, unsigned short port, sf::Packet& packet);
+  void notAcceptClient(const sf::IpAddress &adressClient, unsigned short port);
 
   void updateAllCLient(std::vector<EntityDrawable*> &entitiesUpdated);
-  void sendUpdateTo(ClientInformation &client, std::vector<EntityDrawable*> &entities);
+  void sendUpdateTo(ClientInformation &client, const std::vector<EntityDrawable*> &entities);
   void updateCLient(sf::Packet& packet);
 
   unsigned int confirmationOfConnection(const sf::IpAddress &adressClient, unsigned short port);
@@ -33,7 +34,7 @@ public:
   void start() override;
 
   void deleteClient(sf::IpAddress ip, unsigned short port);
-  void addCLient(sf::IpAddress ip, unsigned short port, unsigned int uid);
+  ClientInformation& addCLient(sf::IpAddress ip, unsigned short port, unsigned int uid);
 
   bool clientActive(ClientInformation &client);
 
