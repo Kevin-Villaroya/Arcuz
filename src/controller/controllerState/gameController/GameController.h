@@ -1,7 +1,7 @@
 #ifndef __GAME_CONTROLLER_H__
 #define __GAME_CONTROLLER_H__
 
-#include "../../../model/Model.h"
+#include "../../../model/modelGame/Model.h"
 #include "../../../tool/SpriteTool.h"
 #include "../../Controller.h"
 

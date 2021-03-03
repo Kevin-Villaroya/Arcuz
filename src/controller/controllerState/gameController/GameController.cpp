@@ -6,7 +6,7 @@ GameController::GameController(int width, int height) : GameController(new sf::R
 
 GameController::GameController(sf::RenderWindow* window){
   this->window = window;
-  this->view = new View(*this->window, this->window->getSize().x, this->window->getSize().y);
+  this->view = new View(*this->window);
   this->model = new Model(*this->view);
   this->running = true;
   this->icon = new sf::Image();

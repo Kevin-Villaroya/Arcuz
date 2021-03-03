@@ -11,12 +11,22 @@ private:
   int height;
   int width;
   sf::RenderWindow& window;
-  sf::View viewCharacter;
+
+  sf::View viewCenter;
 
 public:
+  View(sf::RenderWindow &window);
   View(sf::RenderWindow &window, int height, int width);
   void render(const Character &character, const std::vector<EntityDrawable> &entities);
+  void render(const std::vector<sf::Drawable*> &entities);
+
   void centerViewOn(const Character &character);
+  void centerViewOn(float x, float y);
+
+  const sf::Vector2f& getSize();
+  const sf::Vector2u getSizeWindow();
+  const sf::Vector2f& getCenter();
+  void setSize(float x, float y);
 };
 
 #endif

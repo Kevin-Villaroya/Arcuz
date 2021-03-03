@@ -27,9 +27,8 @@ int main(int argc, char* argv[]){
     ControllerManager manager;
     sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(width, height), "Among Us");
     
-    manager.add(new GameController(window)); //solo
     manager.add(new MenuController(window));
-   
+    manager.add(new GameController(window)); //solo
 
     manager.start();
 

@@ -1,7 +1,6 @@
 Rappel:
 - Taille de map dans le constructeur de Model
 - Penser a ce que les fichiers sont par reference
-- Une screen est auto-suffisante
 - continuer le projet :)
 
 Mineur:
@@ -11,6 +10,5 @@ Majeur:
 - Faire une fenetre de démarrage
     -Possibilité de choisir parmis 3 options: Solo, Host ou Join
     -Possibilité de changer de pseudo
+        -Empecher d'autre ajout des les ascii de l'alphabet et ajouter que suppr retire la derniere lettre
     -En fonction du choix du jeu faire apparaitre une autre zone de selection
-
-    -Penser a renommer Screen par view
