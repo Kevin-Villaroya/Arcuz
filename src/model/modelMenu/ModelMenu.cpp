@@ -4,22 +4,46 @@
 ModelMenu::ModelMenu(View& view) : view(view), textureFond(TextureTool("assets/menu/fond.png")), fondSprite(textureFond){
     this->initMenu();
     this->nicknameUpdating = false;
+
     this->font.loadFromFile("assets/font/regular.ttf");
+    this->soloTexture = TextureTool("assets/icone/solo.png");
+    this->joinTexture = TextureTool("assets/icone/join.png");
+    this->hostTexture = TextureTool("assets/icone/host.png");
 }
 
 void ModelMenu::render(){
     std::vector<sf::Drawable*> allDraws;
+    std::vector<sf::Drawable*> menuButtonDrawables;
 
     this->setPositionNickname();
+    this->solo.setPositionNameButton();
+    this->host.setPositionNameButton();
+    this->join.setPositionNameButton();
+
     allDraws.push_back(&this->fondSprite);
 
     allDraws.push_back(&this->squareNickname);
     allDraws.push_back(&this->nickname);
 
+    menuButtonDrawables = this->solo.getElementsToRender();
+    for(unsigned int i = 0; i < menuButtonDrawables.size(); i++){
+        allDraws.push_back(menuButtonDrawables[i]);
+    }
+
+    menuButtonDrawables = this->host.getElementsToRender();
+    for(unsigned int i = 0; i < menuButtonDrawables.size(); i++){
+        allDraws.push_back(menuButtonDrawables[i]);
+    }
+
+    menuButtonDrawables = this->join.getElementsToRender();
+    for(unsigned int i = 0; i < menuButtonDrawables.size(); i++){
+        allDraws.push_back(menuButtonDrawables[i]);
+    }
     this->view.render(allDraws);
 }
 
 void ModelMenu::initMenu(){
+    sf::Vector2f sizeScreen = this->view.getSize();
     sf::Vector2u actualScale = this->fondSprite.getTexture()->getSize();
     this->fondSprite.scale(this->view.getSize().x / actualScale.x, this->view.getSize().y / actualScale.y);
 
@@ -30,6 +54,10 @@ void ModelMenu::initMenu(){
     this->nickname.setFont(font);
     this->nickname.setFillColor(sf::Color::White);
     this->nickname.setString("Default");
+
+    this->solo = MenuButton(sizeScreen.x * 0.1, sizeScreen.y * 0.2, sizeScreen.x * 0.80, sizeScreen.y * 0.2, &this->soloTexture, font, "solo", "launch game");
+    this->host = MenuButton(sizeScreen.x * 0.1, sizeScreen.y * 0.45, sizeScreen.x * 0.80, sizeScreen.y * 0.2, &this->hostTexture, font, "host", "create game");
+    this->join = MenuButton(sizeScreen.x * 0.1, sizeScreen.y * 0.7, sizeScreen.x * 0.80, sizeScreen.y * 0.2, &this->joinTexture, font, "join", "find game");
 }
 
 void ModelMenu::initView(){

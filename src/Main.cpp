@@ -8,8 +8,8 @@
 #include <cstring>
 
 int main(int argc, char* argv[]){
-    int width = 920;
-    int height = 680;
+    int width = 1080;
+    int height = 1080;
 
     bool isMulti = initIsMulti();
     bool isHost = initIsHost();

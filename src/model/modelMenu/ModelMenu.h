@@ -2,6 +2,7 @@
 #define __MODEL_MENU_H__
 
 #include "../viewer/view/View.h"
+#include "../../viewer/elementMenu/MenuButton.h"
 #include <string>
 
 class ModelMenu{
@@ -12,6 +13,15 @@ class ModelMenu{
 
         sf::Text nickname;
         sf::Font font;
+
+        MenuButton solo;
+        TextureTool soloTexture;
+
+        MenuButton host;
+        TextureTool hostTexture;
+
+        MenuButton join;
+        TextureTool joinTexture;
 
         const TextureTool textureFond;
         sf::Sprite fondSprite;

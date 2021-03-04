@@ -9,6 +9,5 @@ Mineur:
 Majeur:
 - Faire une fenetre de démarrage
     -Possibilité de choisir parmis 3 options: Solo, Host ou Join
-    -Possibilité de changer de pseudo
-        -Empecher d'autre ajout des les ascii de l'alphabet et ajouter que suppr retire la derniere lettre
-    -En fonction du choix du jeu faire apparaitre une autre zone de selection
+        -Faire fonctionner les boutons (renvoyer sunr une autre page dans le cas de host et join sinon lancer le jeu)
+        -Attribuer le bon pseudo lors du lancement du jeu
