@@ -12,13 +12,15 @@ MenuController::MenuController(sf::RenderWindow* window) {
 void MenuController::checkEvents(){
     sf::Event event;
     while (this->window->pollEvent(event)) {
-
-        
         if(event.type == sf::Event::TextEntered && this->model->nicknameIsUpdating()){
             this->model->changeNickname(event.text.unicode);
         }else if (event.type == sf::Event::MouseButtonPressed){
             if (event.mouseButton.button == sf::Mouse::Left){
-                this->model->clickOnMenu(event.mouseButton.x, event.mouseButton.y);
+                int idController = this->model->clickOnMenu(event.mouseButton.x, event.mouseButton.y);
+                if(idController != 0){
+                    this->nextIdScreen = idController;
+                    this->closeController();
+                }
             }
         }else if(event.type == sf::Event::Closed){ // IF WINDOWS CLOSE
             this->closeController();
@@ -27,6 +29,7 @@ void MenuController::checkEvents(){
 }
 
 void MenuController::start(){
+    this->nextIdScreen = 0;
     this->running = true;
     this->run();
 }
@@ -45,6 +48,10 @@ void MenuController::closeController(){
 
 unsigned int MenuController::getId(){
     return MenuController::id;
+}
+
+unsigned int MenuController::nextId(){
+    return this->nextIdScreen;
 }
 
  MenuController::~MenuController(){

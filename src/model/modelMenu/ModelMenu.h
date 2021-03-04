@@ -3,6 +3,7 @@
 
 #include "../viewer/view/View.h"
 #include "../../viewer/elementMenu/MenuButton.h"
+#include "../../tool/FontTool.h"
 #include <string>
 
 class ModelMenu{
@@ -12,7 +13,6 @@ class ModelMenu{
         sf::RectangleShape squareNickname;
 
         sf::Text nickname;
-        sf::Font font;
 
         MenuButton solo;
         TextureTool soloTexture;
@@ -41,9 +41,11 @@ class ModelMenu{
         void render();
         void update();
 
-        void clickOnMenu(float x, float y);
+        unsigned int clickOnMenu(float x, float y);
         bool nicknameIsUpdating();
         void changeNickname(char letter);
+
+        static std::string nameCharacter;
 };
 
 #endif

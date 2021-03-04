@@ -39,6 +39,10 @@ int EntityDrawable::getUid(){
   return this->uid;
 }
 
+void EntityDrawable::setName(const std::string& name){
+  this->name = name;
+}
+
 void EntityDrawable::setUid(unsigned int uid){
   this->uid = uid;
 }

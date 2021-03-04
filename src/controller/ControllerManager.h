@@ -13,6 +13,10 @@ class ControllerManager{
         void add(Controller* controller);
         void start();
 
+        void run();
+
+        void getController(unsigned int id);
+
         ~ControllerManager();
 };
 

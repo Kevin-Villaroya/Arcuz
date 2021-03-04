@@ -1,11 +1,13 @@
 #include "ModelMenu.h"
 #include <iostream>
+#include "../../controller/controllerState/gameController/GameController.h"
+
+std::string ModelMenu::nameCharacter;
 
 ModelMenu::ModelMenu(View& view) : view(view), textureFond(TextureTool("assets/menu/fond.png")), fondSprite(textureFond){
     this->initMenu();
     this->nicknameUpdating = false;
 
-    this->font.loadFromFile("assets/font/regular.ttf");
     this->soloTexture = TextureTool("assets/icone/solo.png");
     this->joinTexture = TextureTool("assets/icone/join.png");
     this->hostTexture = TextureTool("assets/icone/host.png");
@@ -53,13 +55,14 @@ void ModelMenu::initMenu(){
 
     this->initNicknameSquare();
 
-    this->nickname.setFont(font);
+    this->nickname.setFont(FontTool::REGULAR_FONT);
     this->nickname.setFillColor(sf::Color::White);
     this->nickname.setString("Default");
+    ModelMenu::nameCharacter = "Default";
 
-    this->solo = MenuButton(sizeScreen.x * 0.1, sizeScreen.y * 0.2, sizeScreen.x * 0.80, sizeScreen.y * 0.2, &this->soloTexture, font, "solo", "launch game");
-    this->host = MenuButton(sizeScreen.x * 0.1, sizeScreen.y * 0.45, sizeScreen.x * 0.80, sizeScreen.y * 0.2, &this->hostTexture, font, "host", "create game");
-    this->join = MenuButton(sizeScreen.x * 0.1, sizeScreen.y * 0.7, sizeScreen.x * 0.80, sizeScreen.y * 0.2, &this->joinTexture, font, "join", "find game");
+    this->solo = MenuButton(sizeScreen.x * 0.1, sizeScreen.y * 0.2, sizeScreen.x * 0.80, sizeScreen.y * 0.2, &this->soloTexture, FontTool::REGULAR_FONT, "solo", "launch game");
+    this->host = MenuButton(sizeScreen.x * 0.1, sizeScreen.y * 0.45, sizeScreen.x * 0.80, sizeScreen.y * 0.2, &this->hostTexture, FontTool::REGULAR_FONT, "host", "create game");
+    this->join = MenuButton(sizeScreen.x * 0.1, sizeScreen.y * 0.7, sizeScreen.x * 0.80, sizeScreen.y * 0.2, &this->joinTexture, FontTool::REGULAR_FONT, "join", "find game");
 }
 
 void ModelMenu::initView(){
@@ -69,9 +72,20 @@ void ModelMenu::initView(){
     this->view.centerViewOn(sizeScreen.x / 2, sizeScreen.y / 2);
 }
 
-void ModelMenu::clickOnMenu(float x, float y){
+unsigned int ModelMenu::clickOnMenu(float x, float y){//TODO
     sf::Vector2f posMouse = this->convertPositionMouse(x, y);
+
     this->clickOnNickname(posMouse.x, posMouse.y);
+
+    if(this->solo.clickOnButton(posMouse.x, posMouse.y)){
+        return GameController::id;
+    }else if(this->solo.clickOnButton(posMouse.x, posMouse.y)){
+        return 0;
+    }else if(this->host.clickOnButton(posMouse.x, posMouse.y)){
+        return 0;
+    }else{
+        return 0;
+    }
 }
 
 void ModelMenu::clickOnNickname(float posX, float posY){
@@ -97,6 +111,7 @@ void ModelMenu::changeNickname(char letter){
     }else if(this->nickname.getString().getSize() > 0 && letter == 8){
         this->nickname.setString(this->nickname.getString().substring(0, this->nickname.getString().getSize() - 1));
     }
+    ModelMenu::nameCharacter = this->nickname.getString();
 }
 
 void ModelMenu::initNicknameSquare(){

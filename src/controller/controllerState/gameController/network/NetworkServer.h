@@ -1,5 +1,5 @@
-#ifndef __SOCKET_H__
-#define __SOCKET_H__
+#ifndef __NETWORK_SERVER_H__
+#define __NETWORK_SERVER_H__
 
 #include <string>
 #include <SFML/Network.hpp>
@@ -11,6 +11,8 @@
 
 class NetworkServer : public GameController{
 private:
+  static const unsigned int id = 3;
+
   unsigned short port;
   sf::UdpSocket socket;
   std::vector<ClientInformation> clients;
@@ -40,6 +42,8 @@ public:
 
   bool addCharacterClient(std::string& name, TypeCharacter& type, unsigned int uid);
   void removeCharacterClient(const sf::IpAddress &adressClient, unsigned short port, const std::string& name);
+
+  unsigned int getId() override;
 };
 
 #endif

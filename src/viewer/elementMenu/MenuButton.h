@@ -29,8 +29,8 @@ class MenuButton{
     
     public:
         MenuButton();
-        MenuButton(float originX, float originY, float sizeX, float sizeY, sf::Color colorCircle, sf::Font& font, const std::string& nameMenu, const std::string& nameButton);
-        MenuButton(float originX, float originY, float sizeX, float sizeY, sf::Texture* texture, sf::Font& font, const std::string& nameMenu, const std::string& nameButton);
+        MenuButton(float originX, float originY, float sizeX, float sizeY, sf::Color colorCircle, const sf::Font& font, const std::string& nameMenu, const std::string& nameButton);
+        MenuButton(float originX, float originY, float sizeX, float sizeY, sf::Texture* texture, const sf::Font& font, const std::string& nameMenu, const std::string& nameButton);
         
         std::vector<sf::Drawable*> getElementsToRender();
         bool clickOnButton(float x, float y);

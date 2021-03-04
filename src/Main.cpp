@@ -1,8 +1,10 @@
-#include "tool/mainFunctions/functionsInitGame.h"
-#include "tool/mainFunctions/functionsLaunchGame.h"
+//#include "tool/mainFunctions/functionsInitGame.h"
+//#include "tool/mainFunctions/functionsLaunchGame.h"
 
 #include "controller/ControllerManager.h"
 #include "controller/controllerState/gameController/GameController.h"
+#include "controller/controllerState/gameController/network/NetworkClient.h"
+#include "controller/controllerState/gameController/network/NetworkServer.h"
 #include "controller/controllerState/menuController/MenuController.h"
 #include <string>
 #include <cstring>
@@ -11,7 +13,7 @@ int main(int argc, char* argv[]){
     int width = 1080;
     int height = 1080;
 
-    bool isMulti = initIsMulti();
+    /*bool isMulti = initIsMulti();
     bool isHost = initIsHost();
     std::string ip = initIp();
     int port = initPort();
@@ -22,13 +24,15 @@ int main(int argc, char* argv[]){
       }else if(strcmp(argv[1], "-c") == 0){
         isHost = false;
       }
-    }
+    }*/
 
     ControllerManager manager;
-    sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(width, height), "Among Us");
+    sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(width, height), "Arcuz");
     
-    manager.add(new MenuController(window));
-    manager.add(new GameController(window)); //solo
+    manager.add(new MenuController(window)); // menu 4
+    manager.add(new GameController(window)); //solo 1
+    manager.add(new NetworkClient(window)); //client 2
+    //manager.add(new NetworkServer(window)); //host 3
 
     manager.start();
 

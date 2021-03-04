@@ -12,6 +12,15 @@ sf::Mutex mutex;
 NetworkClient::NetworkClient(int width, int height, std::string ip, unsigned short portHost) : GameController(width, height), ip(ip), thread(&NetworkClient::updateCLient, this){
   this->portHost = portHost;
   this->port = sf::Socket::AnyPort;
+}
+
+NetworkClient::NetworkClient(sf::RenderWindow* window) : GameController(window), thread(&NetworkClient::updateCLient, this){
+  this->portHost = 0;
+  this->ip = sf::IpAddress();
+  this->port = sf::Socket::AnyPort;
+}
+
+void NetworkClient::setNetwork(){
   if(this->socket.bind(this->port) != sf::Socket::Done){
     std::cout << "Erreur de liaison" << std::endl;
   }else{
@@ -37,6 +46,8 @@ void NetworkClient::start(){
       }
     }
     this->disconnectGame();
+  }else{
+    this->setNetwork();
   }
 }
 
@@ -166,4 +177,8 @@ EntityDrawable* NetworkClient::createEntity(sf::Packet& packet){
   }else{
     return new EntityDrawable();
   }
+}
+
+unsigned int NetworkClient::getId(){
+  return NetworkClient::id;
 }

@@ -212,3 +212,7 @@ void NetworkServer::removeCharacterClient(const sf::IpAddress &adressClient, uns
   std::cout << "deconnection de " << name << std::endl;
   this->model->removeEntitie(name);
 }
+
+unsigned int NetworkServer::getId(){
+  return NetworkServer::id;
+}

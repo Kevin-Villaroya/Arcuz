@@ -11,6 +11,8 @@
 
 class NetworkClient : public GameController{
 private:
+  static const unsigned int id = 2;
+
   sf::IpAddress ip;
   sf::UdpSocket socket;
 
@@ -25,6 +27,8 @@ private:
   unsigned short port;
   unsigned short portHost;
 
+  void setNetwork();
+
   bool connectGame();
   void disconnectGame();
 
@@ -34,6 +38,7 @@ private:
   void WhenNoUpdateReceived();
 public:
   NetworkClient(int width, int height, std::string ip, unsigned short port);
+  NetworkClient(sf::RenderWindow* window);
 
   void start() override;
   void checkEvents() override;
@@ -47,6 +52,7 @@ public:
   void updateServer();
 
   EntityDrawable* createEntity(sf::Packet& packet);
+  unsigned int getId();
 };
 
 #endif

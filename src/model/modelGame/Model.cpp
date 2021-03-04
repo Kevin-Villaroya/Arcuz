@@ -1,9 +1,13 @@
 #include "Model.h"
+#include "../../tool/FontTool.h"
 #include <iostream>
 
 Model::Model(View &view):view(view), map(Map(50,50)), mainCharacter(new Character()){
   this->view.centerViewOn(*mainCharacter);
   this->modelChanged = false;
+  this->nameCharacter.setFont(FontTool::REGULAR_FONT);
+  this->nameCharacter.setFillColor(sf::Color::Black);
+  this->nameCharacter.setCharacterSize(8);
 }
 
 void Model::update(){//loop update
@@ -21,21 +25,30 @@ void Model::update(){//loop update
     updated = true;
     this->entitiesNeedUpdate.push_back(this->mainCharacter);
   }
+
+    float posXNameCharacter = this->mainCharacter->getPosition().x - this->nameCharacter.getGlobalBounds().width / 2 + this->mainCharacter->getTexture()->getSize().x / 4;
+    float posYNameCharacter = this->mainCharacter->getPosition().y - this->nameCharacter.getGlobalBounds().height;
+
+  this->nameCharacter.setString(this->mainCharacter->getName());
+  this->nameCharacter.setPosition(posXNameCharacter, posYNameCharacter);
+
   this->modelChanged = updated;
 }
 
 void Model::render(){
-  std::vector<EntityDrawable> allDraws;
+  std::vector<sf::Drawable*> allDraws;
 
   for(int i = 0; i < this->map.getLenght(); i++){
     for(int j = 0; j < this->map.getWidth(); j++){
-      allDraws.push_back(this->map.getTile(i,j));
+      allDraws.push_back(&this->map.getTile(i,j));
     }
   }
 
   for(unsigned int i = 0; i < this->entities.size(); i++){
-    allDraws.push_back(*this->entities[i]);
+    allDraws.push_back(this->entities[i]);
   }
+
+  allDraws.push_back(&this->nameCharacter);
 
   this->view.render(*this->mainCharacter, allDraws);
 }

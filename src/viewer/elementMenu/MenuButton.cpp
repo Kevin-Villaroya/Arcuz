@@ -9,13 +9,13 @@ void MenuButton::initFont(){
 
 MenuButton::MenuButton() : MenuButton(0,0,0,0,sf::Color::Black, MenuButton::DEFAULT_FONT ,"" ,""){}
 
-MenuButton::MenuButton(float originX, float originY, float sizeX, float sizeY, sf::Texture* texture, sf::Font& font, const std::string& nameMenu, const std::string& nameButton) : 
+MenuButton::MenuButton(float originX, float originY, float sizeX, float sizeY, sf::Texture* texture, const sf::Font& font, const std::string& nameMenu, const std::string& nameButton) : 
 MenuButton(originX, originY, sizeX, sizeY, sf::Color::White, font, nameMenu, nameButton){
     this->circle.setTexture(texture);
     this->circle.setTextureRect(sf::IntRect(-100, 0, 560, 560));
 }
 
-MenuButton::MenuButton(float originX, float originY, float sizeX, float sizeY, sf::Color colorCircle, sf::Font& font, const std::string& nameMenu, const std::string& nameButton){
+MenuButton::MenuButton(float originX, float originY, float sizeX, float sizeY, sf::Color colorCircle, const sf::Font& font, const std::string& nameMenu, const std::string& nameButton){
     this->circle = sf::CircleShape(sizeX * 0.1);
     this->circle.setPosition(originX + sizeX * 0.1, originY + sizeY * 0.1);
     this->circle.setFillColor(colorCircle);

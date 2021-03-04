@@ -8,6 +8,7 @@
 class MenuController : public Controller{
 private:
     static const unsigned int id = 0;
+    unsigned int nextIdScreen = 0;
 
     std::string nameCharacter;
 
@@ -28,6 +29,7 @@ public:
     virtual void closeController();
 
     virtual unsigned int getId();
+    virtual unsigned int nextId() override;
 
     ~MenuController();
 };

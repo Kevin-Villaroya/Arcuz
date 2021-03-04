@@ -1,8 +1,9 @@
 #include "GameController.h"
+#include "../../controller/controllerState/menuController/MenuController.h"
 #include <string>
 #include <iostream>
 
-GameController::GameController(int width, int height) : GameController(new sf::RenderWindow(sf::VideoMode(width, height), "Among Us")){}
+GameController::GameController(int width, int height) : GameController(new sf::RenderWindow(sf::VideoMode(width, height), "Arcuz")){}
 
 GameController::GameController(sf::RenderWindow* window){
   this->window = window;
@@ -61,7 +62,9 @@ void GameController::checkEvents(){
 }
 
 void GameController::start(){
+  this->nextIdScreen = 0;
   this->running = true;
+  this->model->getMainCharacter()->setName(ModelMenu::nameCharacter);
   this->run();
 }
 
@@ -79,6 +82,10 @@ void GameController::closeController(){
 
 unsigned int GameController::getId(){
   return GameController::id;
+}
+
+unsigned int GameController::nextId(){
+  return this->nextIdScreen;
 }
 
 GameController::~GameController(){

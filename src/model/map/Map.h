@@ -18,7 +18,7 @@ public:
 
   int getLenght();
   int getWidth();
-  Tile getTile(int x, int y);
+  Tile& getTile(int x, int y);
   void setTile(Tile newTile, int x ,int y);
 };
 

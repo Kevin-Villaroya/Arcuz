@@ -6,7 +6,24 @@ void ControllerManager::add(Controller* controller){
 
 void ControllerManager::start(){
     if(this->controllers.size() > 0){
-        this->controllers[0]->start();
+        this->currentController = this->controllers[0];
+    }
+    this->run();
+}
+
+void ControllerManager::run(){
+    this->currentController->start();
+    while(this->currentController->nextId() != 0){
+        this->getController(this->currentController->nextId());
+        this->currentController->start();
+    }
+}
+
+void ControllerManager::getController(unsigned int id){
+    for(unsigned int i = 0; i < this->controllers.size(); i++){
+        if(this->controllers[i]->getId() == id){
+            this->currentController = this->controllers[i];
+        }
     }
 }
 

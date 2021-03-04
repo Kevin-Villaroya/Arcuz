@@ -11,3 +11,4 @@ Majeur:
     -Possibilité de choisir parmis 3 options: Solo, Host ou Join
         -Faire fonctionner les boutons (renvoyer sunr une autre page dans le cas de host et join sinon lancer le jeu)
         -Attribuer le bon pseudo lors du lancement du jeu
+    - vector de sf text dans model.h a faire afficher et remplir

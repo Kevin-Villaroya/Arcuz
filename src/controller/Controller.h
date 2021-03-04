@@ -15,6 +15,7 @@ class Controller{
 
         bool isRunning();
         virtual unsigned int getId() = 0;
+        virtual unsigned int nextId() = 0;
         virtual ~Controller();
 };
 

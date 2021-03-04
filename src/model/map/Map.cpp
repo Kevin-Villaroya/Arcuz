@@ -27,7 +27,7 @@ int Map::getWidth(){
   return this->width;
 }
 
-Tile Map::getTile(int x, int y){
+Tile& Map::getTile(int x, int y){
     if(this->outOfBounds(x,y)){
       throw std::string("ERREUR: SORTIE DE MAP");
     }else{

@@ -13,10 +13,13 @@ class Model{
 private:
   View view;
   Map map;
+
   Character* mainCharacter;
+  sf::Text nameCharacter;
 
   bool modelChanged;
   std::vector<EntityDrawable*> entitiesNeedUpdate; //optimisation
+  std::vector<sf::Text> nameEntities;
 
   std::vector<EntityDrawable*> entities; //all entities in the game (without character)
 
