@@ -34,7 +34,7 @@ void MenuController::start(){
 void MenuController::run(){
     while(this->running){
         this->checkEvents();
-        //this->model->update();
+        this->model->update();
         this->model->render();
     }
 }

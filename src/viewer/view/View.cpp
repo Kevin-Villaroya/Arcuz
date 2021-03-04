@@ -42,15 +42,15 @@ void View::centerViewOn(float x, float y){
   this->window.setView(this->viewCenter);
 }
 
-const sf::Vector2f& View::getSize(){
+const sf::Vector2f& View::getSize() const{
   return this->viewCenter.getSize();
 }
 
-const sf::Vector2u View::getSizeWindow(){
+const sf::Vector2u View::getSizeWindow() const{
   return this->window.getSize();
 }
 
-const sf::Vector2f& View::getCenter(){
+const sf::Vector2f& View::getCenter() const{
   return this->viewCenter.getCenter();
 }
 

@@ -38,6 +38,12 @@ MenuButton::MenuButton(float originX, float originY, float sizeX, float sizeY, s
     this->nameButton.setString(nameButton);
     this->nameButton.setCharacterSize((sizeY - (sizeX * 0.1 + sizeY * 0.1 + 10)) / 2.5);
     this->nameButton.setPosition(sizeX * 0.2 + originX + sizeX * 0.1 + 10, sizeX * 0.1 + originY + sizeY * 0.1 + 10);
+
+    this->originX = originX;
+    this->originY = originY;
+
+    this->sizeX = sizeX;
+    this->sizeY = sizeY;
 }
 
 std::vector<sf::Drawable*> MenuButton::getElementsToRender(){
@@ -63,10 +69,36 @@ bool MenuButton::clickOnButton(float posX, float posY){
     }
 }
 
+void MenuButton::update(const View* view){
+    this->setScaleIcone(view);
+    this->setScaleText(view);
+    this->setPositionNameButton();
+}
+
+void MenuButton::setScaleIcone(const View* view){
+    sf::Vector2u sizeWindow = view->getSizeWindow();
+    sf::Vector2f sizeView = view->getSize();
+
+    if(sizeWindow.x > sizeView.x){
+        this->circle.setScale(sizeView.x / sizeWindow.x, 1);
+        this->circle.setPosition(this->originX + this->sizeX * 0.1 + (sizeX * 0.1) * (sizeWindow.x / sizeView.x - 1), this->originY + this->sizeY * 0.1);
+    }
+}
+
+void MenuButton::setScaleText(const View* view){
+    sf::Vector2u sizeWindow = view->getSizeWindow();
+    sf::Vector2f sizeView = view->getSize();
+
+    if(sizeWindow.x > sizeView.x){
+        this->nameButton.setScale(sizeView.x / sizeWindow.x, 1);
+        this->nameMenu.setScale(sizeView.x / sizeWindow.x, 1);
+    }
+}
+
 void MenuButton::setPositionNameButton(){
-    sf::Vector2f sizeScreen = this->button.getSize();
-    sf::Vector2f posScreen = this->button.getPosition();
+    sf::Vector2f sizeButton = this->button.getSize();
+    sf::Vector2f posButton = this->button.getPosition();
 
     float sizeName = this->nameButton.getGlobalBounds().width;
-    this->nameButton.setPosition(posScreen.x + sizeScreen.x / 2 - sizeName / 2, posScreen.y + sizeScreen.y /2 - this->nameButton.getCharacterSize() / 1.5);
+    this->nameButton.setPosition(posButton.x + sizeButton.x / 2 - sizeName / 2, posButton.y + sizeButton.y /2 - this->nameButton.getCharacterSize() / 1.5);
 }

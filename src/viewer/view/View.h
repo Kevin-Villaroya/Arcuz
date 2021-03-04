@@ -23,9 +23,9 @@ public:
   void centerViewOn(const Character &character);
   void centerViewOn(float x, float y);
 
-  const sf::Vector2f& getSize();
-  const sf::Vector2u getSizeWindow();
-  const sf::Vector2f& getCenter();
+  const sf::Vector2f& getSize() const;
+  const sf::Vector2u getSizeWindow() const;
+  const sf::Vector2f& getCenter() const;
   void setSize(float x, float y);
 };
 

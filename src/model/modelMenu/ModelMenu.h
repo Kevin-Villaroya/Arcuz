@@ -39,6 +39,7 @@ class ModelMenu{
     public:
         ModelMenu(View& view);
         void render();
+        void update();
 
         void clickOnMenu(float x, float y);
         bool nicknameIsUpdating();

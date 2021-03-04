@@ -15,11 +15,6 @@ void ModelMenu::render(){
     std::vector<sf::Drawable*> allDraws;
     std::vector<sf::Drawable*> menuButtonDrawables;
 
-    this->setPositionNickname();
-    this->solo.setPositionNameButton();
-    this->host.setPositionNameButton();
-    this->join.setPositionNameButton();
-
     allDraws.push_back(&this->fondSprite);
 
     allDraws.push_back(&this->squareNickname);
@@ -40,6 +35,13 @@ void ModelMenu::render(){
         allDraws.push_back(menuButtonDrawables[i]);
     }
     this->view.render(allDraws);
+}
+
+void ModelMenu::update(){
+    this->setPositionNickname();
+    this->solo.update(&this->view);
+    this->host.update(&this->view);
+    this->join.update(&this->view);
 }
 
 void ModelMenu::initMenu(){
@@ -109,8 +111,10 @@ void ModelMenu::initNicknameSquare(){
 
 void ModelMenu::setPositionNickname(){
     sf::Vector2f sizeScreen = this->view.getSize();
+    sf::Vector2u sizeWindow = this->view.getSizeWindow();
 
     float sizeNickname = this->squareNickname.getSize().x - this->nickname.getGlobalBounds().width;
+    this->nickname.setScale(sizeScreen.x / sizeWindow.x, 1);
     this->nickname.setPosition(sizeScreen.x / 2 - sizeScreen.x * 0.25 + 1 + sizeNickname / 2, sizeScreen.y * 0.05 - this->nickname.getCharacterSize() / 2);
 }
 
