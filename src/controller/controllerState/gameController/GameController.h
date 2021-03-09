@@ -20,6 +20,9 @@ public:
   GameController(int width, int height);
   virtual void checkEvents();
 
+  virtual void needToStart(std::vector<void*> parameters) override;
+  virtual bool hasToSendWhenClose();
+
   virtual void start() override;
   void run();
   void closeController() override;

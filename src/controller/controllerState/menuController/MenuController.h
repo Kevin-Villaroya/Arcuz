@@ -7,24 +7,24 @@
 
 class MenuController : public Controller{
 private:
-    static const unsigned int id = 0;
     unsigned int nextIdScreen = 0;
-
-    std::string nameCharacter;
 
     ModelMenu* model;
     View* view;
-
-    bool online;
-    bool host;
+    
 public:
     MenuController(sf::RenderWindow* window);
     MenuController(int width, int height);
+
+    static const unsigned int id = 4;
 
     virtual void checkEvents();
 
     virtual void start();
     void run();
+
+    virtual bool hasToSendWhenClose() override;
+    virtual std::vector<void*> sendWhenClose() override;
 
     virtual void closeController();
 

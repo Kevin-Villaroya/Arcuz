@@ -8,6 +8,7 @@ class ControllerManager{
     private:
         std::vector<Controller*> controllers;
         Controller* currentController;
+        Controller* previousController;
 
     public:
         void add(Controller* controller);

@@ -1,4 +1,5 @@
 #include "ControllerManager.h"
+#include <iostream>
 
 void ControllerManager::add(Controller* controller){
     this->controllers.push_back(controller);
@@ -14,7 +15,13 @@ void ControllerManager::start(){
 void ControllerManager::run(){
     this->currentController->start();
     while(this->currentController->nextId() != 0){
+        this->previousController = this->currentController;
         this->getController(this->currentController->nextId());
+
+        if(this->previousController->hasToSendWhenClose()){
+            this->currentController->needToStart(this->previousController->sendWhenClose());
+        }
+
         this->currentController->start();
     }
 }

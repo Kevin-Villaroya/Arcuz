@@ -61,10 +61,18 @@ void GameController::checkEvents(){
    }
 }
 
+void GameController::needToStart(std::vector<void*> parameters){
+  std::string nameCharacter = *(std::string*)(parameters[0]);
+  this->model->getMainCharacter()->setName(nameCharacter);
+}
+
+bool GameController::hasToSendWhenClose(){
+  return false;
+}
+
 void GameController::start(){
   this->nextIdScreen = 0;
   this->running = true;
-  this->model->getMainCharacter()->setName(ModelMenu::nameCharacter);
   this->run();
 }
 

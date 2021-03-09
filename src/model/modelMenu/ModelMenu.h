@@ -13,6 +13,7 @@ class ModelMenu{
         sf::RectangleShape squareNickname;
 
         sf::Text nickname;
+        std::string nameCharacter;
 
         MenuButton solo;
         TextureTool soloTexture;
@@ -27,6 +28,8 @@ class ModelMenu{
         sf::Sprite fondSprite;
 
         bool nicknameUpdating;
+
+        bool hosting;
 
         void initMenu();
         void initNicknameSquare();
@@ -45,7 +48,9 @@ class ModelMenu{
         bool nicknameIsUpdating();
         void changeNickname(char letter);
 
-        static std::string nameCharacter;
+        bool& isHosting();
+
+        std::string& getNameCharacter();
 };
 
 #endif

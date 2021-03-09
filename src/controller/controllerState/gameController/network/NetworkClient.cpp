@@ -12,12 +12,14 @@ sf::Mutex mutex;
 NetworkClient::NetworkClient(int width, int height, std::string ip, unsigned short portHost) : GameController(width, height), ip(ip), thread(&NetworkClient::updateCLient, this){
   this->portHost = portHost;
   this->port = sf::Socket::AnyPort;
+  this->connectionSucceed = false;
 }
 
 NetworkClient::NetworkClient(sf::RenderWindow* window) : GameController(window), thread(&NetworkClient::updateCLient, this){
   this->portHost = 0;
   this->ip = sf::IpAddress();
   this->port = sf::Socket::AnyPort;
+  this->connectionSucceed = false;
 }
 
 void NetworkClient::setNetwork(){
@@ -26,7 +28,6 @@ void NetworkClient::setNetwork(){
   }else{
     this->connectionSucceed = this->connectGame();
     this->threadTerminated = true;
-    this->threadPriority = false;
   }
 }
 
@@ -48,6 +49,7 @@ void NetworkClient::start(){
     this->disconnectGame();
   }else{
     this->setNetwork();
+    this->start();
   }
 }
 
@@ -55,9 +57,25 @@ void NetworkClient::checkEvents(){
   GameController::checkEvents();
 }
 
+void NetworkClient::needToStart(std::vector<void*> parameters){
+  std::string nameCharacter = *(std::string*)(parameters[0]);
+  unsigned short port = *(unsigned short*)(parameters[1]);
+  sf::IpAddress ip = *(sf::IpAddress*)(parameters[2]);
+
+  std::cout << ip.toString() << std::endl;
+
+  this->portHost = port;
+  this->ip = ip;
+
+  std::cout << "Client ready" << std::endl;
+  std::cout << "Server Location: ip: " << ip.toString() << ", port: "<< port <<std::endl;
+
+  this->model->getMainCharacter()->setName(nameCharacter);
+}
+
 void NetworkClient::send(sf::Packet &packet){
   if(!this->socket.send(packet, this->ip, this->portHost) == sf::Socket::Status::Done){
-    std::cout << "packet send failed" << std::endl;
+    //std::cout << "packet send failed" << std::endl;
   }
 }
 

@@ -11,11 +11,11 @@
 
 class NetworkServer : public GameController{
 private:
-  static const unsigned int id = 3;
-
   unsigned short port;
   sf::UdpSocket socket;
   std::vector<ClientInformation> clients;
+
+  sf::Thread threadServer;
 
   bool allClientupdated;
 
@@ -31,9 +31,16 @@ private:
   unsigned int confirmationOfConnection(const sf::IpAddress &adressClient, unsigned short port);
   void confirmationOfHavingReceivedUpdate(int uid);
 public:
+  static const unsigned int id = 3;
+  
   NetworkServer(int width, int height, unsigned short port);
+  NetworkServer(sf::RenderWindow* window);
+
   void startServer();
+  void initStart();
   void start() override;
+
+  virtual void needToStart(std::vector<void*> parameters) override;
 
   void deleteClient(sf::IpAddress ip, unsigned short port);
   ClientInformation& addCLient(sf::IpAddress ip, unsigned short port, unsigned int uid);

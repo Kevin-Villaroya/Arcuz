@@ -42,6 +42,21 @@ void MenuController::run(){
     }
 }
 
+bool MenuController::hasToSendWhenClose(){
+    return true;
+}
+
+std::vector<void*> MenuController::sendWhenClose(){
+    std::vector<void*> parameters;
+    parameters.push_back(&this->model->getNameCharacter());
+
+    if(this->nextId() == 5){
+        parameters.push_back(&this->model->isHosting());
+    }
+
+    return parameters;
+}
+
 void MenuController::closeController(){
     this->running = false;
 }
@@ -54,7 +69,7 @@ unsigned int MenuController::nextId(){
     return this->nextIdScreen;
 }
 
- MenuController::~MenuController(){
-   delete this->view;
-   delete this->model;
- }
+MenuController::~MenuController(){
+delete this->view;
+delete this->model;
+}

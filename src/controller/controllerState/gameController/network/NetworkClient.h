@@ -11,8 +11,6 @@
 
 class NetworkClient : public GameController{
 private:
-  static const unsigned int id = 2;
-
   sf::IpAddress ip;
   sf::UdpSocket socket;
 
@@ -37,11 +35,15 @@ private:
 
   void WhenNoUpdateReceived();
 public:
+  static const unsigned int id = 2;
+  
   NetworkClient(int width, int height, std::string ip, unsigned short port);
   NetworkClient(sf::RenderWindow* window);
 
   void start() override;
   void checkEvents() override;
+
+  virtual void needToStart(std::vector<void*> parameters) override;
 
   void send(sf::Packet &packet);
   sf::Socket::Status receive(sf::Packet &packet);

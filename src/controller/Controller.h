@@ -10,6 +10,10 @@ class Controller{
 
         sf::RenderWindow* window; //WINDOWS IN SFML ARE DISPLAYERS AND LISTENERS
     public:
+        virtual void needToStart(std::vector<void*> parameters);
+        virtual bool hasToSendWhenClose() = 0;
+        virtual std::vector<void*> sendWhenClose();
+
         virtual void start() = 0;
         virtual void closeController() = 0;
 

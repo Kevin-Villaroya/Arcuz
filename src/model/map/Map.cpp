@@ -9,10 +9,10 @@ Map::Map(int lenght, int width) : tiles(std::vector<std::vector<Tile>> (lenght, 
 
   for(int i = 0; i < lenght; i++){
     for(int j = 0; j < width; j++){
-      unsigned int height = this->tiles[i][j].getHeight();
-      unsigned int width = this->tiles[i][j].getWidth();
-      this->tiles[i][j].setPosition(i * width, j * height);
-      if(i == 0 || j == 0){
+      unsigned int heightTile = this->tiles[i][j].getHeight();
+      unsigned int widthTile = this->tiles[i][j].getWidth();
+      this->tiles[i][j].setPosition(i * widthTile, j * heightTile);
+      if(i == 0 || j == 0 || i == lenght - 1 || j == width - 1){
         this->tiles[i][j].setSpriteByType(TypeTile::GRASS);
       }
     }

@@ -1,12 +1,12 @@
 #include "ModelMenu.h"
 #include <iostream>
 #include "../../controller/controllerState/gameController/GameController.h"
-
-std::string ModelMenu::nameCharacter;
+#include "../../controller/controllerState/menuIpController/MenuIpController.h"
 
 ModelMenu::ModelMenu(View& view) : view(view), textureFond(TextureTool("assets/menu/fond.png")), fondSprite(textureFond){
     this->initMenu();
     this->nicknameUpdating = false;
+    this->hosting = false;
 
     this->soloTexture = TextureTool("assets/icone/solo.png");
     this->joinTexture = TextureTool("assets/icone/join.png");
@@ -58,7 +58,6 @@ void ModelMenu::initMenu(){
     this->nickname.setFont(FontTool::REGULAR_FONT);
     this->nickname.setFillColor(sf::Color::White);
     this->nickname.setString("Default");
-    ModelMenu::nameCharacter = "Default";
 
     this->solo = MenuButton(sizeScreen.x * 0.1, sizeScreen.y * 0.2, sizeScreen.x * 0.80, sizeScreen.y * 0.2, &this->soloTexture, FontTool::REGULAR_FONT, "solo", "launch game");
     this->host = MenuButton(sizeScreen.x * 0.1, sizeScreen.y * 0.45, sizeScreen.x * 0.80, sizeScreen.y * 0.2, &this->hostTexture, FontTool::REGULAR_FONT, "host", "create game");
@@ -72,17 +71,19 @@ void ModelMenu::initView(){
     this->view.centerViewOn(sizeScreen.x / 2, sizeScreen.y / 2);
 }
 
-unsigned int ModelMenu::clickOnMenu(float x, float y){//TODO
+unsigned int ModelMenu::clickOnMenu(float x, float y){
     sf::Vector2f posMouse = this->convertPositionMouse(x, y);
 
     this->clickOnNickname(posMouse.x, posMouse.y);
 
     if(this->solo.clickOnButton(posMouse.x, posMouse.y)){
         return GameController::id;
-    }else if(this->solo.clickOnButton(posMouse.x, posMouse.y)){
-        return 0;
     }else if(this->host.clickOnButton(posMouse.x, posMouse.y)){
-        return 0;
+        this->hosting = true;
+        return MenuIpController::id;
+    }else if(this->join.clickOnButton(posMouse.x, posMouse.y)){
+        this->hosting = false;
+        return MenuIpController::id;
     }else{
         return 0;
     }
@@ -111,7 +112,15 @@ void ModelMenu::changeNickname(char letter){
     }else if(this->nickname.getString().getSize() > 0 && letter == 8){
         this->nickname.setString(this->nickname.getString().substring(0, this->nickname.getString().getSize() - 1));
     }
-    ModelMenu::nameCharacter = this->nickname.getString();
+}
+
+bool& ModelMenu::isHosting(){
+    return this->hosting;
+}
+
+std::string& ModelMenu::getNameCharacter(){
+    this->nameCharacter = this->nickname.getString();
+    return nameCharacter;
 }
 
 void ModelMenu::initNicknameSquare(){

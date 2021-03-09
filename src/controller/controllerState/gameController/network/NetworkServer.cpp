@@ -5,10 +5,14 @@
 #include <string.h>
 #include <../../model/entities/EntityDrawable.h>
 
-NetworkServer::NetworkServer(int width, int height, unsigned short port) : GameController(width, height){
+NetworkServer::NetworkServer(int width, int height, unsigned short port) : GameController(width, height), threadServer(&NetworkServer::startServer, this){
     this->port = port;
     this->socket.bind(this->port);
     this->allClientupdated = false;
+}
+
+NetworkServer::NetworkServer(sf::RenderWindow* window) : GameController(window), threadServer(&NetworkServer::startServer, this){
+
 }
 
 void NetworkServer::startServer(){
@@ -19,11 +23,21 @@ void NetworkServer::startServer(){
     sf::Packet packet;
 
     if (this->socket.receive(packet, sender, port) != sf::Socket::Done){
-      std::cout << "Erreur" << std::endl;
+      //std::cout << "Erreur" << std::endl;
     }else{
       this->processingRequest(sender, port, packet);
     }
   }
+}
+
+void NetworkServer::initStart(){
+  std::cout << "Server Ready" << std::endl;
+  std::cout << "listening on port: " << port <<std::endl;
+
+  this->socket.bind(this->port);
+  this->allClientupdated = false;
+
+  threadServer.launch();
 }
 
 void NetworkServer::start(){
@@ -35,6 +49,17 @@ void NetworkServer::start(){
       this->updateAllCLient(this->model->getEntitiesNeedUpdate());
     }
   }
+  threadServer.terminate();
+}
+
+void NetworkServer::needToStart(std::vector<void*> parameters){
+  std::string nameCharacter = *(std::string*)(parameters[0]);
+  unsigned short port = *(unsigned short*)(parameters[1]);
+
+  this->port = port;
+  this->model->getMainCharacter()->setName(nameCharacter);
+
+  this->initStart();
 }
 
 void NetworkServer::processingRequest(const sf::IpAddress &adressClient, unsigned short port, sf::Packet &packet){
