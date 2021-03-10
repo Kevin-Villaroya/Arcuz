@@ -7,8 +7,7 @@ Mineur:
 - Faire une barre de chargement lors du chargement des sprites
 
 Majeur:
-- Faire une fenetre de démarrage
-    -Possibilité de choisir parmis 3 options: Solo, Host ou Join
-        -Faire fonctionner les boutons (renvoyer sunr une autre page dans le cas de host et join sinon lancer le jeu)
-        -Attribuer le bon pseudo lors du lancement du jeu
-    - vector de sf text dans model.h a faire afficher et remplir
+-Ajouter un timeout lors de la connexion est envoyer une erreur si pas de connexion
+-Si host n'as pas bind envoyer une erreur et tout arreter
+-Afficher les pseudos des autres entites personnage
+-reguler l'animation entre le personnage main et les autres entites

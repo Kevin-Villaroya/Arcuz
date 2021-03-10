@@ -90,10 +90,20 @@ void ModelMenuIp::initView(){
 
 void ModelMenuIp::changeValue(char letter){
     this->ipText.addLetterToValue(letter);
-    this->portText.addLetterToValue(letter);
-
     this->ip = sf::IpAddress(this->ipText.getValue());
-    this->port = std::stoi(this->portText.getValue());
+
+    if((letter >= 48 && letter <= 57) || letter == 8){ //letter is a number or a delete
+        this->portText.addLetterToValue(letter);
+    }
+    
+    if(this->portText.getValue().size() > 0){
+        if(std::stoi(this->portText.getValue()) > 65535){ //if the port is out of range
+            this->portText.addLetterToValue(8);
+        }else{
+            this->port = std::stoi(this->portText.getValue());
+        }          
+    }
+    
 }
 
 void ModelMenuIp::setNameCharacter(const std::string& nameCharacter){
