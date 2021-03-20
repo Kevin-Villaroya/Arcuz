@@ -70,7 +70,7 @@ void NetworkClient::needToStart(std::vector<void*> parameters){
   std::cout << "Client ready" << std::endl;
   std::cout << "Server Location: ip: " << ip.toString() << ", port: "<< port <<std::endl;
 
-  this->model->getMainCharacter()->setName(nameCharacter);
+  this->model->setNameCharacter(nameCharacter);
 }
 
 void NetworkClient::send(sf::Packet &packet){

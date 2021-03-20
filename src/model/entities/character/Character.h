@@ -63,6 +63,7 @@ public:
 
   int getId() const;
   int getSpeed() const;
+  void setDelayOfAnimation(unsigned int frames);
 
   const TypeAnimationCharacter getAnimation() const;
   Animation* getAnimation(TypeAnimationCharacter typeAnimation);

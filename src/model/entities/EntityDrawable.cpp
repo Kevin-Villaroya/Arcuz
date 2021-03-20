@@ -11,6 +11,7 @@ EntityDrawable::EntityDrawable(bool isSpriteFixe){
   this->uid = 0;
   this->oldPosX = this->getPosX();
   this->oldPosY = this->getPosY();
+  this->name = "";
 }
 
 unsigned int EntityDrawable::getPosX() const{

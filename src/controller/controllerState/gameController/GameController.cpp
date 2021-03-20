@@ -63,7 +63,7 @@ void GameController::checkEvents(){
 
 void GameController::needToStart(std::vector<void*> parameters){
   std::string nameCharacter = *(std::string*)(parameters[0]);
-  this->model->getMainCharacter()->setName(nameCharacter);
+  this->model->setNameCharacter(nameCharacter);
 }
 
 bool GameController::hasToSendWhenClose(){

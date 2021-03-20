@@ -128,6 +128,14 @@ int Character::getSpeed() const{
   return this->speed;
 }
 
+void Character::setDelayOfAnimation(unsigned int frames){
+  this->animationIdle.setDelay(frames);
+  this->animationJump.setDelay(frames);
+  this->animationWalk.setDelay(frames);
+  this->animationRun.setDelay(frames);
+  this->animationDead.setDelay(frames);
+}
+
 const TypeAnimationCharacter Character::getAnimation() const{
   return this->action;
 }

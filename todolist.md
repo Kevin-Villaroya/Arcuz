@@ -9,5 +9,4 @@ Mineur:
 Majeur:
 -Ajouter un timeout lors de la connexion est envoyer une erreur si pas de connexion
 -Si host n'as pas bind envoyer une erreur et tout arreter
--Afficher les pseudos des autres entites personnage
--reguler l'animation entre le personnage main et les autres entites
+-ajouter un pin cote client pour verifier que le serveur est toujours present

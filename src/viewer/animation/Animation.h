@@ -9,7 +9,7 @@ class Animation{
 
 private:
   std::vector<TextureTool> animation;
-  const unsigned int delay;
+  unsigned int delay;
 
   unsigned int currentFrame;
   unsigned int currentDelay;
@@ -23,6 +23,9 @@ public:
 
   sf::Texture& getTextureDisplay();
   unsigned int getCurrentFrame();
+
+  unsigned int getDelay();
+  void setDelay(unsigned int delay);
 
   void reset();
   bool isLastFrame();

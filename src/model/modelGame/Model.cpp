@@ -5,9 +5,10 @@
 Model::Model(View &view):view(view), map(Map(50,50)), mainCharacter(new Character()){
   this->view.centerViewOn(*mainCharacter);
   this->modelChanged = false;
-  this->nameCharacter.setFont(FontTool::REGULAR_FONT);
-  this->nameCharacter.setFillColor(sf::Color::Black);
-  this->nameCharacter.setCharacterSize(8);
+
+  this->addEntityName(mainCharacter->getName());
+
+  this->mainCharacter->setDelayOfAnimation(1);
 }
 
 void Model::update(){//loop update
@@ -26,11 +27,7 @@ void Model::update(){//loop update
     this->entitiesNeedUpdate.push_back(this->mainCharacter);
   }
 
-    float posXNameCharacter = this->mainCharacter->getPosition().x - this->nameCharacter.getGlobalBounds().width / 2 + this->mainCharacter->getTexture()->getSize().x / 4;
-    float posYNameCharacter = this->mainCharacter->getPosition().y - this->nameCharacter.getGlobalBounds().height;
-
-  this->nameCharacter.setString(this->mainCharacter->getName());
-  this->nameCharacter.setPosition(posXNameCharacter, posYNameCharacter);
+  this->updateEntitiesName();
 
   this->modelChanged = updated;
 }
@@ -48,7 +45,9 @@ void Model::render(){
     allDraws.push_back(this->entities[i]);
   }
 
-  allDraws.push_back(&this->nameCharacter);
+  for(unsigned int i = 0; i < this->nameEntities.size(); i++){
+    allDraws.push_back(this->nameEntities[i]);
+  }
 
   this->view.render(*this->mainCharacter, allDraws);
 }
@@ -78,6 +77,8 @@ bool Model::addCharacter(Character* character){
 void Model::addEntity(EntityDrawable* entity){
   entity->setUid(this->entities.size() + 1);
   this->entities.push_back(entity);
+
+  this->addEntityName(entity->getName());
 }
 
 const std::vector<EntityDrawable*>& Model::getEntities(){
@@ -121,6 +122,12 @@ EntityDrawable* Model::getEntity(const int uid){
   return NULL;
 }
 
+void Model::setNameCharacter(const std::string& name){
+  this->mainCharacter->setName(name);
+  std::cout << name << std::endl;
+  this->nameEntities[0]->setString(name);
+}
+
 size_t Model::quantityOfEntities(){
   return this->entities.size();
 }
@@ -130,7 +137,16 @@ void Model::removeAllEntities(){
     EntityDrawable* entity = this->entities[i];
     delete entity;
   }
+
+  for(unsigned int i = 0; i < this->entities.size(); i++){
+    sf::Text* nameEntity = this->nameEntities[i];
+    delete nameEntity;
+  }
+
+  this->nameEntities.clear();
   this->entities.clear();
+
+  this->addEntityName(mainCharacter->getName());
 }
 
 bool Model::updateNeededForEntities(){
@@ -144,11 +160,18 @@ std::vector<EntityDrawable*>& Model::getEntitiesNeedUpdate(){
 void Model::removeEntitie(EntityDrawable& entitie){
   unsigned int i = 0;
   bool find = false;
+
   while(i < this->entities.size() || !find){
     if(this->entities[i] == &entitie){
       EntityDrawable* entityRemoved = this->entities[i];
+      sf::Text* nameEntity = this->nameEntities[i+1];
+
       this->entities.erase(this->entities.begin() + i);
+      this->nameEntities.erase(this->nameEntities.begin() + i + 1);
+
       delete entityRemoved;
+      delete nameEntity;
+
       find = true;
     }
     i++;
@@ -158,12 +181,52 @@ void Model::removeEntitie(EntityDrawable& entitie){
 void Model::removeEntitie(const std::string& name){
   unsigned int i = 0;
   bool find = false;
+
   while(i < this->entities.size() || !find){
     if(this->entities[i]->getName().compare(name) == 0){
+      EntityDrawable* entityRemoved = this->entities[i];
+      sf::Text* nameEntity = this->nameEntities[i+1];
+
       this->entities.erase(this->entities.begin() + i);
+      this->nameEntities.erase(this->nameEntities.begin() + i + 1);
+
+      delete entityRemoved;
+      delete nameEntity;
+
       find = true;
     }
     i++;
+  }
+}
+
+void Model::addEntityName(const std::string& name){
+  int sizeNameEntity = this->nameEntities.size();
+
+  this->nameEntities.push_back(new sf::Text());
+  this->nameEntities[sizeNameEntity]->setFont(FontTool::REGULAR_FONT);
+  this->nameEntities[sizeNameEntity]->setFillColor(sf::Color::Black);
+  this->nameEntities[sizeNameEntity]->setCharacterSize(8);
+  this->nameEntities[sizeNameEntity]->setString(name);
+}
+
+void Model::updateEntitiesName(){
+
+  float posXName = 0;
+  float posYName = 0;
+
+  posXName = this->mainCharacter->getPosition().x - this->nameEntities[0]->getGlobalBounds().width / 2 + this->mainCharacter->getTexture()->getSize().x / 4;
+  posYName = this->mainCharacter->getPosition().y - this->nameEntities[0]->getGlobalBounds().height;
+
+  this->nameEntities[0]->setPosition(posXName, posYName);
+
+  for(unsigned int posEntityName = 1; posEntityName < this->nameEntities.size(); posEntityName++){
+    unsigned int posEntity = posEntityName - 1;
+    if(posEntity < this->entities.size()){
+      posXName = this->entities[posEntity]->getPosition().x - this->nameEntities[posEntityName]->getGlobalBounds().width / 2 + this->entities[posEntity]->getTexture()->getSize().x / 4;
+      posYName = this->entities[posEntity]->getPosition().y - this->nameEntities[posEntityName]->getGlobalBounds().height;
+
+      this->nameEntities[posEntityName]->setPosition(posXName, posYName);
+    }
   }
 }
 
@@ -171,5 +234,8 @@ Model::~Model(){
   delete mainCharacter;
   for(size_t i = 0; i < this->entities.size(); i++){
     delete this->entities[i];
+  }
+  for(size_t i = 0; i < this->nameEntities.size(); i++){
+    delete this->nameEntities[i];
   }
 }

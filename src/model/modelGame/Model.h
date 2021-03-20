@@ -15,14 +15,15 @@ private:
   Map map;
 
   Character* mainCharacter;
-  sf::Text nameCharacter;
 
   bool modelChanged;
   std::vector<EntityDrawable*> entitiesNeedUpdate; //optimisation
-  std::vector<sf::Text> nameEntities;
+  std::vector<sf::Text*> nameEntities;
 
   std::vector<EntityDrawable*> entities; //all entities in the game (without character)
 
+  void addEntityName(const std::string& name);
+  void updateEntitiesName();
 public:
   Model(View &view);
 
@@ -38,6 +39,8 @@ public:
   bool existEntity(const std::string& name);
   bool existEntity(const int uid);
   EntityDrawable* getEntity(const int uid);
+
+  void setNameCharacter(const std::string& name);
 
   size_t quantityOfEntities();
 

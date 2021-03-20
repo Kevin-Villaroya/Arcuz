@@ -57,7 +57,7 @@ void NetworkServer::needToStart(std::vector<void*> parameters){
   unsigned short port = *(unsigned short*)(parameters[1]);
 
   this->port = port;
-  this->model->getMainCharacter()->setName(nameCharacter);
+  this->model->setNameCharacter(nameCharacter);
 
   this->initStart();
 }

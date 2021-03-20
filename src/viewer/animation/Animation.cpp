@@ -34,6 +34,14 @@ unsigned int Animation::getCurrentFrame(){
   return this->currentFrame;
 }
 
+unsigned int Animation::getDelay(){
+  return this->delay;
+}
+
+void Animation::setDelay(unsigned int delay){
+  this->delay = delay;
+}
+
 void Animation::reset(){
   this->currentFrame = 0;
   this->currentDelay = 0;
