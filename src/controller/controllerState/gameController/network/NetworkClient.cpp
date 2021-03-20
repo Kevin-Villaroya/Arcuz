@@ -27,7 +27,13 @@ void NetworkClient::setNetwork(){
     std::cout << "Erreur de liaison" << std::endl;
   }else{
     this->connectionSucceed = this->connectGame();
+
+    if(this->connectionSucceed == false){
+      this->numberOfConnectionAttempts++;
+    }
+
     this->threadTerminated = true;
+    this->selector.add(this->socket);
   }
 }
 
@@ -47,9 +53,11 @@ void NetworkClient::start(){
       }
     }
     this->disconnectGame();
-  }else{
+  }else if(this->numberOfConnectionAttempts < 3){
     this->setNetwork();
     this->start();
+  }else{
+    this->nextIdScreen = 4;
   }
 }
 
@@ -71,18 +79,25 @@ void NetworkClient::needToStart(std::vector<void*> parameters){
   std::cout << "Server Location: ip: " << ip.toString() << ", port: "<< port <<std::endl;
 
   this->model->setNameCharacter(nameCharacter);
+  this->numberOfConnectionAttempts = 0;
 }
 
 void NetworkClient::send(sf::Packet &packet){
   if(!this->socket.send(packet, this->ip, this->portHost) == sf::Socket::Status::Done){
-    //std::cout << "packet send failed" << std::endl;
+    std::cout << "packet send failed" << std::endl;
   }
 }
 
 sf::Socket::Status NetworkClient::receive(sf::Packet &packet){
   sf::IpAddress ip;
   unsigned short port;
-  return this->socket.receive(packet, ip, port);
+  if (this->selector.wait(sf::seconds(3))){
+    if (selector.isReady(socket)){
+      return socket.receive(packet, ip, port);
+    }
+  }
+
+  return sf::Socket::Error;
 }
 
 bool NetworkClient::connectGame(){
@@ -92,6 +107,8 @@ bool NetworkClient::connectGame(){
   packet << (uint32_t)Action::connect;
   packet << this->model->getMainCharacter()->getName();
   packet << (uint32_t)model->getMainCharacter()->getType();
+
+  std::cout << "Try to connect to the server attempt: " << this->numberOfConnectionAttempts << std::endl;
 
   this->send(packet);
   return confirmationOfConnection();
@@ -115,6 +132,8 @@ bool NetworkClient::confirmationOfConnection(){
 
   if(this->receive(receiveUid) == sf::Socket::Done){
     receiveUid >> info;
+  }else{
+    return false;
   }
 
   if((Action)info == Action::confirm_disconnect){

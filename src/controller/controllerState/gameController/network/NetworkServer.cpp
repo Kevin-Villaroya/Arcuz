@@ -31,13 +31,18 @@ void NetworkServer::startServer(){
 }
 
 void NetworkServer::initStart(){
-  std::cout << "Server Ready" << std::endl;
-  std::cout << "listening on port: " << port <<std::endl;
+  this->running = true;
 
-  this->socket.bind(this->port);
-  this->allClientupdated = false;
+  if(this->socket.bind(this->port) == sf::Socket::Done){
+    this->allClientupdated = false;
+    threadServer.launch();
 
-  threadServer.launch();
+    std::cout << "Server Ready" << std::endl;
+    std::cout << "listening on port: " << port <<std::endl;
+  }else{
+    this->nextIdScreen = 4;
+    this->closeController();
+  }
 }
 
 void NetworkServer::start(){

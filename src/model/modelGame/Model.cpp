@@ -124,7 +124,6 @@ EntityDrawable* Model::getEntity(const int uid){
 
 void Model::setNameCharacter(const std::string& name){
   this->mainCharacter->setName(name);
-  std::cout << name << std::endl;
   this->nameEntities[0]->setString(name);
 }
 

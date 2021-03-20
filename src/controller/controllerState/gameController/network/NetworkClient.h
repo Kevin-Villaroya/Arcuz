@@ -13,6 +13,7 @@ class NetworkClient : public GameController{
 private:
   sf::IpAddress ip;
   sf::UdpSocket socket;
+  sf::SocketSelector selector;
 
   sf::Thread thread;
   sf::Mutex mutex;
@@ -24,6 +25,8 @@ private:
 
   unsigned short port;
   unsigned short portHost;
+
+  unsigned int numberOfConnectionAttempts = 0;
 
   void setNetwork();
 
