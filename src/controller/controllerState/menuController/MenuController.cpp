@@ -49,6 +49,7 @@ bool MenuController::hasToSendWhenClose(){
 std::vector<void*> MenuController::sendWhenClose(){
     std::vector<void*> parameters;
     parameters.push_back(&this->model->getNameCharacter());
+    parameters.push_back(&this->model->getSkin());
 
     if(this->nextId() == 5){
         parameters.push_back(&this->model->isHosting());

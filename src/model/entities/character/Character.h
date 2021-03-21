@@ -22,7 +22,8 @@ enum TypeAnimationCharacter{
 class Character : public EntityDrawable{
 
 private:
-  const static float SCALE;
+  const static float SCALE_BOY;
+  const static float SCALE_GIRL;
 
   TypeCharacter type;
 
@@ -69,6 +70,9 @@ public:
   Animation* getAnimation(TypeAnimationCharacter typeAnimation);
 
   const int getType() const;
+  TypeCharacter getType(std::string type) const;
+  void setType(std::string nameType);
+  void setType(TypeCharacter Type);
 
   void putIn(sf::Packet& packet) const override;
   void putOut(sf::Packet& packet) override;

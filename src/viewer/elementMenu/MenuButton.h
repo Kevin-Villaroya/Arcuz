@@ -3,13 +3,11 @@
 
 #include "../view/View.h"
 #include <SFML/Graphics.hpp>
+#include "../../tool/FontTool.h"
 #include <vector>
 
 class MenuButton{
-    private:
-        static sf::Font DEFAULT_FONT;
-        static void initFont();
-
+    protected:
         sf::RectangleShape button;
         sf::RectangleShape line;
         sf::CircleShape circle;
@@ -32,12 +30,10 @@ class MenuButton{
         MenuButton(float originX, float originY, float sizeX, float sizeY, sf::Color colorCircle, const sf::Font& font, const std::string& nameMenu, const std::string& nameButton);
         MenuButton(float originX, float originY, float sizeX, float sizeY, sf::Texture* texture, const sf::Font& font, const std::string& nameMenu, const std::string& nameButton);
         
-        std::vector<sf::Drawable*> getElementsToRender();
-        bool clickOnButton(float x, float y);
+        virtual std::vector<sf::Drawable*> getElementsToRender();
+        virtual bool clickOnButton(float x, float y);
 
-        void update(const View* view);
-
-        
+        virtual void update(const View* view);
 };
 
 #endif

@@ -3,6 +3,7 @@
 
 #include "../viewer/view/View.h"
 #include "../../viewer/elementMenu/MenuButton.h"
+#include "../../viewer/elementMenu/MenuButtonSelect.h"
 #include "../../tool/FontTool.h"
 #include <string>
 
@@ -23,6 +24,9 @@ class ModelMenu{
 
         MenuButton join;
         TextureTool joinTexture;
+
+        MenuButtonSelect chooseType;
+        TextureTool chooseTypeTexture;
 
         const TextureTool textureFond;
         sf::Sprite fondSprite;
@@ -50,6 +54,7 @@ class ModelMenu{
 
         bool& isHosting();
 
+        std::string& getSkin();
         std::string& getNameCharacter();
 };
 

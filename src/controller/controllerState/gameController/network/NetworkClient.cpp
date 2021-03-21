@@ -26,6 +26,7 @@ void NetworkClient::setNetwork(){
   if(this->socket.bind(this->port) != sf::Socket::Done){
     std::cout << "Erreur de liaison" << std::endl;
   }else{
+    this->selector.add(this->socket);
     this->connectionSucceed = this->connectGame();
 
     if(this->connectionSucceed == false){
@@ -33,7 +34,6 @@ void NetworkClient::setNetwork(){
     }
 
     this->threadTerminated = true;
-    this->selector.add(this->socket);
   }
 }
 
@@ -67,10 +67,10 @@ void NetworkClient::checkEvents(){
 
 void NetworkClient::needToStart(std::vector<void*> parameters){
   std::string nameCharacter = *(std::string*)(parameters[0]);
-  unsigned short port = *(unsigned short*)(parameters[1]);
-  sf::IpAddress ip = *(sf::IpAddress*)(parameters[2]);
+  std::string type = *(std::string*)(parameters[1]);
 
-  std::cout << ip.toString() << std::endl;
+  unsigned short port = *(unsigned short*)(parameters[2]);
+  sf::IpAddress ip = *(sf::IpAddress*)(parameters[3]);
 
   this->portHost = port;
   this->ip = ip;
@@ -79,6 +79,7 @@ void NetworkClient::needToStart(std::vector<void*> parameters){
   std::cout << "Server Location: ip: " << ip.toString() << ", port: "<< port <<std::endl;
 
   this->model->setNameCharacter(nameCharacter);
+  this->model->getMainCharacter()->setType(type);
   this->numberOfConnectionAttempts = 0;
 }
 
@@ -91,7 +92,7 @@ void NetworkClient::send(sf::Packet &packet){
 sf::Socket::Status NetworkClient::receive(sf::Packet &packet){
   sf::IpAddress ip;
   unsigned short port;
-  if (this->selector.wait(sf::seconds(3))){
+  if (this->selector.wait(sf::seconds(4))){
     if (selector.isReady(socket)){
       return socket.receive(packet, ip, port);
     }

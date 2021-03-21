@@ -3,7 +3,8 @@
 #include <iostream>
 #include <string>
 
-const float Character::SCALE = 0.5;
+const float Character::SCALE_GIRL = 0.4;
+const float Character::SCALE_BOY = 0.5;
 
 Character::Character() : Character("default"){}
 
@@ -164,9 +165,38 @@ const int Character::getType() const{
   return this->type;
 }
 
+TypeCharacter Character::getType(std::string type) const{
+
+  if(type.compare("girl") == 0){
+    return TypeCharacter::girl;
+  }else{
+    return TypeCharacter::man;
+  }
+}
+
+void Character::setType(std::string nameType){
+  TypeCharacter type = this->getType(nameType);
+  this->setType(type);
+}
+
+void Character::setType(TypeCharacter type){
+  this->type = type;
+
+  this->animationIdle = setCharacterAnimation(type, TypeAnimationCharacter::idle);
+  this->animationWalk = setCharacterAnimation(type, TypeAnimationCharacter::walk);
+  this->animationRun = setCharacterAnimation(type, TypeAnimationCharacter::run);
+  this->animationJump = setCharacterAnimation(type, TypeAnimationCharacter::jump);
+  this->animationDead = setCharacterAnimation(type, TypeAnimationCharacter::dead);
+}
+
 void Character::applySprite(){
   this->setTexture(this->currentAnimation->getTextureDisplay());
-  this->setScale(Character::SCALE, Character::SCALE);
+
+  if(this->type == TypeCharacter::girl){
+    this->setScale(Character::SCALE_GIRL, Character::SCALE_GIRL);
+  }else if(this->type == TypeCharacter::man){
+    this->setScale(Character::SCALE_BOY, Character::SCALE_BOY);
+  }
 }
 
 void Character::putIn(sf::Packet& packet) const{
@@ -196,6 +226,7 @@ void Character::putOut(sf::Packet& packet){
   animation = (TypeAnimationCharacter)animationPrimitive;
 
   if(this->type != type){
+    setType(type);
     setCharacterAnimation(type, animation);
   }
 

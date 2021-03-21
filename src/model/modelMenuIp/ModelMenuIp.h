@@ -13,6 +13,7 @@ class ModelMenuIp{
         View view;
 
         std::string nameCharacter;
+        std::string type;
 
         MenuText ipText;
         sf::IpAddress ip;
@@ -40,6 +41,9 @@ class ModelMenuIp{
 
         void setNameCharacter(const std::string& nameCharacter);
         std::string& getNameCharacter();
+
+        void setType(std::string type);
+        std::string& getType();
 
         void setPort(unsigned short port);
         unsigned short& getPort();

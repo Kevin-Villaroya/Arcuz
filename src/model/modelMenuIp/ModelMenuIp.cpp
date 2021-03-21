@@ -114,6 +114,14 @@ std::string& ModelMenuIp::getNameCharacter(){
     return this->nameCharacter;
 }
 
+void ModelMenuIp::setType(std::string type){
+    this->type = type;
+}
+
+std::string& ModelMenuIp::getType(){
+    return this->type;
+}
+
 void ModelMenuIp::setPort(unsigned short port){
     this->port = port;
     this->portText.setValue(std::to_string(port));

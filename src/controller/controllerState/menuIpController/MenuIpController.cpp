@@ -35,7 +35,10 @@ void MenuIpController::checkEvents(){
 
 void MenuIpController::needToStart(std::vector<void*> parameters){
     std::string nameCharacter = *(std::string*)(parameters[0]);
-    bool host = *(bool*)(parameters[1]);
+    std::string skinCharacter = *(std::string*)(parameters[1]);
+
+    bool host = *(bool*)(parameters[2]);
+    this->model->setType(skinCharacter);
     this->model->setNameCharacter(nameCharacter);
     this->model->setIsHost(host);
 }
@@ -52,6 +55,7 @@ std::vector<void*> MenuIpController::sendWhenClose(){
     std::vector<void*> parameters;
 
     parameters.push_back(&this->model->getNameCharacter());
+    parameters.push_back(&this->model->getType());
 
     if(this->nextIdScreen == 2){ //client
         parameters.push_back(&this->model->getPort());

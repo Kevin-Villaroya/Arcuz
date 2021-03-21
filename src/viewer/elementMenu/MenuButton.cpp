@@ -1,13 +1,7 @@
 #include "MenuButton.h"
 #include <iostream>
 
-sf::Font MenuButton::DEFAULT_FONT;
-
-void MenuButton::initFont(){
-    MenuButton::DEFAULT_FONT.loadFromFile("assets/font/regular.ttf");
-}
-
-MenuButton::MenuButton() : MenuButton(0,0,0,0,sf::Color::Black, MenuButton::DEFAULT_FONT ,"" ,""){}
+MenuButton::MenuButton() : MenuButton(0,0,0,0,sf::Color::Black, FontTool::REGULAR_FONT ,"" ,""){}
 
 MenuButton::MenuButton(float originX, float originY, float sizeX, float sizeY, sf::Texture* texture, const sf::Font& font, const std::string& nameMenu, const std::string& nameButton) : 
 MenuButton(originX, originY, sizeX, sizeY, sf::Color::White, font, nameMenu, nameButton){

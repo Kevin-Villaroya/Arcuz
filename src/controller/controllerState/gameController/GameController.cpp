@@ -63,7 +63,11 @@ void GameController::checkEvents(){
 
 void GameController::needToStart(std::vector<void*> parameters){
   std::string nameCharacter = *(std::string*)(parameters[0]);
+  std::string skinCharacter = *(std::string*)(parameters[1]);
+
+
   this->model->setNameCharacter(nameCharacter);
+  this->model->getMainCharacter()->setType(skinCharacter);
 }
 
 bool GameController::hasToSendWhenClose(){

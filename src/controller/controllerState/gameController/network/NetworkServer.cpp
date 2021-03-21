@@ -59,10 +59,14 @@ void NetworkServer::start(){
 
 void NetworkServer::needToStart(std::vector<void*> parameters){
   std::string nameCharacter = *(std::string*)(parameters[0]);
-  unsigned short port = *(unsigned short*)(parameters[1]);
+  std::string type = *(std::string*)(parameters[1]);
+
+
+  unsigned short port = *(unsigned short*)(parameters[2]);
 
   this->port = port;
   this->model->setNameCharacter(nameCharacter);
+  this->model->getMainCharacter()->setType(type);
 
   this->initStart();
 }

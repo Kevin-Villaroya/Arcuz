@@ -11,6 +11,7 @@ ModelMenu::ModelMenu(View& view) : view(view), textureFond(TextureTool("assets/m
     this->soloTexture = TextureTool("assets/icone/solo.png");
     this->joinTexture = TextureTool("assets/icone/join.png");
     this->hostTexture = TextureTool("assets/icone/host.png");
+    this->chooseTypeTexture = TextureTool("assets/icone/armoire.png");
 }
 
 void ModelMenu::render(){
@@ -36,11 +37,18 @@ void ModelMenu::render(){
     for(unsigned int i = 0; i < menuButtonDrawables.size(); i++){
         allDraws.push_back(menuButtonDrawables[i]);
     }
+
+    menuButtonDrawables = this->chooseType.getElementsToRender();
+    for(unsigned int i = 0; i < menuButtonDrawables.size(); i++){
+        allDraws.push_back(menuButtonDrawables[i]);
+    }
+
     this->view.render(allDraws);
 }
 
 void ModelMenu::update(){
     this->setPositionNickname();
+    this->chooseType.update(&this->view);
     this->solo.update(&this->view);
     this->host.update(&this->view);
     this->join.update(&this->view);
@@ -59,9 +67,13 @@ void ModelMenu::initMenu(){
     this->nickname.setFillColor(sf::Color::White);
     this->nickname.setString("Default");
 
-    this->solo = MenuButton(sizeScreen.x * 0.1, sizeScreen.y * 0.2, sizeScreen.x * 0.80, sizeScreen.y * 0.2, &this->soloTexture, FontTool::REGULAR_FONT, "solo", "launch game");
-    this->host = MenuButton(sizeScreen.x * 0.1, sizeScreen.y * 0.45, sizeScreen.x * 0.80, sizeScreen.y * 0.2, &this->hostTexture, FontTool::REGULAR_FONT, "host", "create game");
-    this->join = MenuButton(sizeScreen.x * 0.1, sizeScreen.y * 0.7, sizeScreen.x * 0.80, sizeScreen.y * 0.2, &this->joinTexture, FontTool::REGULAR_FONT, "join", "find game");
+    this->chooseType = MenuButtonSelect(sizeScreen.x * 0.1, sizeScreen.y * 0.15, sizeScreen.x * 0.80, sizeScreen.y * 0.15, &this->chooseTypeTexture, FontTool::REGULAR_FONT, "skin:", "boy");
+    this->chooseType.addOption("boy");
+    this->chooseType.addOption("girl");
+
+    this->solo = MenuButton(sizeScreen.x * 0.1, sizeScreen.y * 0.3, sizeScreen.x * 0.80, sizeScreen.y * 0.2, &this->soloTexture, FontTool::REGULAR_FONT, "solo", "launch game");
+    this->host = MenuButton(sizeScreen.x * 0.1, sizeScreen.y * 0.55, sizeScreen.x * 0.80, sizeScreen.y * 0.2, &this->hostTexture, FontTool::REGULAR_FONT, "host", "create game");
+    this->join = MenuButton(sizeScreen.x * 0.1, sizeScreen.y * 0.8, sizeScreen.x * 0.80, sizeScreen.y * 0.2, &this->joinTexture, FontTool::REGULAR_FONT, "join", "find game");
 }
 
 void ModelMenu::initView(){
@@ -75,6 +87,7 @@ unsigned int ModelMenu::clickOnMenu(float x, float y){
     sf::Vector2f posMouse = this->convertPositionMouse(x, y);
 
     this->clickOnNickname(posMouse.x, posMouse.y);
+    this->chooseType.clickOnButton(posMouse.x, posMouse.y);
 
     if(this->solo.clickOnButton(posMouse.x, posMouse.y)){
         return GameController::id;
@@ -116,6 +129,10 @@ void ModelMenu::changeNickname(char letter){
 
 bool& ModelMenu::isHosting(){
     return this->hosting;
+}
+
+std::string& ModelMenu::getSkin(){
+    return this->chooseType.getCurrentOption();
 }
 
 std::string& ModelMenu::getNameCharacter(){
