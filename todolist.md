@@ -10,10 +10,8 @@ Mineur:
 Majeur:
 -- Dans l'ordre d'apparition --
 
--Avoir la possibiliter d'etre un garcon ou une fille
 -Ameliorer la carte
-    -Ajouter des EntityDrawableStructure sur les tiles
--Gerer l'ordre d'affichage des entites pour visualiser un plan Z
+    -Ajouter un generateur de carte
 -Ajouter une mini-map
 -Ajouter du gameplay
     -Ajouter un inventaire

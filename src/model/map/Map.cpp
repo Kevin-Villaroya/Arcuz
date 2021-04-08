@@ -3,12 +3,13 @@
 
 Map::Map(){}
 
-Map::Map(int lenght, int width) : tiles(std::vector<std::vector<Tile>> (lenght, std::vector<Tile>(width, Tile(TypeTile::GROUND, true)))) {
+Map::Map(int lenght, int width) : tiles(std::vector<std::vector<Tile>> (lenght, std::vector<Tile>(width, Tile(TypeTile::GROUND)))) {
   this->lenght = lenght;
   this->width = width;
 
   for(int i = 0; i < lenght; i++){
     for(int j = 0; j < width; j++){
+      this->tiles[i][j] = Tile(TypeTile::GROUND);
       unsigned int heightTile = this->tiles[i][j].getHeight();
       unsigned int widthTile = this->tiles[i][j].getWidth();
       this->tiles[i][j].setPosition(i * widthTile, j * heightTile);

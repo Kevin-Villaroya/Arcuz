@@ -24,7 +24,7 @@ NetworkClient::NetworkClient(sf::RenderWindow* window) : GameController(window),
 
 void NetworkClient::setNetwork(){
   if(this->socket.bind(this->port) != sf::Socket::Done){
-    std::cout << "Erreur de liaison" << std::endl;
+    std::cout << "Link error" << std::endl;
   }else{
     this->selector.add(this->socket);
     this->connectionSucceed = this->connectGame();
@@ -123,7 +123,7 @@ void NetworkClient::disconnectGame(){
   packet << this->model->getMainCharacter()->getName();
   this->send(packet);
   this->thread.terminate();
-  std::cout << "deconnection du serveur" << std::endl;
+  std::cout << "server disconnection" << std::endl;
 }
 
 bool NetworkClient::confirmationOfConnection(){
@@ -138,12 +138,12 @@ bool NetworkClient::confirmationOfConnection(){
   }
 
   if((Action)info == Action::confirm_disconnect){
-    std::cout << "Reception d'un rejet de connection " << std::endl;
+    std::cout << "Receiving a connection rejection" << std::endl;
     return false;
   }else{
     uid = (int)info;
     this->model->getMainCharacter()->setUid(uid);
-    std::cout << "Mon id est " << uid << std::endl;
+    std::cout << "My id is " << uid << std::endl;
     return true;
   }
 }

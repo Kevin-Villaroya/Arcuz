@@ -7,7 +7,7 @@
 #include "../viewer/view/View.h"
 #include "entities/EntityDrawable.h"
 #include "map/Map.h"
-#include "entities/character/Character.h"
+#include "entities/entitiesAnimated/character/Character.h"
 
 class Model{
 private:
@@ -39,6 +39,9 @@ public:
   bool existEntity(const std::string& name);
   bool existEntity(const int uid);
   EntityDrawable* getEntity(const int uid);
+
+  void moveCharacter();
+  bool collisionWithABlockedTile(float x, float y);
 
   void setNameCharacter(const std::string& name);
 

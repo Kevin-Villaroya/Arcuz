@@ -1,7 +1,7 @@
 #ifndef __CHARACTER_H__
 #define __CHARACTER_H__
 
-#include "../EntityDrawable.h"
+#include "entitiesAnimated/EntityDrawableAnimated.h"
 #include <SFML/Network/Packet.hpp>
 #include <string>
 #include "../../../viewer/animation/Animation.h"
@@ -19,7 +19,7 @@ enum TypeAnimationCharacter{
   dead
 };
 
-class Character : public EntityDrawable{
+class Character : public EntityDrawableAnimated{
 
 private:
   const static float SCALE_BOY;
@@ -27,20 +27,13 @@ private:
 
   TypeCharacter type;
 
-  Animation animationIdle;
-  Animation animationWalk;
-  Animation animationRun;
-  Animation animationJump;
-  Animation animationDead;
-
-  Animation* currentAnimation;
   TypeAnimationCharacter action;
 
   int speed;
   int id;
 
-  void applySprite();
-  void playAnimation();
+  float getEntityScale() override;
+
 public:
   Character();
   Character(std::string name);
@@ -64,13 +57,13 @@ public:
 
   int getId() const;
   int getSpeed() const;
-  void setDelayOfAnimation(unsigned int frames);
 
   const TypeAnimationCharacter getAnimation() const;
-  Animation* getAnimation(TypeAnimationCharacter typeAnimation);
 
   const int getType() const;
   TypeCharacter getType(std::string type) const;
+  std::string getNameAnimationOfType(TypeAnimationCharacter type) const;
+
   void setType(std::string nameType);
   void setType(TypeCharacter Type);
 

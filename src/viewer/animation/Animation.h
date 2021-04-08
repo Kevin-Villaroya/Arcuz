@@ -8,24 +8,29 @@
 class Animation{
 
 private:
-  std::vector<TextureTool> animation;
+  std::vector<TextureTool*> animation;
   unsigned int delay;
 
   unsigned int currentFrame;
   unsigned int currentDelay;
 
+  std::string name;
+
   void increaseFrame();
 public:
   Animation();
   Animation(const std::vector<TextureTool*> &textures);
-  Animation(const std::vector<TextureTool*> &textures, unsigned int delay);
-  void addTexture(const TextureTool &texture);
+  Animation(const std::vector<TextureTool*> &textures, unsigned int delay, std::string name);
+  void addTexture(TextureTool* texture);
 
-  sf::Texture& getTextureDisplay();
+  const sf::Texture* getTextureDisplay();
   unsigned int getCurrentFrame();
 
   unsigned int getDelay();
   void setDelay(unsigned int delay);
+
+  const std::string& getName();
+  void setName(std::string name);
 
   void reset();
   bool isLastFrame();

@@ -155,7 +155,7 @@ unsigned int  NetworkServer::connectClient(const sf::IpAddress &adressClient, un
   packet >> type_int;
   type = (TypeCharacter)type_int;
 
-  std::cout << "le joueur " << name << " essaie de se connecter" << std::endl;
+  std::cout << "the player " << name << " try to connect" << std::endl;
 
   if(!this->model->existEntity(name)){
       uid = this->confirmationOfConnection(adressClient, port);
@@ -167,7 +167,7 @@ unsigned int  NetworkServer::connectClient(const sf::IpAddress &adressClient, un
       this->sendUpdateTo(client, entitiesToSend);
       this->addCharacterClient(name, type, uid);
     }else{
-      std::cout << "le joueur " << name << " existe déja ERREUR" << std::endl;
+      std::cout << "the player " << name << " already exist ERROR" << std::endl;
       this->notAcceptClient(adressClient, port);
     }
 
@@ -243,7 +243,7 @@ bool NetworkServer::addCharacterClient(std::string& name, TypeCharacter& type, u
 }
 
 void NetworkServer::removeCharacterClient(const sf::IpAddress &adressClient, unsigned short port, const std::string& name){
-  std::cout << "deconnection de " << name << std::endl;
+  std::cout << "disconnection of " << name << std::endl;
   this->model->removeEntitie(name);
 }
 

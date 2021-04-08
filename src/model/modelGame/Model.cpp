@@ -1,13 +1,16 @@
 #include "Model.h"
 #include "../../tool/FontTool.h"
+#include "../tile/poseable/tree/Tree.h"
 #include <iostream>
 
-Model::Model(View &view):view(view), map(Map(50,50)), mainCharacter(new Character()){
+Model::Model(View &view):view(view), map(Map(15,15)), mainCharacter(new Character()){
   this->view.centerViewOn(*mainCharacter);
   this->modelChanged = false;
 
-  this->addEntityName(mainCharacter->getName());
+  Tree* tree = new Tree();
+  this->map.getTile(5,5).setPoseable(tree, true);
 
+  this->addEntityName(mainCharacter->getName());
   this->mainCharacter->setDelayOfAnimation(1);
 }
 
@@ -15,10 +18,18 @@ void Model::update(){//loop update
   bool updated = this->mainCharacter->update();
   this->entitiesNeedUpdate.clear();
 
+  this->moveCharacter();
+
   for(unsigned int i = 0; i < this->entities.size(); i++){
     if(this->entities[i]->update()){
       updated = true;
       this->entitiesNeedUpdate.push_back(this->entities[i]);
+    }
+  }
+
+  for(int i = 0; i < this->map.getLenght(); i++){
+    for(int j = 0; j < this->map.getWidth(); j++){
+      this->map.getTile(i,j).update();
     }
   }
 
@@ -35,14 +46,31 @@ void Model::update(){//loop update
 void Model::render(){
   std::vector<sf::Drawable*> allDraws;
 
+  float sizeXTile = this->map.getTile(0,0).getTexture()->getSize().x;
+  float sizeYTile = this->map.getTile(0,0).getTexture()->getSize().y; 
+
   for(int i = 0; i < this->map.getLenght(); i++){
     for(int j = 0; j < this->map.getWidth(); j++){
       allDraws.push_back(&this->map.getTile(i,j));
     }
   }
 
-  for(unsigned int i = 0; i < this->entities.size(); i++){
-    allDraws.push_back(this->entities[i]);
+  for(int j = 0; j < this->map.getWidth(); j++){
+    for(int i = 0; i < this->map.getLenght(); i++){
+      if(this->map.getTile(i,j).isOriginPoseable()){
+        allDraws.push_back(this->map.getTile(i,j).getPoseable());
+      }
+
+      for(unsigned int k = 0; k < this->entities.size(); k++){
+        if((int)(this->entities[i]->getPosition().x / sizeXTile) == i && (int)(this->entities[i]->getPosition().y / sizeYTile) == j){
+          allDraws.push_back(this->entities[i]);
+        }
+      }
+
+      if((int)(this->mainCharacter->getPosition().x / sizeXTile) == i && (int)(this->mainCharacter->getPosition().y / sizeYTile) == j){
+        allDraws.push_back(this->mainCharacter);
+      }
+    }
   }
 
   for(unsigned int i = 0; i < this->nameEntities.size(); i++){
@@ -65,10 +93,10 @@ bool Model::addCharacter(Character* character){
   }
   
   if(!alreadyExist){
-    std::cout << "le joueur " << character->getName() << " est connecté" << std::endl;
+    std::cout << "the player " << character->getName() << " is connected" << std::endl;
     this->addEntity(character);
   }else{
-    std::cout << "le joueur " << character->getName() << " existe déja ERREUR" << std::endl;
+    std::cout << "the player " << character->getName() << " already exist ERROR" << std::endl;
   }
 
   return !alreadyExist;
@@ -120,6 +148,35 @@ EntityDrawable* Model::getEntity(const int uid){
     }
   }
   return NULL;
+}
+
+void Model::moveCharacter(){
+  Direction direction = this->mainCharacter->getDirection();
+  int speed = this->mainCharacter->getSpeed();
+
+  float x = this->mainCharacter->getPosition().x;
+  float y = this->mainCharacter->getPosition().y;
+
+  if(direction == Direction::right){
+    x += speed;
+  }else if(direction == Direction::left){
+    x-= speed;
+  }else if(direction == Direction::up){
+    y -= speed;
+  }else if(direction == Direction::down){
+    y+= speed;
+  }
+
+  if(!this->collisionWithABlockedTile(x,y)){
+    this->mainCharacter->setPosition(x,y);
+  }
+}
+
+bool Model::collisionWithABlockedTile(float x, float y){
+  float sizeXTile = this->map.getTile(0,0).getTexture()->getSize().x;
+  float sizeYTile = this->map.getTile(0,0).getTexture()->getSize().y;
+
+  return !this->map.getTile(x / sizeXTile, y / sizeYTile).isTraversable();
 }
 
 void Model::setNameCharacter(const std::string& name){
@@ -204,7 +261,7 @@ void Model::addEntityName(const std::string& name){
   this->nameEntities.push_back(new sf::Text());
   this->nameEntities[sizeNameEntity]->setFont(FontTool::REGULAR_FONT);
   this->nameEntities[sizeNameEntity]->setFillColor(sf::Color::Black);
-  this->nameEntities[sizeNameEntity]->setCharacterSize(8);
+  this->nameEntities[sizeNameEntity]->setCharacterSize(6);
   this->nameEntities[sizeNameEntity]->setString(name);
 }
 
@@ -213,7 +270,9 @@ void Model::updateEntitiesName(){
   float posXName = 0;
   float posYName = 0;
 
-  posXName = this->mainCharacter->getPosition().x - this->nameEntities[0]->getGlobalBounds().width / 2 + this->mainCharacter->getTexture()->getSize().x / 4;
+  float sizeXCharacter = this->mainCharacter->getTexture()->getSize().x * this->mainCharacter->getScale().x;
+
+  posXName = this->mainCharacter->getPosition().x - this->nameEntities[0]->getGlobalBounds().width / 2 +  sizeXCharacter / 2;
   posYName = this->mainCharacter->getPosition().y - this->nameEntities[0]->getGlobalBounds().height;
 
   this->nameEntities[0]->setPosition(posXName, posYName);
@@ -221,7 +280,9 @@ void Model::updateEntitiesName(){
   for(unsigned int posEntityName = 1; posEntityName < this->nameEntities.size(); posEntityName++){
     unsigned int posEntity = posEntityName - 1;
     if(posEntity < this->entities.size()){
-      posXName = this->entities[posEntity]->getPosition().x - this->nameEntities[posEntityName]->getGlobalBounds().width / 2 + this->entities[posEntity]->getTexture()->getSize().x / 4;
+      sizeXCharacter = this->entities[posEntity]->getTexture()->getSize().x * this->entities[posEntity]->getScale().x;
+
+      posXName = this->entities[posEntity]->getPosition().x - this->nameEntities[posEntityName]->getGlobalBounds().width / 2 + sizeXCharacter / 2;
       posYName = this->entities[posEntity]->getPosition().y - this->nameEntities[posEntityName]->getGlobalBounds().height;
 
       this->nameEntities[posEntityName]->setPosition(posXName, posYName);

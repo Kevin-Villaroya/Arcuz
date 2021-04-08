@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "../model/entities/EntityDrawable.h"
-#include "../model/entities/character/Character.h"
+#include "../model/entities/entitiesAnimated/character/Character.h"
 
 class View{
 private:

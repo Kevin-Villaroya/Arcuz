@@ -109,14 +109,14 @@ void EntityDrawable::putIn(sf::Packet& packet) const{
 
 void EntityDrawable::putOut(sf::Packet& packet){
   unsigned int posX;
-  unsigned int posY;
-  std::string name;
-  int uid;
-  TextureTool texture;
+	unsigned int posY;
+	std::string name;
+	int uid;
+	TextureTool texture;
 
-  packet >> uid;
-  packet >> name;
-  packet >> posX;
+	packet >> uid;
+	packet >> name;
+	packet >> posX;
   packet >> posY;
 
   this->uid = uid;

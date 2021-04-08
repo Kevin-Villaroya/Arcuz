@@ -16,7 +16,7 @@ void View::render(const Character &character, const std::vector<sf::Drawable*> &
   for(unsigned int i = 0; i < entities.size(); i++){
     this->window.draw(*entities[i]);
   }
-  this->window.draw(character);
+  
   this->window.display();
 }
 

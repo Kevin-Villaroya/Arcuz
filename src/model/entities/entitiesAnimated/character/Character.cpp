@@ -3,31 +3,32 @@
 #include <iostream>
 #include <string>
 
-const float Character::SCALE_GIRL = 0.4;
-const float Character::SCALE_BOY = 0.5;
+const float Character::SCALE_GIRL = 0.22;
+const float Character::SCALE_BOY = 0.30;
 
 Character::Character() : Character("default"){}
 
 Character::Character(std::string name) : Character(name, TypeCharacter::man){}
 
-Character::Character(std::string name, TypeCharacter type) :
-type(type),
-animationIdle(setCharacterAnimation(type, TypeAnimationCharacter::idle)),
-animationWalk(setCharacterAnimation(type, TypeAnimationCharacter::walk)),
-animationRun(setCharacterAnimation(type, TypeAnimationCharacter::run)),
-animationJump(setCharacterAnimation(type, TypeAnimationCharacter::jump)),
-animationDead(setCharacterAnimation(type, TypeAnimationCharacter::dead)){
+Character::Character(std::string name, TypeCharacter type) :type(type){
+  this->addAnimation(setCharacterAnimation(type, TypeAnimationCharacter::idle), "idle");
+  this->addAnimation(setCharacterAnimation(type, TypeAnimationCharacter::walk), "walk");
+  this->addAnimation(setCharacterAnimation(type, TypeAnimationCharacter::run), "run");
+  this->addAnimation(setCharacterAnimation(type, TypeAnimationCharacter::jump), "jump");
+  this->addAnimation(setCharacterAnimation(type, TypeAnimationCharacter::dead), "dead");
+
   this->name = name;
-  this->typeEntity = TypeEntity::character; 
-  this->currentAnimation = &this->animationIdle;
+  this->typeEntity = TypeEntity::character;
+  this->playAnimation("idle");
   this->action = TypeAnimationCharacter::idle;
   this->speed = 0; this->direction = Direction::right;
+
   this->applySprite();
 }
 
 bool Character::update(){
   this->watchDirection();
-  this->moveCharacter();
+  //this->moveCharacter();
   this->applySprite();
 
   bool updated = this->oldPosX != this->getPosX() || this->oldPosY != this->getPosY();
@@ -55,51 +56,51 @@ void Character::moveCharacter(){
 }
 
 void Character::walk(Direction newDirection){
-  if(this->currentAnimation == &this->animationWalk && this->direction == newDirection){
+  if(this->getNameAnimation().compare("walk") == 0 && this->direction == newDirection){
   }else{
     this->currentAnimation->reset();
     this->direction = newDirection;
-    this->currentAnimation = &this->animationWalk;
+    this->playAnimation("walk");
     this->action = TypeAnimationCharacter::walk;
   }
   this->setSpeedWhenWalk();
 }
 
 void Character::run(Direction newDirection){
-  if(this->currentAnimation == &this->animationRun && this->direction == newDirection){
+  if(this->getNameAnimation().compare("run") == 0 && this->direction == newDirection){
   }else{
     this->currentAnimation->reset();
     this->direction = newDirection;
-    this->currentAnimation = &this->animationRun;
+    this->playAnimation("run");
     this->action = TypeAnimationCharacter::run;
   }
   this->setSpeedWhenRun();
 }
 
 void Character::stop(){
-  if(this->currentAnimation == &this->animationIdle){
+  if(this->getNameAnimation().compare("idle") == 0){
   }else{
-    this->currentAnimation = &this->animationIdle;
+    this->playAnimation("idle");
     this->action = TypeAnimationCharacter::idle;
   }
   this->setSpeedWhenStopped();
 }
 
 void Character::jump(){
-  if(this->currentAnimation == &this->animationJump){
+  if(this->getNameAnimation().compare("jump") == 0){
   }else{
     this->currentAnimation->reset();
-    this->currentAnimation = &this->animationJump;
+    this->playAnimation("jump");
     this->action = TypeAnimationCharacter::jump;
   }
   this->setSpeedWhenWalk();
 }
 
 void Character::die(){
-  if(this->currentAnimation == &this->animationDead){
+  if(this->getNameAnimation().compare("dead") == 0){
   }else{
     this->currentAnimation->reset();
-    this->currentAnimation = &this->animationDead;
+    this->playAnimation("dead");
     this->action = TypeAnimationCharacter::dead;
   }
   this->setSpeedWhenStopped();
@@ -129,36 +130,8 @@ int Character::getSpeed() const{
   return this->speed;
 }
 
-void Character::setDelayOfAnimation(unsigned int frames){
-  this->animationIdle.setDelay(frames);
-  this->animationJump.setDelay(frames);
-  this->animationWalk.setDelay(frames);
-  this->animationRun.setDelay(frames);
-  this->animationDead.setDelay(frames);
-}
-
 const TypeAnimationCharacter Character::getAnimation() const{
   return this->action;
-}
-
-Animation* Character::getAnimation(TypeAnimationCharacter typeAnimation){
-  switch(typeAnimation){
-    case TypeAnimationCharacter::dead:
-      return &this->animationDead;
-      break;
-    case TypeAnimationCharacter::walk:
-      return &this->animationWalk;
-      break;
-    case TypeAnimationCharacter::run:
-      return &this->animationRun;
-      break;
-    case TypeAnimationCharacter::jump:
-      return &this->animationJump;
-      break;
-    default:
-      return &this->animationIdle;
-      break;
-  }
 }
 
 const int Character::getType() const{
@@ -174,6 +147,26 @@ TypeCharacter Character::getType(std::string type) const{
   }
 }
 
+std::string Character::getNameAnimationOfType(TypeAnimationCharacter type) const{
+  switch(type){
+    case TypeAnimationCharacter::dead:
+      return "dead";
+      break;
+    case TypeAnimationCharacter::walk:
+      return "walk";
+      break;
+    case TypeAnimationCharacter::run:
+      return "run";
+      break;
+    case TypeAnimationCharacter::jump:
+      return "jump";
+      break;
+    default:
+      return "idle";
+      break;
+  }
+}
+
 void Character::setType(std::string nameType){
   TypeCharacter type = this->getType(nameType);
   this->setType(type);
@@ -182,56 +175,43 @@ void Character::setType(std::string nameType){
 void Character::setType(TypeCharacter type){
   this->type = type;
 
-  this->animationIdle = setCharacterAnimation(type, TypeAnimationCharacter::idle);
-  this->animationWalk = setCharacterAnimation(type, TypeAnimationCharacter::walk);
-  this->animationRun = setCharacterAnimation(type, TypeAnimationCharacter::run);
-  this->animationJump = setCharacterAnimation(type, TypeAnimationCharacter::jump);
-  this->animationDead = setCharacterAnimation(type, TypeAnimationCharacter::dead);
+  this->clearAnimations();
+
+  this->addAnimation(setCharacterAnimation(type, TypeAnimationCharacter::idle), "idle");
+  this->addAnimation(setCharacterAnimation(type, TypeAnimationCharacter::walk), "walk");
+  this->addAnimation(setCharacterAnimation(type, TypeAnimationCharacter::run), "run");
+  this->addAnimation(setCharacterAnimation(type, TypeAnimationCharacter::jump), "jump");
+  this->addAnimation(setCharacterAnimation(type, TypeAnimationCharacter::dead), "dead");
 }
 
-void Character::applySprite(){
-  this->setTexture(this->currentAnimation->getTextureDisplay());
-
-  if(this->type == TypeCharacter::girl){
-    this->setScale(Character::SCALE_GIRL, Character::SCALE_GIRL);
+float Character::getEntityScale(){
+   if(this->type == TypeCharacter::girl){
+    return Character::SCALE_GIRL;
   }else if(this->type == TypeCharacter::man){
-    this->setScale(Character::SCALE_BOY, Character::SCALE_BOY);
+    return Character::SCALE_BOY;
   }
+  return 1;
 }
 
 void Character::putIn(sf::Packet& packet) const{
-  EntityDrawable::putIn(packet);
-
   packet << this->getType();
-  packet << this->getAnimation();
-  packet << (uint32_t)this->direction;
+
+  EntityDrawableAnimated::putIn(packet);
 }
 
 void Character::putOut(sf::Packet& packet){
-  EntityDrawable::putOut(packet);
-
-  int animationPrimitive; 
-  TypeAnimationCharacter animation;
-  uint32_t direction;
-
   int typePrimitive; 
   TypeCharacter type;
 
   packet >> typePrimitive;
-  packet >> animationPrimitive;
-  packet >> direction;
 
-  this->direction = (Direction)direction;
   type = (TypeCharacter)typePrimitive;
-  animation = (TypeAnimationCharacter)animationPrimitive;
 
   if(this->type != type){
     setType(type);
-    setCharacterAnimation(type, animation);
   }
 
-  this->currentAnimation = this->getAnimation(animation);
-  this->watchDirection();
+  EntityDrawableAnimated::putOut(packet);
 }
 
 Animation setCharacterAnimation(TypeCharacter type, TypeAnimationCharacter typeAnimation){
