@@ -28,12 +28,20 @@ protected:
   unsigned int oldPosY;
 
   bool isSpriteFixe;
+
+  sf::Vector2f collisionPoint;
 public:
   EntityDrawable();
   EntityDrawable(bool isSpriteFixe);
 
   unsigned int getPosX() const;
   unsigned int getPosY() const;
+
+  void setPosition(float x, float y);
+  void setPosition(const sf::Vector2f &postion);
+
+  void move(float x, float y);
+  void move(const sf::Vector2f &offset);
 
   unsigned int getHeight() const;
   unsigned int getWidth() const;
@@ -51,6 +59,7 @@ public:
 
   virtual void watchDirection();
   void setOriginCenter();
+  sf::Vector2f& getOriginCollision();
 
   void setTexture(const sf::Texture &texture);
   virtual bool update();

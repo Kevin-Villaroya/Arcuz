@@ -42,7 +42,7 @@ void Tile::setPoseable(AbstractPoseable* poseable, bool isOrigin){
   this->originOfPoseable = isOrigin;
 
   if(this->originOfPoseable == true){
-    this->poseable->setPosition(this->getPosition().x + this->poseable->getTexture()->getSize().x / 4, this->getPosition().y);
+    this->poseable->setCollisionPosition(this->getOriginCollision().x, this->getOriginCollision().y);
   }
 }
 

@@ -18,6 +18,9 @@ public:
     void setRecoverable(bool recoverable);
     bool isTraversable ();
 
+    void setCollisionPosition(float x, float y);
+    void setCollisionPosition(const sf::Vector2f &postion);
+
     std::string getName();
 };
 

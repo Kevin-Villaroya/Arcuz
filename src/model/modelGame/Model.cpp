@@ -1,6 +1,7 @@
 #include "Model.h"
 #include "../../tool/FontTool.h"
 #include "../tile/poseable/tree/Tree.h"
+#include "../tile/poseable/stone/Stone.h"
 #include <iostream>
 
 Model::Model(View &view):view(view), map(Map(15,15)), mainCharacter(new Character()){
@@ -9,6 +10,9 @@ Model::Model(View &view):view(view), map(Map(15,15)), mainCharacter(new Characte
 
   Tree* tree = new Tree();
   this->map.getTile(5,5).setPoseable(tree, true);
+
+  Stone* stone = new Stone();
+  this->map.getTile(6,6).setPoseable(stone, true);
 
   this->addEntityName(mainCharacter->getName());
   this->mainCharacter->setDelayOfAnimation(1);
@@ -154,21 +158,27 @@ void Model::moveCharacter(){
   Direction direction = this->mainCharacter->getDirection();
   int speed = this->mainCharacter->getSpeed();
 
-  float x = this->mainCharacter->getPosition().x;
-  float y = this->mainCharacter->getPosition().y;
+  float xPos = this->mainCharacter->getPosition().x;
+  float yPos = this->mainCharacter->getPosition().y;
+  float xCol = this->mainCharacter->getOriginCollision().x;
+  float yCol = this->mainCharacter->getOriginCollision().y;
 
   if(direction == Direction::right){
-    x += speed;
+    xPos += speed;
+    xCol += speed;
   }else if(direction == Direction::left){
-    x-= speed;
+    xPos -= speed;
+    xCol -= speed;
   }else if(direction == Direction::up){
-    y -= speed;
+    yPos -= speed;
+    yCol -= speed;
   }else if(direction == Direction::down){
-    y+= speed;
+    yPos += speed;
+    yCol += speed;
   }
 
-  if(!this->collisionWithABlockedTile(x,y)){
-    this->mainCharacter->setPosition(x,y);
+  if(!this->collisionWithABlockedTile(xCol, yCol)){
+    this->mainCharacter->setPosition(xPos, yPos);
   }
 }
 
@@ -176,7 +186,10 @@ bool Model::collisionWithABlockedTile(float x, float y){
   float sizeXTile = this->map.getTile(0,0).getTexture()->getSize().x;
   float sizeYTile = this->map.getTile(0,0).getTexture()->getSize().y;
 
-  return !this->map.getTile(x / sizeXTile, y / sizeYTile).isTraversable();
+  if(this->map.getTile((x + 2) / sizeXTile, (y + 2) / sizeYTile).isTraversable() && this->map.getTile((x - 2) / sizeXTile, (y - 2) / sizeYTile).isTraversable()){
+    return false;
+  }
+  return true;
 }
 
 void Model::setNameCharacter(const std::string& name){

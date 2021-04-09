@@ -22,6 +22,26 @@ unsigned int EntityDrawable::getPosY() const{
   return this->getPosition().y;
 }
 
+void EntityDrawable::setPosition(float x, float y){
+
+  this->collisionPoint.x =  x + (this->getTexture()->getSize().x * this->getScale().x) / 2;
+  this->collisionPoint.y =  y + this->getTexture()->getSize().y * this->getScale().y;
+
+  sf::Transformable::setPosition(x, y);
+}
+
+void EntityDrawable::setPosition(const sf::Vector2f &position){
+  this->setPosition(position.x, position.y);
+}
+
+void EntityDrawable::move(float x, float y){
+  this->setPosition(x + this->collisionPoint.x, y + this->collisionPoint.y);
+}
+
+void EntityDrawable::move(const sf::Vector2f &offset){
+  this->move(offset.x, offset.y);
+}
+
 unsigned int EntityDrawable::getHeight() const{
   if(this->getTexture() == nullptr){
     return 0;
@@ -46,6 +66,10 @@ void EntityDrawable::setName(const std::string& name){
 
 void EntityDrawable::setUid(unsigned int uid){
   this->uid = uid;
+}
+
+sf::Vector2f& EntityDrawable::getOriginCollision(){
+  return this->collisionPoint;
 }
 
 void EntityDrawable::setTexture(const sf::Texture &texture){

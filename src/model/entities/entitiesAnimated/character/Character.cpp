@@ -28,7 +28,6 @@ Character::Character(std::string name, TypeCharacter type) :type(type){
 
 bool Character::update(){
   this->watchDirection();
-  //this->moveCharacter();
   this->applySprite();
 
   bool updated = this->oldPosX != this->getPosX() || this->oldPosY != this->getPosY();
