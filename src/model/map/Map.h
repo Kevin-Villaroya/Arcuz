@@ -18,6 +18,8 @@ public:
 
   int getLenght();
   int getWidth();
+
+  sf::Vector2u getSizeTile();
   Tile& getTile(int x, int y);
   void setTile(Tile newTile, int x ,int y);
 };

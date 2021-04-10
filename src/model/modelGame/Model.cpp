@@ -2,17 +2,15 @@
 #include "../../tool/FontTool.h"
 #include "../tile/poseable/tree/Tree.h"
 #include "../tile/poseable/stone/Stone.h"
+#include "../../../tool/generator/Biome.h"
+#include "../../../tool/generator/MapGenerator.h"
 #include <iostream>
 
-Model::Model(View &view):view(view), map(Map(15,15)), mainCharacter(new Character()){
+Model::Model(View &view, unsigned int sizeMinMap):view(view), map(Map(15,15)), mainCharacter(new Character()){
   this->view.centerViewOn(*mainCharacter);
   this->modelChanged = false;
 
-  Tree* tree = new Tree();
-  this->map.getTile(5,5).setPoseable(tree, true);
-
-  Stone* stone = new Stone();
-  this->map.getTile(6,6).setPoseable(stone, true);
+  this->sizeMinMap = sizeMinMap;
 
   this->addEntityName(mainCharacter->getName());
   this->mainCharacter->setDelayOfAnimation(1);
@@ -66,12 +64,12 @@ void Model::render(){
       }
 
       for(unsigned int k = 0; k < this->entities.size(); k++){
-        if((int)(this->entities[i]->getPosition().x / sizeXTile) == i && (int)(this->entities[i]->getPosition().y / sizeYTile) == j){
+        if((int)(this->entities[i]->getOriginCollision().x / sizeXTile) == i && (int)(this->entities[i]->getOriginCollision().y / sizeYTile) == j){
           allDraws.push_back(this->entities[i]);
         }
       }
 
-      if((int)(this->mainCharacter->getPosition().x / sizeXTile) == i && (int)(this->mainCharacter->getPosition().y / sizeYTile) == j){
+      if((int)(this->mainCharacter->getOriginCollision().x / sizeXTile) == i && (int)(this->mainCharacter->getOriginCollision().y / sizeYTile) == j){
         allDraws.push_back(this->mainCharacter);
       }
     }
@@ -179,6 +177,28 @@ void Model::moveCharacter(){
 
   if(!this->collisionWithABlockedTile(xCol, yCol)){
     this->mainCharacter->setPosition(xPos, yPos);
+  }else{
+    this->unstuckEntity(*this->mainCharacter);
+  }
+}
+
+void Model::unstuckEntity(EntityDrawable& entity){
+  float posX = this->mainCharacter->getOriginCollision().x;
+  float posY = this->mainCharacter->getOriginCollision().y;
+
+  sf::Vector2f originTile = sf::Vector2f(posX / this->map.getSizeTile().x, posY / this->map.getSizeTile().y );
+
+  if(posX > originTile.x && posX < originTile.x + 3){
+    entity.setPosition(originTile.x, entity.getPosition().y);
+
+  }else if(posX < originTile.x - 3 + this->map.getSizeTile().x){
+    entity.setPosition(originTile.x + this->map.getSizeTile().x, entity.getPosition().y);
+
+  }else if(posY > originTile.y && posY < originTile.y + 3){
+    entity.setPosition(originTile.x, entity.getPosition().y);
+
+  }else if(posY < originTile.y - 3 + this->map.getSizeTile().y){
+    entity.setPosition(originTile.x + this->map.getSizeTile().x, entity.getPosition().y);
   }
 }
 
@@ -186,7 +206,7 @@ bool Model::collisionWithABlockedTile(float x, float y){
   float sizeXTile = this->map.getTile(0,0).getTexture()->getSize().x;
   float sizeYTile = this->map.getTile(0,0).getTexture()->getSize().y;
 
-  if(this->map.getTile((x + 2) / sizeXTile, (y + 2) / sizeYTile).isTraversable() && this->map.getTile((x - 2) / sizeXTile, (y - 2) / sizeYTile).isTraversable()){
+  if(this->map.getTile(x / sizeXTile, y / sizeYTile).isTraversable()){
     return false;
   }
   return true;
@@ -301,6 +321,46 @@ void Model::updateEntitiesName(){
       this->nameEntities[posEntityName]->setPosition(posXName, posYName);
     }
   }
+}
+
+void Model::setSpawnPlayers(){
+  bool findPos = false;
+
+  for(int i = 0; i < this->map.getLenght() && !findPos; i++){
+    for(int j = 0; j < this->map.getWidth() && !findPos; j++){
+      if(this->map.getTile(i, j).getPoseable()->isTraversable()){
+        this->posSpawn = sf::Vector2u(i, j);
+        findPos = true;
+      }
+    }
+  }
+
+  this->mainCharacter->setPosition(this->posSpawn.x * this->map.getSizeTile().x, this->posSpawn.y * this->map.getSizeTile().y);
+}
+
+void Model::generateMap(){
+  Biome plaine(5, 2, 1);
+  plaine.addTypeTile(TypeTile::GRASS, 0.95);
+  plaine.addTypeTile(TypeTile::GROUND, 0.05);
+
+  Biome foret(3, 3, 3);
+  foret.addTypeTile(TypeTile::FOREST, 1);
+  foret.addPoseable("tree", 0.4);
+
+  Biome mountain(4, 2, 3);
+  mountain.addTypeTile(TypeTile::MOUNTAIN, 1);
+  mountain.addPoseable("stone", 0.1);
+
+  MapGenerator generator(this->sizeMinMap);
+  generator.addBiome(plaine);
+  generator.addBiome(foret);
+  generator.addBiome(mountain);
+
+  generator.generateMap();
+
+  generator.createMap(this->map);
+
+  this->setSpawnPlayers();
 }
 
 Model::~Model(){

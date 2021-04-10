@@ -6,8 +6,11 @@
 #include "poseable/AbstractPoseable.h"
 
 enum TypeTile{
+  EMPTY,
   GRASS,
-  GROUND
+  GROUND,
+  FOREST,
+  MOUNTAIN
 };
 
 class Tile : public EntityDrawable{
@@ -18,6 +21,8 @@ private:
   bool originOfPoseable; //if it's origin, we have to draw it (needed for big structures)
 
 public:
+  static Tile EMPTY_TILE;
+
   Tile(TypeTile type);
   TypeTile getType() const;
   void setType(TypeTile type);
@@ -31,6 +36,7 @@ public:
 
   AbstractPoseable* getPoseable();
   bool isOriginPoseable();
+  void setOriginPoseable(bool value);
 
   bool update() override;
 

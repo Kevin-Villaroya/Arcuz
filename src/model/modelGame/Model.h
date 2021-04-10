@@ -13,6 +13,7 @@ class Model{
 private:
   View view;
   Map map;
+  unsigned int sizeMinMap;
 
   Character* mainCharacter;
 
@@ -20,16 +21,22 @@ private:
   std::vector<EntityDrawable*> entitiesNeedUpdate; //optimisation
   std::vector<sf::Text*> nameEntities;
 
+  sf::Vector2u posSpawn;
+
   std::vector<EntityDrawable*> entities; //all entities in the game (without character)
 
   void addEntityName(const std::string& name);
   void updateEntitiesName();
+
+  void setSpawnPlayers();
 public:
-  Model(View &view);
+  Model(View &view, unsigned int sizeMinMap);
 
   void update();
   void render();
   Character* getMainCharacter();
+
+  void generateMap();
 
   bool addCharacter(Character* character);
   void addEntity(EntityDrawable* entity);
@@ -41,6 +48,8 @@ public:
   EntityDrawable* getEntity(const int uid);
 
   void moveCharacter();
+  void unstuckEntity(EntityDrawable& entity);
+  
   bool collisionWithABlockedTile(float x, float y);
 
   void setNameCharacter(const std::string& name);

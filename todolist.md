@@ -1,6 +1,6 @@
 Rappel:
-- Taille de map dans le constructeur de Model
-- Penser a ce que les fichiers sont par reference
+- Taille de map dans le GameController
+- Penser que lors de l'ajout d'un poseable, l'ajouter dans le switch case de AbstractPoseable;
 - continuer le projet :)
 
 Mineur:
@@ -10,8 +10,10 @@ Mineur:
 Majeur:
 -- Dans l'ordre d'apparition --
 
--Ameliorer la carte
-    -Ajouter un generateur de carte
+-Faire passer la carte actuel a tout les nouveaux joueurs arrivants sur le serveur
+
+-Rendre public sur github le projet
+
 -Ajouter une mini-map
 -Ajouter du gameplay
     -Ajouter un inventaire

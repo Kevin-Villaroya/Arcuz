@@ -9,6 +9,9 @@ private:
     bool traversable ;
 public:
     static AbstractPoseable EMPTY_POSEABLE;
+    static std::vector<std::string> typePoseable;
+
+    static AbstractPoseable* getAbstractPosable(const std::string& namePoseable);
 
     virtual float getEntityScale() override;
     AbstractPoseable(const std::string& name);

@@ -1,4 +1,5 @@
 #include "StructureTexture.h"
+#include "../../model/entities/tile/poseable/AbstractPoseable.h"
 #include <experimental/filesystem>
 #include <iostream>
 
@@ -13,6 +14,7 @@ StructureTexture::StructureTexture(){
     std::vector<TextureTool*> textures;
 
     this->nameTextures.push_back(file.path().filename().string());
+    AbstractPoseable::typePoseable.push_back(file.path().filename().string());
     this->structureTextures.push_back(textures);
 
     for (const auto & file : std::experimental::filesystem::directory_iterator(pathchild)){

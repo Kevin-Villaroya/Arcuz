@@ -14,19 +14,6 @@ int main(int argc, char* argv[]){
     int width = 1080;
     int height = 1080;
 
-    /*bool isMulti = initIsMulti();
-    bool isHost = initIsHost();
-    std::string ip = initIp();
-    int port = initPort();
-
-    if(argc == 2){
-      if(strcmp(argv[1], "-h") == 0){
-        isHost = true;
-      }else if(strcmp(argv[1], "-c") == 0){
-        isHost = false;
-      }
-    }*/
-
     ControllerManager manager;
     sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(width, height), "Arcuz");
     
@@ -38,14 +25,5 @@ int main(int argc, char* argv[]){
     manager.add(new NetworkServer(window)); //host 3
 
     manager.start();
-
-    /*if(!isMulti){
-      launchSolo(width, height);
-    }else if(isHost){
-      launchServer(width, height, port);
-    }else{
-      launchClient(width, height, ip, port);
-    }*/
-
     return 0;
 }
