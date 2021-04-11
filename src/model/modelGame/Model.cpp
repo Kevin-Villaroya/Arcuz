@@ -64,8 +64,8 @@ void Model::render(){
       }
 
       for(unsigned int k = 0; k < this->entities.size(); k++){
-        if((int)(this->entities[i]->getOriginCollision().x / sizeXTile) == i && (int)(this->entities[i]->getOriginCollision().y / sizeYTile) == j){
-          allDraws.push_back(this->entities[i]);
+        if((int)(this->entities[k]->getOriginCollision().x / sizeXTile) == i && (int)(this->entities[k]->getOriginCollision().y / sizeYTile) == j){
+          allDraws.push_back(this->entities[k]);
         }
       }
 
@@ -150,6 +150,11 @@ EntityDrawable* Model::getEntity(const int uid){
     }
   }
   return NULL;
+}
+
+void Model::setSpawnPlayers(){
+  this->map.setSpawnPlayers();
+  this->mainCharacter->setPosition(this->map.getPosSpawnPlayers().x * this->map.getSizeTile().x, this->map.getPosSpawnPlayers().y * this->map.getSizeTile().y);
 }
 
 void Model::moveCharacter(){
@@ -323,21 +328,6 @@ void Model::updateEntitiesName(){
   }
 }
 
-void Model::setSpawnPlayers(){
-  bool findPos = false;
-
-  for(int i = 0; i < this->map.getLenght() && !findPos; i++){
-    for(int j = 0; j < this->map.getWidth() && !findPos; j++){
-      if(this->map.getTile(i, j).getPoseable()->isTraversable()){
-        this->posSpawn = sf::Vector2u(i, j);
-        findPos = true;
-      }
-    }
-  }
-
-  this->mainCharacter->setPosition(this->posSpawn.x * this->map.getSizeTile().x, this->posSpawn.y * this->map.getSizeTile().y);
-}
-
 void Model::generateMap(){
   Biome plaine(5, 2, 1);
   plaine.addTypeTile(TypeTile::GRASS, 0.95);
@@ -361,6 +351,10 @@ void Model::generateMap(){
   generator.createMap(this->map);
 
   this->setSpawnPlayers();
+}
+
+Map& Model::getMap(){
+  return this->map;
 }
 
 Model::~Model(){

@@ -2,9 +2,10 @@
 #include "tree/Tree.h"
 #include "stone/Stone.h"
 #include "water/Water.h"
+#include <iostream>
 
 AbstractPoseable AbstractPoseable::EMPTY_POSEABLE("Empty", true, false);
-std::vector<std::string> AbstractPoseable::typePoseable;
+std::vector<std::string> AbstractPoseable::typePoseable = {"Empty", "tree", "stone", "water"};
 
 AbstractPoseable::AbstractPoseable(const std::string& name):AbstractPoseable(name, true, false){}
 
@@ -45,6 +46,33 @@ AbstractPoseable* AbstractPoseable::getAbstractPosable(const std::string& namePo
   }else{
     return &AbstractPoseable::EMPTY_POSEABLE;
   }
+}
+
+std::string AbstractPoseable::getTypeAbstractPosable(AbstractPoseable* poseable){
+  for(unsigned int i = 0; i < AbstractPoseable::typePoseable.size(); i++){
+    if(poseable->getName().compare(AbstractPoseable::typePoseable[i]) == 0){
+      return AbstractPoseable::typePoseable[i];
+    }
+  }
+
+  return "empty";
+}
+
+unsigned int AbstractPoseable::getIdTypeAbstractPosable(const std::string& namePoseable){
+  for(unsigned int i = 0; i < AbstractPoseable::typePoseable.size(); i++){
+    if(namePoseable.compare(AbstractPoseable::typePoseable[i]) == 0){
+      return i;
+    }
+  }
+
+  return 0;
+}
+
+AbstractPoseable* AbstractPoseable::getAbstractPosable(unsigned int idPoseable){
+  if(idPoseable < AbstractPoseable::typePoseable.size()){
+    return AbstractPoseable::getAbstractPosable(AbstractPoseable::typePoseable[idPoseable]);
+  }
+  return NULL;
 }
 
 void AbstractPoseable::setCollisionPosition(float x, float y){

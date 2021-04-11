@@ -37,6 +37,8 @@ private:
   void confirmUpdate();
 
   void WhenNoUpdateReceived();
+
+  void receiveMap();
 public:
   static const unsigned int id = 2;
   

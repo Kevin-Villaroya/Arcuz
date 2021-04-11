@@ -11,9 +11,7 @@ NetworkServer::NetworkServer(int width, int height, unsigned short port) : GameC
     this->allClientupdated = false;
 }
 
-NetworkServer::NetworkServer(sf::RenderWindow* window) : GameController(window), threadServer(&NetworkServer::startServer, this){
-
-}
+NetworkServer::NetworkServer(sf::RenderWindow* window) : GameController(window), threadServer(&NetworkServer::startServer, this){}
 
 void NetworkServer::startServer(){
   while (true){
@@ -67,6 +65,8 @@ void NetworkServer::needToStart(std::vector<void*> parameters){
   this->port = port;
   this->model->setNameCharacter(nameCharacter);
   this->model->getMainCharacter()->setType(type);
+
+  this->model->generateMap();
 
   this->initStart();
 }
@@ -164,6 +164,7 @@ unsigned int  NetworkServer::connectClient(const sf::IpAddress &adressClient, un
       std::vector<EntityDrawable*> entitiesToSend = this->model->getEntities();
       entitiesToSend.push_back(this->model->getMainCharacter());
 
+      this->sendMapTo(client);
       this->sendUpdateTo(client, entitiesToSend);
       this->addCharacterClient(name, type, uid);
     }else{
@@ -199,6 +200,15 @@ void NetworkServer::confirmationOfHavingReceivedUpdate(int uid){
       find = true;
     }
   }
+}
+
+void NetworkServer::sendMapTo(ClientInformation& client){
+  sf::Packet packet;
+
+  packet << (uint32_t)Action::update_map;
+  this->model->getMap().putIn(packet);
+
+  this->socket.send(packet, client.ip, client.port);
 }
 
 void NetworkServer::deleteClient(sf::IpAddress ip, unsigned short port){

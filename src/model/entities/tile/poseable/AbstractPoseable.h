@@ -12,6 +12,10 @@ public:
     static std::vector<std::string> typePoseable;
 
     static AbstractPoseable* getAbstractPosable(const std::string& namePoseable);
+    static std::string getTypeAbstractPosable(AbstractPoseable* poseable);
+
+    static unsigned int getIdTypeAbstractPosable(const std::string& namePoseable);
+    static AbstractPoseable* getAbstractPosable(unsigned int idPoseable);
 
     virtual float getEntityScale() override;
     AbstractPoseable(const std::string& name);

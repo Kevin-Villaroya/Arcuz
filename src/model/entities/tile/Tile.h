@@ -40,6 +40,9 @@ public:
 
   bool update() override;
 
+  void putIn(sf::Packet& packet) const override;
+  void putOut(sf::Packet& packet) override;
+
   ~Tile();
 };
 

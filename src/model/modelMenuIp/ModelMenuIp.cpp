@@ -6,7 +6,7 @@
 
 ModelMenuIp::ModelMenuIp(View& view) : view(view), textureFond(TextureTool("assets/menu/fond.png")), fondSprite(textureFond){
     this->port = 23547;
-    this->ip = sf::IpAddress("127.0.0.1");
+    this->ip = sf::IpAddress("192.168.1.32");
 
     this->initMenu();
 }

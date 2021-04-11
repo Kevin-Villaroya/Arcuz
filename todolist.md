@@ -1,6 +1,6 @@
 Rappel:
 - Taille de map dans le GameController
-- Penser que lors de l'ajout d'un poseable, l'ajouter dans le switch case de AbstractPoseable;
+- Penser que lors de l'ajout d'un poseable, l'ajouter dans le switch case de AbstractPoseable et son vector;
 - continuer le projet :)
 
 Mineur:

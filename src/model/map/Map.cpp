@@ -1,5 +1,6 @@
 #include "Map.h"
 #include <string>
+#include <iostream>
 
 Map::Map(){}
 
@@ -17,6 +18,23 @@ Map::Map(int lenght, int width) : tiles(std::vector<std::vector<Tile>> (lenght, 
       this->tiles[i][j].setPosition(i * widthTile, j * heightTile);
     }
   }
+}
+
+void Map::setSpawnPlayers(){
+  bool findPos = false;
+
+  for(int i = 0; i < this->getLenght() && !findPos; i++){
+    for(int j = 0; j < this->getWidth() && !findPos; j++){
+      if(this->getTile(i, j).getPoseable()->isTraversable()){
+        this->posSpawn = sf::Vector2u(i, j);
+        findPos = true;
+      }
+    }
+  }
+}
+
+sf::Vector2u Map::getPosSpawnPlayers(){
+  return this->posSpawn;
 }
 
 int Map::getLenght(){
@@ -48,6 +66,52 @@ void Map::setTile(Tile newTile, int x, int y){
     }
 }
 
-  bool Map::outOfBounds(int x, int y){
-    return x < 0 || y < 0 || x > this->lenght || y > this->width;
+bool Map::outOfBounds(unsigned int x, unsigned int y){
+  return x < 0 || y < 0 || x > this->lenght || y > this->width;
+}
+
+void Map::resizeMap(unsigned int lenght, unsigned int width){
+
+  this->lenght = lenght;
+  this->width = width;
+
+  std::vector<std::vector<Tile>> tempMap;
+
+  for(unsigned int i = 0; i < lenght; i++){
+    std::vector<Tile> tempLine;
+    for(unsigned int j = 0; j < width; j++){
+      tempLine.push_back(Tile(TypeTile::GROUND));
+    }
+    tempMap.push_back(tempLine);
   }
+
+  this->tiles = tempMap;
+}
+
+void Map::putIn(sf::Packet& packet) const{
+  packet << (unsigned int)this->tiles.size();
+  packet << (unsigned int)this->tiles[0].size();
+
+  for(unsigned int i = 0; i < this->tiles.size(); i++){
+    for(unsigned int j = 0; j < this->tiles[i].size(); j++){
+      this->tiles[i][j].putIn(packet);
+    }
+  }
+}
+
+void Map::putOut(sf::Packet& packet){
+  unsigned int lenght;
+  unsigned int width;
+
+  packet >> lenght;
+  packet >> width;
+
+  this->resizeMap(lenght, width);
+
+  for(unsigned int i = 0; i < this->lenght; i++){
+    for(unsigned int j = 0; j < this->width; j++){
+      this->setTile(this->tiles[i][j], i, j);
+      this->tiles[i][j].putOut(packet);
+    }
+  }
+}

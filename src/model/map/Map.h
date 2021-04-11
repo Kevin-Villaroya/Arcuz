@@ -7,10 +7,12 @@
 class Map{
 private:
   std::vector<std::vector<Tile>> tiles;
-  int width;
-  int lenght;
+  unsigned int width;
+  unsigned int lenght;
 
-  bool outOfBounds(int x, int y);
+  bool outOfBounds(unsigned int x, unsigned int y);
+
+  sf::Vector2u posSpawn;
 
 public:
   Map();
@@ -22,6 +24,14 @@ public:
   sf::Vector2u getSizeTile();
   Tile& getTile(int x, int y);
   void setTile(Tile newTile, int x ,int y);
+
+  void setSpawnPlayers();
+  sf::Vector2u getPosSpawnPlayers();
+
+  void resizeMap(unsigned int lenght, unsigned int width);
+
+  void putIn(sf::Packet& packet) const;
+  void putOut(sf::Packet& packet);
 };
 
 #endif

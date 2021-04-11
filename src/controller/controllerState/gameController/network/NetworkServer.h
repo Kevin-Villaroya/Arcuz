@@ -30,6 +30,8 @@ private:
 
   unsigned int confirmationOfConnection(const sf::IpAddress &adressClient, unsigned short port);
   void confirmationOfHavingReceivedUpdate(int uid);
+
+  void sendMapTo(ClientInformation& client);
 public:
   static const unsigned int id = 3;
   

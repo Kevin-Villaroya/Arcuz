@@ -8,7 +8,7 @@ GameController::GameController(int width, int height) : GameController(new sf::R
 GameController::GameController(sf::RenderWindow* window){
   this->window = window;
   this->view = new View(*this->window);
-  this->model = new Model(*this->view, 60);
+  this->model = new Model(*this->view, 40);
   this->running = true;
   this->icon = new sf::Image();
   this->icon->loadFromFile("assets/icone/index.jpg");

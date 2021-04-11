@@ -27,6 +27,7 @@ TypeTile Tile::getType() const{
 
 void Tile::setType(TypeTile type){
   this->type = type;
+  this->setSpriteByType(type);
 }
 
 void Tile::setSpriteByType(TypeTile type){
@@ -50,6 +51,8 @@ void Tile::setSpriteByType(TypeTile type){
 }
 
 void Tile::setPoseable(AbstractPoseable* poseable, bool isOrigin){
+  this->removePoseable();
+
   this->poseable = poseable;
   this->originOfPoseable = isOrigin;
 
@@ -81,6 +84,26 @@ void Tile::removePoseable(){
 
 bool Tile::isTraversable(){
   return this->poseable->isTraversable();
+}
+
+void Tile::putIn(sf::Packet& packet) const{
+  uint32_t type = (uint32_t)this->getType();
+  unsigned int idPoseable = AbstractPoseable::getIdTypeAbstractPosable(this->poseable->getName());
+
+  packet << type;
+  packet << idPoseable;
+}
+
+void Tile::putOut(sf::Packet& packet){
+  uint32_t type;
+  unsigned int idPoseable;
+
+  packet >> type;
+  packet >> idPoseable;
+
+  this->setType((TypeTile)type);
+
+  this->setPoseable(AbstractPoseable::getAbstractPosable(idPoseable), true);
 }
 
 Tile::~Tile(){

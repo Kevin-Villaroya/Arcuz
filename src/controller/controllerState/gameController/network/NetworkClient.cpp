@@ -144,6 +144,8 @@ bool NetworkClient::confirmationOfConnection(){
     uid = (int)info;
     this->model->getMainCharacter()->setUid(uid);
     std::cout << "My id is " << uid << std::endl;
+
+    this->receiveMap();
     return true;
   }
 }
@@ -161,6 +163,24 @@ void NetworkClient::confirmUpdate(){
 void NetworkClient::WhenNoUpdateReceived(){
   for(unsigned int i = 0; i < this->model->getEntities().size(); i++){
     this->model->getEntities()[i]->noUpdate();
+  }
+}
+
+void NetworkClient::receiveMap(){
+  sf::Packet packet;
+  uint32_t info;
+
+  if(this->receive(packet) == sf::Socket::Done){
+    packet >> info;
+  }else{
+    std::cout << "Packet received for map corrupted" << std::endl;
+  }
+
+  if((Action)info == Action::update_map){
+    this->model->getMap().putOut(packet);
+    this->model->setSpawnPlayers();
+  }else{
+    std::cout << "Packet received for map corrupted" << std::endl;
   }
 }
 

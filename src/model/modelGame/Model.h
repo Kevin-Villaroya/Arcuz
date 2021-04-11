@@ -21,14 +21,11 @@ private:
   std::vector<EntityDrawable*> entitiesNeedUpdate; //optimisation
   std::vector<sf::Text*> nameEntities;
 
-  sf::Vector2u posSpawn;
-
   std::vector<EntityDrawable*> entities; //all entities in the game (without character)
 
   void addEntityName(const std::string& name);
   void updateEntitiesName();
 
-  void setSpawnPlayers();
 public:
   Model(View &view, unsigned int sizeMinMap);
 
@@ -37,6 +34,7 @@ public:
   Character* getMainCharacter();
 
   void generateMap();
+  Map& getMap();
 
   bool addCharacter(Character* character);
   void addEntity(EntityDrawable* entity);
@@ -46,6 +44,8 @@ public:
   bool existEntity(const std::string& name);
   bool existEntity(const int uid);
   EntityDrawable* getEntity(const int uid);
+
+  void setSpawnPlayers();
 
   void moveCharacter();
   void unstuckEntity(EntityDrawable& entity);
