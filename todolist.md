@@ -10,9 +10,6 @@ Mineur:
 Majeur:
 -- Dans l'ordre d'apparition --
 
--Ajouter une mini-map
-    -Ajouter un cadre autour du hud avec un boutoin - et +
-    -Retirer le filtre noir de la view et l'ajouter dans le cadre
 -Ajouter du gameplay
     -Ajouter un inventaire
     -Ajouter des ressources

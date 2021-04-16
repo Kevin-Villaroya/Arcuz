@@ -21,6 +21,7 @@ Minimap::Minimap(float posX, float posY, float sizeX, float sizeY, sf::RenderWin
 std::vector<sf::Drawable*> Minimap::elementsToRender(){
 	std::vector<sf::Drawable*> elements;
 
+	elements.push_back(&this->filter);
 	elements.push_back(&this->cadre);
 
 	return elements;
@@ -95,6 +96,10 @@ void Minimap::initBlackBackground(float posX, float posY, float sizeX, float siz
 	this->rectangleBackground = sf::RectangleShape(sf::Vector2f(xEnd - xBegin, yEnd - yBegin));
 	this->rectangleBackground.setPosition(xBegin, yBegin);
 	this->rectangleBackground.setFillColor(sf::Color::Black);
+
+	this->filter = sf::RectangleShape(sf::Vector2f(xEnd - xBegin, yEnd - yBegin));
+	this->filter.setPosition(xBegin, yBegin);
+	this->filter.setFillColor(sf::Color(0,0,0,50));
 }
 
 void Minimap::initMinimapView(float posX, float posY, float sizeX, float sizeY){

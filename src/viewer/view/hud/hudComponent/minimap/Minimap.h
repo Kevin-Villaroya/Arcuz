@@ -20,6 +20,7 @@ private:
 	sf::FloatRect minusButton;
 
 	sf::RectangleShape rectangleBackground;
+	sf::RectangleShape filter;
 
 	float scaleZoom;
 
