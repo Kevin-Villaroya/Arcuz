@@ -16,6 +16,7 @@ private:
   std::vector<ClientInformation> clients;
 
   sf::Thread threadServer;
+  sf::Mutex mutex;
 
   bool allClientupdated;
 

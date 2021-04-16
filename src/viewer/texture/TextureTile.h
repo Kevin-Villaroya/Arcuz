@@ -2,16 +2,22 @@
 #define __TEXTURE_TILE_H
 
 #include "../../tool/TextureTool.h"
+#include <memory>
 
 class TextureTile{
-public:
-  static const TextureTool* GRASS_TEXTURE;
-  static const TextureTool* GROUND_TEXTURE;
-  static const TextureTool* FOREST_TEXTURE;
-  static const TextureTool* MOUNTAIN_TEXTURE;
-  static const TextureTool* EMPTY_TEXTURE;
+private:
+  static TextureTool GRASS_TEXTURE;
+  static TextureTool GROUND_TEXTURE;
+  static TextureTool FOREST_TEXTURE;
+  static TextureTool MOUNTAIN_TEXTURE;
+  static TextureTool EMPTY_TEXTURE;
 
 public:
+	static TextureTool* getGrassTexture();
+	static TextureTool* getGroundTexture();
+	static TextureTool* getForestTexture();
+	static TextureTool* getMountainTexture();
+	static TextureTool* getEmptyTexture();
 };
 
 #endif

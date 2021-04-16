@@ -10,11 +10,9 @@ Mineur:
 Majeur:
 -- Dans l'ordre d'apparition --
 
--Faire passer la carte actuel a tout les nouveaux joueurs arrivants sur le serveur
-
--Rendre public sur github le projet
-
 -Ajouter une mini-map
+    -Ajouter un cadre autour du hud avec un boutoin - et +
+    -Retirer le filtre noir de la view et l'ajouter dans le cadre
 -Ajouter du gameplay
     -Ajouter un inventaire
     -Ajouter des ressources

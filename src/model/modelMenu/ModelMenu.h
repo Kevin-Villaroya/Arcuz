@@ -5,6 +5,7 @@
 #include "../../viewer/elementMenu/MenuButton.h"
 #include "../../viewer/elementMenu/MenuButtonSelect.h"
 #include "../../tool/FontTool.h"
+#include "../../viewer/texture/MenuTexture.h"
 #include <string>
 
 class ModelMenu{
@@ -17,18 +18,11 @@ class ModelMenu{
         std::string nameCharacter;
 
         MenuButton solo;
-        TextureTool soloTexture;
-
         MenuButton host;
-        TextureTool hostTexture;
-
         MenuButton join;
-        TextureTool joinTexture;
 
         MenuButtonSelect chooseType;
-        TextureTool chooseTypeTexture;
 
-        const TextureTool textureFond;
         sf::Sprite fondSprite;
 
         bool nicknameUpdating;

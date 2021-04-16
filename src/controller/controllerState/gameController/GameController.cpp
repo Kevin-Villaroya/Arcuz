@@ -8,7 +8,7 @@ GameController::GameController(int width, int height) : GameController(new sf::R
 GameController::GameController(sf::RenderWindow* window){
   this->window = window;
   this->view = new View(*this->window);
-  this->model = new Model(*this->view, 40);
+  this->model = new Model(*this->view, 70);
   this->running = true;
   this->icon = new sf::Image();
   this->icon->loadFromFile("assets/icone/index.jpg");
@@ -36,7 +36,7 @@ void GameController::checkEvents(){
          }
        }
 
-       else if (event.key.code == sf::Keyboard::Escape){ //CASE ELSE
+       else if (event.key.code == sf::Keyboard::Escape){ //SINGLE KEY PRESSED
          this->running = false;
        }else if(event.key.code == sf::Keyboard::Right){
          this->model->getMainCharacter()->walk(Direction::right);
@@ -51,6 +51,11 @@ void GameController::checkEvents(){
            this->model->getMainCharacter()->stop();
          }
        }
+     }else if(event.type == sf::Event::MouseButtonPressed){ // IF MOUSE CLICK
+      if (event.mouseButton.button == sf::Mouse::Left){
+        this->model->click(event.mouseButton.x, event.mouseButton.y);
+        this->view->click(event.mouseButton.x, event.mouseButton.y);
+      }
      }else{ // IF NO KEY PRESSED
        this->model->getMainCharacter()->stop();
      }

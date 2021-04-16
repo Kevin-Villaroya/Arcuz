@@ -47,7 +47,9 @@ void NetworkServer::start(){
   while(this->running){
     this->checkEvents();
     this->model->update();
+    this->mutex.lock();
     this->model->render();
+    this->mutex.unlock();
     if(!allClientupdated && this->model->updateNeededForEntities()){
       this->updateAllCLient(this->model->getEntitiesNeedUpdate());
     }
@@ -88,11 +90,13 @@ void NetworkServer::processingRequest(const sf::IpAddress &adressClient, unsigne
       this->notAcceptClient(adressClient, port);
     }
   }else if (action == Action::disconnect){
+    this->mutex.lock();
     packet >> name;
     if(this->model->existEntity(name)){
       this->removeCharacterClient(adressClient, port, name);
     }
     this->deleteClient(adressClient, port);
+    this->mutex.unlock();
   }else if (action == Action::update){
     this->updateCLient(packet);
   }else if(action == Action::confirm_update){

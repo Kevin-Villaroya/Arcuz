@@ -47,8 +47,9 @@ public:
 
   void setSpawnPlayers();
 
+  void click(float x, float y);
+
   void moveCharacter();
-  void unstuckEntity(EntityDrawable& entity);
   
   bool collisionWithABlockedTile(float x, float y);
 

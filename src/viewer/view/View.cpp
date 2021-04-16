@@ -3,9 +3,11 @@
 
 View::View(sf::RenderWindow &window): View(window, 200, 200){}
 
-View::View(sf::RenderWindow &window, int height, int width): window(window) , viewCenter(sf::FloatRect(width / 2, height / 2, width, height)){
+View::View(sf::RenderWindow &window, int height, int width): window(window) , game(sf::FloatRect(width / 2, height / 2, width, height)), hud(&window){
   this->height = height;
   this->width = width;
+
+  this->game.setViewport(sf::FloatRect(0.f,0.f,1.f,1.f));
 }
 
 void View::render(const Character &character, const std::vector<sf::Drawable*> &entities){
@@ -17,6 +19,8 @@ void View::render(const Character &character, const std::vector<sf::Drawable*> &
     this->window.draw(*entities[i]);
   }
   
+  this->hud.render(character, entities);
+
   this->window.display();
 }
 
@@ -33,17 +37,17 @@ void View::render(const std::vector<sf::Drawable*> &entities){
 }
 
 void View::centerViewOn(const Character &character){
-  this->viewCenter.setCenter(character.getPosX(), character.getPosY());
-  this->window.setView(this->viewCenter);
+  this->game.setCenter(character.getPosX(), character.getPosY());
+  this->window.setView(this->game);
 }
 
 void View::centerViewOn(float x, float y){
-  this->viewCenter.setCenter(x, y);
-  this->window.setView(this->viewCenter);
+  this->game.setCenter(x, y);
+  this->window.setView(this->game);
 }
 
 const sf::Vector2f& View::getSize() const{
-  return this->viewCenter.getSize();
+  return this->game.getSize();
 }
 
 const sf::Vector2u View::getSizeWindow() const{
@@ -51,9 +55,13 @@ const sf::Vector2u View::getSizeWindow() const{
 }
 
 const sf::Vector2f& View::getCenter() const{
-  return this->viewCenter.getCenter();
+  return this->game.getCenter();
 }
 
 void View::setSize(float x, float y){
-  this->viewCenter.setSize(sf::Vector2f(x, y));
+  this->game.setSize(sf::Vector2f(x, y));
+}
+
+void View::click(float x, float y){
+  this->hud.click(x, y);
 }

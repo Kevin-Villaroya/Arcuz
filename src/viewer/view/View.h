@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include "hud/Hud.h"
 #include "../model/entities/EntityDrawable.h"
 #include "../model/entities/entitiesAnimated/character/Character.h"
 
@@ -12,7 +13,8 @@ private:
   int width;
   sf::RenderWindow& window;
 
-  sf::View viewCenter;
+  sf::View game;
+  Hud hud;
 
 public:
   View(sf::RenderWindow &window);
@@ -27,6 +29,8 @@ public:
   const sf::Vector2u getSizeWindow() const;
   const sf::Vector2f& getCenter() const;
   void setSize(float x, float y);
+
+  void click(float x, float y);
 };
 
 #endif

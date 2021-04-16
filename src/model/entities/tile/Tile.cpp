@@ -33,19 +33,19 @@ void Tile::setType(TypeTile type){
 void Tile::setSpriteByType(TypeTile type){
   switch(type){
     case TypeTile::GRASS:
-      this->setTexture(*TextureTile::GRASS_TEXTURE);
+      this->setTexture(*TextureTile::getGrassTexture());
       break;
     case TypeTile::GROUND:
-      this->setTexture(*TextureTile::GROUND_TEXTURE);
+      this->setTexture(*TextureTile::getGroundTexture());
       break;
     case TypeTile::EMPTY:
-      this->setTexture(*TextureTile::EMPTY_TEXTURE);
+      this->setTexture(*TextureTile::getEmptyTexture());
       break;
     case TypeTile::MOUNTAIN:
-      this->setTexture(*TextureTile::MOUNTAIN_TEXTURE);
+      this->setTexture(*TextureTile::getMountainTexture());
       break;
     case TypeTile::FOREST:
-      this->setTexture(*TextureTile::FOREST_TEXTURE);
+      this->setTexture(*TextureTile::getForestTexture());
       break;
   }
 }

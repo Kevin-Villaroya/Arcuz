@@ -157,6 +157,10 @@ void Model::setSpawnPlayers(){
   this->mainCharacter->setPosition(this->map.getPosSpawnPlayers().x * this->map.getSizeTile().x, this->map.getPosSpawnPlayers().y * this->map.getSizeTile().y);
 }
 
+ void Model::click(float x, float y){
+  
+  }
+
 void Model::moveCharacter(){
   Direction direction = this->mainCharacter->getDirection();
   int speed = this->mainCharacter->getSpeed();
@@ -168,42 +172,20 @@ void Model::moveCharacter(){
 
   if(direction == Direction::right){
     xPos += speed;
-    xCol += speed;
+    xCol += speed + 2;
   }else if(direction == Direction::left){
     xPos -= speed;
-    xCol -= speed;
+    xCol -= speed + 2;
   }else if(direction == Direction::up){
     yPos -= speed;
-    yCol -= speed;
+    yCol -= speed + 2;
   }else if(direction == Direction::down){
     yPos += speed;
-    yCol += speed;
+    yCol += speed + 2;
   }
 
   if(!this->collisionWithABlockedTile(xCol, yCol)){
     this->mainCharacter->setPosition(xPos, yPos);
-  }else{
-    this->unstuckEntity(*this->mainCharacter);
-  }
-}
-
-void Model::unstuckEntity(EntityDrawable& entity){
-  float posX = this->mainCharacter->getOriginCollision().x;
-  float posY = this->mainCharacter->getOriginCollision().y;
-
-  sf::Vector2f originTile = sf::Vector2f(posX / this->map.getSizeTile().x, posY / this->map.getSizeTile().y );
-
-  if(posX > originTile.x && posX < originTile.x + 3){
-    entity.setPosition(originTile.x, entity.getPosition().y);
-
-  }else if(posX < originTile.x - 3 + this->map.getSizeTile().x){
-    entity.setPosition(originTile.x + this->map.getSizeTile().x, entity.getPosition().y);
-
-  }else if(posY > originTile.y && posY < originTile.y + 3){
-    entity.setPosition(originTile.x, entity.getPosition().y);
-
-  }else if(posY < originTile.y - 3 + this->map.getSizeTile().y){
-    entity.setPosition(originTile.x + this->map.getSizeTile().x, entity.getPosition().y);
   }
 }
 

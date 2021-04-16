@@ -22,13 +22,24 @@ Map::Map(int lenght, int width) : tiles(std::vector<std::vector<Tile>> (lenght, 
 
 void Map::setSpawnPlayers(){
   bool findPos = false;
+  bool findPoseableNotTraversable = false;
 
   for(int i = 0; i < this->getLenght() && !findPos; i++){
     for(int j = 0; j < this->getWidth() && !findPos; j++){
-      if(this->getTile(i, j).getPoseable()->isTraversable()){
+
+      for(int x = i; x < i + 5 && x < this->getLenght(); x++){
+        for(int y = j; y < j + 5 && y < this->getWidth(); y++){
+          if(!this->getTile(x, y).getPoseable()->isTraversable()){
+            findPoseableNotTraversable = true;
+          }
+        }
+      }
+
+      if(findPoseableNotTraversable == false && this->getTile(i, j).getPoseable()->isTraversable()){
         this->posSpawn = sf::Vector2u(i, j);
         findPos = true;
       }
+      findPoseableNotTraversable = false;
     }
   }
 }
